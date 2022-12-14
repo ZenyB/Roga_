@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -19,8 +21,8 @@ namespace Roga
     {
         Point lastPoint = Point.Empty;// null for a Point object
         bool isMouseDown = new Boolean();//this is used to evaluate whether our mousebutton is down or not
-        string LastMouseType = string.Empty;//hold the lastest mouse type
-        private string _mouseType;//hold the mouse type
+        string LastMouseType = string.Empty;//hold the lastest mouse type to remove the button events
+        private string _mouseType;//hold the mouse type to add the button event
         public string MouseType
         {
             get { return _mouseType; }
@@ -32,20 +34,131 @@ namespace Roga
                     case "pen":
                         Remove_Draw();
                         break;
+                    case "brightness&contrast":
+                        //remove brightness
+                        break;
+                    case "eraser":
+                        //remove eraser
+                        break;
+                    case "RGB":
+                        //remove Color Channel
+                        break;
+                    case "exposure":
+                        //remove 
+                        break;
+                    case "AddPicture":
+                        //remove
+                        break;
+                    case "AddText":
+                        //remove
+                        break;
+                    case "crop":
+                        //remove 
+                        break;
+                    case "shape":
+                        //remove
+                        break;
+                    case "filter":
+                        //remove
+                        break;
                 }
                 switch (value)
                 {
                     case "pen":
                         Add_Draw();
                         break;
+                    case "brightness&contrast":
+                        //add brightness
+                        break;
+                    case "eraser":
+                        //add eraser
+                        break;
+                    case "RGB":
+                        //add Color Channel
+                        break;
+                    case "exposure":
+                        //add 
+                        break;
+                    case "AddPicture":
+                        //add
+                        break;
+                    case "AddText":
+                        //add
+                        break;
+                    case "crop":
+                        //add 
+                        break;
+                    case "shape":
+                        //add
+                        break;
+                    case "filter":
+                        //add
+                        break;
                     default:
                         break;
                 }
             }
         }
+
+        //constructor
+        //
         public MainScreen()
         {
             InitializeComponent();
+            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\pencil.jpg");
+            string sFilePath = Path.GetFullPath(sFile);
+            Pen_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\back.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Back_Button.BackgroundImage= Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\hand.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Hand_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\save.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Save_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\eraser.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Eraser_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\brightness.png");
+            sFilePath = Path.GetFullPath(sFile);
+            BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\color.png");
+            sFilePath = Path.GetFullPath(sFile);
+            ColorChannel_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\exposure.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Exposure_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\addpicture.png");
+            sFilePath = Path.GetFullPath(sFile);
+            AddPicture_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\text.png");
+            sFilePath = Path.GetFullPath(sFile);
+            AddText_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\crop.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Crop_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\shape.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Shape_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\filter.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Filter_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(1000, 800);
             MouseType = "";
@@ -82,6 +195,59 @@ namespace Roga
         public MainScreen(string selectedPath)
         {
             InitializeComponent();
+            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\pencil.jpg");
+            string sFilePath = Path.GetFullPath(sFile);
+            Pen_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\back.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Back_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\hand.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Hand_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\save.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Save_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\eraser.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Eraser_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\brightness.png");
+            sFilePath = Path.GetFullPath(sFile);
+            BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\color.png");
+            sFilePath = Path.GetFullPath(sFile);
+            ColorChannel_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\exposure.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Exposure_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\addpicture.png");
+            sFilePath = Path.GetFullPath(sFile);
+            AddPicture_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\text.png");
+            sFilePath = Path.GetFullPath(sFile);
+            AddText_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\crop.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Crop_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\shape.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Shape_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\filter.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Filter_Button.BackgroundImage = Image.FromFile(sFilePath);
+
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(1000, 800);
             MouseType = "";
@@ -136,6 +302,59 @@ namespace Roga
         public MainScreen(Image picture)
         {
             InitializeComponent();
+            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\pencil.jpg");
+            string sFilePath = Path.GetFullPath(sFile);
+            Pen_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\back.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Back_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\hand.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Hand_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\save.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Save_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\eraser.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Eraser_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\brightness.png");
+            sFilePath = Path.GetFullPath(sFile);
+            BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\color.png");
+            sFilePath = Path.GetFullPath(sFile);
+            ColorChannel_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\exposure.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Exposure_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\addpicture.png");
+            sFilePath = Path.GetFullPath(sFile);
+            AddPicture_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\text.png");
+            sFilePath = Path.GetFullPath(sFile);
+            AddText_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\crop.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Crop_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\shape.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Shape_Button.BackgroundImage = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\filter.png");
+            sFilePath = Path.GetFullPath(sFile);
+            Filter_Button.BackgroundImage = Image.FromFile(sFilePath);
+
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(1000, 800);
             MouseType = "";
@@ -187,12 +406,15 @@ namespace Roga
             pic.BringToFront();
 
         }//creat a project with selected image
-
+        //
         static Image resizeImage(Image imgToResize, Size size)
         {
             return (Image)(new Bitmap(imgToResize, size));
         }
 
+        
+        //pencil event
+        //
         private void Pic_Draw_MouseUp(object sender, MouseEventArgs e)
         {
             isMouseDown = false;
@@ -255,12 +477,20 @@ namespace Roga
             pic.MouseMove -= Pic_Draw_MouseMove;
             pic.MouseUp -= Pic_Draw_MouseUp;
         }
+        //
+
+        //2 cai nay hok biet viet vo chi nua cu de ik
+        //
         private void MainScreen_Load(object sender, EventArgs e)
         {
         }
         void Form4_MouseWheel(object sender, MouseEventArgs e)
         {
         }
+        //
+
+        //button onclick
+        //
         private void Pen_Button_Click(object sender, EventArgs e)
         {
             MouseType = "pen";
@@ -290,5 +520,60 @@ namespace Roga
             t.Start();
             t.Join();
         }
+
+        private void Eraser_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "eraser";
+            LastMouseType = MouseType;
+        }
+
+        private void BrightnessAndContrast_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "brightness&contrast";
+            LastMouseType = MouseType;
+        }
+
+        private void ColorChannel_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "RGB";
+            LastMouseType = MouseType;
+        }
+
+        private void Exposure_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "exposure";
+            LastMouseType = MouseType;
+        }
+
+        private void AddPicture_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "AddPicture";
+            LastMouseType = MouseType;
+        }
+
+        private void AddText_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "AddText";
+            LastMouseType = MouseType;
+        }
+
+        private void Crop_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "crop";
+            LastMouseType = MouseType;
+        }
+
+        private void Shape_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "shape";
+            LastMouseType = MouseType;
+        }
+
+        private void Filter_Button_Click(object sender, EventArgs e)
+        {
+            MouseType = "filter";
+            LastMouseType = MouseType;
+        }
+        //
     }
 }
