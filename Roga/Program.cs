@@ -10,6 +10,8 @@ namespace Roga
     {
         static void Main(string[] args)
         {
+            LoginScreen loginScreen = new LoginScreen();
+            loginScreen.ShowDialog();
         }
     }
 }
