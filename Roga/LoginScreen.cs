@@ -57,7 +57,7 @@ namespace Roga
         {
             this.Hide();
             HomeScreen homeScreen = new HomeScreen();
-            homeScreen.ShowDialog();
+            homeScreen.ShowDialog();    
         }
     }
 }
