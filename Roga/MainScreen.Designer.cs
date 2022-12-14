@@ -34,6 +34,14 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.Shape_Button = new System.Windows.Forms.Button();
+            this.Crop_Button = new System.Windows.Forms.Button();
+            this.Filter_Button = new System.Windows.Forms.Button();
+            this.AddText_Button = new System.Windows.Forms.Button();
+            this.AddPicture_Button = new System.Windows.Forms.Button();
+            this.Exposure_Button = new System.Windows.Forms.Button();
+            this.ColorChannel_Button = new System.Windows.Forms.Button();
+            this.BrightnessAndContrast_Button = new System.Windows.Forms.Button();
             this.Pen_Button = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.Back_Button = new System.Windows.Forms.Button();
@@ -42,14 +50,6 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.Eraser_Button = new System.Windows.Forms.Button();
             this.pic = new System.Windows.Forms.PictureBox();
-            this.ColorChannel_Button = new System.Windows.Forms.Button();
-            this.BrightnessAndContrast_Button = new System.Windows.Forms.Button();
-            this.AddPicture_Button = new System.Windows.Forms.Button();
-            this.Exposure_Button = new System.Windows.Forms.Button();
-            this.Filter_Button = new System.Windows.Forms.Button();
-            this.AddText_Button = new System.Windows.Forms.Button();
-            this.Shape_Button = new System.Windows.Forms.Button();
-            this.Crop_Button = new System.Windows.Forms.Button();
             this.picturePanel2 = new PicturePanel();
             this.picturePanel1 = new PicturePanel();
             this.menuStrip1.SuspendLayout();
@@ -119,6 +119,110 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(174, 390);
             this.panel5.TabIndex = 1;
+            // 
+            // Shape_Button
+            // 
+            this.Shape_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Shape_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Shape_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Shape_Button.Location = new System.Drawing.Point(98, 319);
+            this.Shape_Button.Name = "Shape_Button";
+            this.Shape_Button.Size = new System.Drawing.Size(55, 55);
+            this.Shape_Button.TabIndex = 9;
+            this.Shape_Button.UseVisualStyleBackColor = true;
+            this.Shape_Button.Click += new System.EventHandler(this.Shape_Button_Click);
+            // 
+            // Crop_Button
+            // 
+            this.Crop_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Crop_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Crop_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Crop_Button.Location = new System.Drawing.Point(18, 319);
+            this.Crop_Button.Name = "Crop_Button";
+            this.Crop_Button.Size = new System.Drawing.Size(55, 55);
+            this.Crop_Button.TabIndex = 8;
+            this.Crop_Button.UseVisualStyleBackColor = true;
+            this.Crop_Button.Click += new System.EventHandler(this.Crop_Button_Click);
+            // 
+            // Filter_Button
+            // 
+            this.Filter_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Filter_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Filter_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Filter_Button.Location = new System.Drawing.Point(98, 249);
+            this.Filter_Button.Name = "Filter_Button";
+            this.Filter_Button.Size = new System.Drawing.Size(55, 55);
+            this.Filter_Button.TabIndex = 7;
+            this.Filter_Button.UseVisualStyleBackColor = true;
+            this.Filter_Button.Click += new System.EventHandler(this.Filter_Button_Click);
+            // 
+            // AddText_Button
+            // 
+            this.AddText_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddText_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AddText_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AddText_Button.Location = new System.Drawing.Point(18, 249);
+            this.AddText_Button.Name = "AddText_Button";
+            this.AddText_Button.Size = new System.Drawing.Size(55, 55);
+            this.AddText_Button.TabIndex = 6;
+            this.AddText_Button.UseVisualStyleBackColor = true;
+            this.AddText_Button.Click += new System.EventHandler(this.AddText_Button_Click);
+            // 
+            // AddPicture_Button
+            // 
+            this.AddPicture_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddPicture_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AddPicture_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AddPicture_Button.Location = new System.Drawing.Point(98, 173);
+            this.AddPicture_Button.Name = "AddPicture_Button";
+            this.AddPicture_Button.Size = new System.Drawing.Size(55, 55);
+            this.AddPicture_Button.TabIndex = 5;
+            this.AddPicture_Button.UseVisualStyleBackColor = true;
+            this.AddPicture_Button.Click += new System.EventHandler(this.AddPicture_Button_Click);
+            // 
+            // Exposure_Button
+            // 
+            this.Exposure_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Exposure_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Exposure_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Exposure_Button.Location = new System.Drawing.Point(18, 173);
+            this.Exposure_Button.Name = "Exposure_Button";
+            this.Exposure_Button.Size = new System.Drawing.Size(55, 55);
+            this.Exposure_Button.TabIndex = 4;
+            this.Exposure_Button.UseVisualStyleBackColor = true;
+            this.Exposure_Button.Click += new System.EventHandler(this.Exposure_Button_Click);
+            // 
+            // ColorChannel_Button
+            // 
+            this.ColorChannel_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ColorChannel_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ColorChannel_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ColorChannel_Button.Location = new System.Drawing.Point(98, 98);
+            this.ColorChannel_Button.Name = "ColorChannel_Button";
+            this.ColorChannel_Button.Size = new System.Drawing.Size(55, 55);
+            this.ColorChannel_Button.TabIndex = 3;
+            this.ColorChannel_Button.UseVisualStyleBackColor = true;
+            this.ColorChannel_Button.Click += new System.EventHandler(this.ColorChannel_Button_Click);
+            // 
+            // BrightnessAndContrast_Button
+            // 
+            this.BrightnessAndContrast_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.BrightnessAndContrast_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BrightnessAndContrast_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BrightnessAndContrast_Button.Location = new System.Drawing.Point(18, 98);
+            this.BrightnessAndContrast_Button.Name = "BrightnessAndContrast_Button";
+            this.BrightnessAndContrast_Button.Size = new System.Drawing.Size(55, 55);
+            this.BrightnessAndContrast_Button.TabIndex = 2;
+            this.BrightnessAndContrast_Button.UseVisualStyleBackColor = true;
+            this.BrightnessAndContrast_Button.Click += new System.EventHandler(this.BrightnessAndContrast_Button_Click);
             // 
             // Pen_Button
             // 
@@ -215,110 +319,6 @@
             this.pic.TabIndex = 0;
             this.pic.TabStop = false;
             // 
-            // ColorChannel_Button
-            // 
-            this.ColorChannel_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ColorChannel_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ColorChannel_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ColorChannel_Button.Location = new System.Drawing.Point(98, 98);
-            this.ColorChannel_Button.Name = "ColorChannel_Button";
-            this.ColorChannel_Button.Size = new System.Drawing.Size(55, 55);
-            this.ColorChannel_Button.TabIndex = 3;
-            this.ColorChannel_Button.UseVisualStyleBackColor = true;
-            this.ColorChannel_Button.Click += new System.EventHandler(this.ColorChannel_Button_Click);
-            // 
-            // BrightnessAndContrast_Button
-            // 
-            this.BrightnessAndContrast_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.BrightnessAndContrast_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BrightnessAndContrast_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BrightnessAndContrast_Button.Location = new System.Drawing.Point(18, 98);
-            this.BrightnessAndContrast_Button.Name = "BrightnessAndContrast_Button";
-            this.BrightnessAndContrast_Button.Size = new System.Drawing.Size(55, 55);
-            this.BrightnessAndContrast_Button.TabIndex = 2;
-            this.BrightnessAndContrast_Button.UseVisualStyleBackColor = true;
-            this.BrightnessAndContrast_Button.Click += new System.EventHandler(this.BrightnessAndContrast_Button_Click);
-            // 
-            // AddPicture_Button
-            // 
-            this.AddPicture_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddPicture_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.AddPicture_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AddPicture_Button.Location = new System.Drawing.Point(98, 173);
-            this.AddPicture_Button.Name = "AddPicture_Button";
-            this.AddPicture_Button.Size = new System.Drawing.Size(55, 55);
-            this.AddPicture_Button.TabIndex = 5;
-            this.AddPicture_Button.UseVisualStyleBackColor = true;
-            this.AddPicture_Button.Click += new System.EventHandler(this.AddPicture_Button_Click);
-            // 
-            // Exposure_Button
-            // 
-            this.Exposure_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Exposure_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Exposure_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Exposure_Button.Location = new System.Drawing.Point(18, 173);
-            this.Exposure_Button.Name = "Exposure_Button";
-            this.Exposure_Button.Size = new System.Drawing.Size(55, 55);
-            this.Exposure_Button.TabIndex = 4;
-            this.Exposure_Button.UseVisualStyleBackColor = true;
-            this.Exposure_Button.Click += new System.EventHandler(this.Exposure_Button_Click);
-            // 
-            // Filter_Button
-            // 
-            this.Filter_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Filter_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Filter_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Filter_Button.Location = new System.Drawing.Point(98, 249);
-            this.Filter_Button.Name = "Filter_Button";
-            this.Filter_Button.Size = new System.Drawing.Size(55, 55);
-            this.Filter_Button.TabIndex = 7;
-            this.Filter_Button.UseVisualStyleBackColor = true;
-            this.Filter_Button.Click += new System.EventHandler(this.Filter_Button_Click);
-            // 
-            // AddText_Button
-            // 
-            this.AddText_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddText_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.AddText_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AddText_Button.Location = new System.Drawing.Point(18, 249);
-            this.AddText_Button.Name = "AddText_Button";
-            this.AddText_Button.Size = new System.Drawing.Size(55, 55);
-            this.AddText_Button.TabIndex = 6;
-            this.AddText_Button.UseVisualStyleBackColor = true;
-            this.AddText_Button.Click += new System.EventHandler(this.AddText_Button_Click);
-            // 
-            // Shape_Button
-            // 
-            this.Shape_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Shape_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Shape_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Shape_Button.Location = new System.Drawing.Point(98, 319);
-            this.Shape_Button.Name = "Shape_Button";
-            this.Shape_Button.Size = new System.Drawing.Size(55, 55);
-            this.Shape_Button.TabIndex = 9;
-            this.Shape_Button.UseVisualStyleBackColor = true;
-            this.Shape_Button.Click += new System.EventHandler(this.Shape_Button_Click);
-            // 
-            // Crop_Button
-            // 
-            this.Crop_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Crop_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Crop_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Crop_Button.Location = new System.Drawing.Point(18, 319);
-            this.Crop_Button.Name = "Crop_Button";
-            this.Crop_Button.Size = new System.Drawing.Size(55, 55);
-            this.Crop_Button.TabIndex = 8;
-            this.Crop_Button.UseVisualStyleBackColor = true;
-            this.Crop_Button.Click += new System.EventHandler(this.Crop_Button_Click);
-            // 
             // picturePanel2
             // 
             this.picturePanel2.AutoScroll = true;
@@ -353,8 +353,8 @@
             this.Margin = new System.Windows.Forms.Padding(5);
             this.MinimizeBox = false;
             this.Name = "MainScreen";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MainScreen";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.MainScreen_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
