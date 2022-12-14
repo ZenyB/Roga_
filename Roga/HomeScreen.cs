@@ -209,8 +209,8 @@ namespace Roga
             {
                 Image img = Image.FromFile(open.FileName);
                 MainScreen mainForm = new MainScreen(img);
-                mainForm.Show();
-                this.Close();
+                this.Hide();
+                mainForm.ShowDialog();
             }
         }
 
@@ -222,8 +222,8 @@ namespace Roga
             string sFilePath = Path.GetFullPath(sFile);
             Image img = Image.FromFile(sFilePath);
             MainScreen mainForm = new MainScreen(img);
-            mainForm.Show();
-            this.Close();
+            this.Hide();
+            mainForm.ShowDialog();
         }
     }
 }
