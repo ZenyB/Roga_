@@ -13,7 +13,9 @@ namespace Roga
         static void Main(string[] args)
         {
             LoginScreen loginScreen = new LoginScreen();
-            loginScreen.ShowDialog();
+            HomeScreen home = new HomeScreen();
+            home.ShowDialog();
+            //loginScreen.ShowDialog();
         }
     }
 }
