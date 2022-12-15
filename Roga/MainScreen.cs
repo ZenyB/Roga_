@@ -23,6 +23,8 @@ namespace Roga
         bool isMouseDown = new Boolean();//this is used to evaluate whether our mousebutton is down or not
         string LastMouseType = string.Empty;//hold the lastest mouse type to remove the button events
         private string _mouseType;//hold the mouse type to add the button event
+        private Image imgNow; //The image is being processed
+        private Stack<Image> stackImage = new Stack<Image>(); //stack images has been processed
         public string MouseType
         {
             get { return _mouseType; }
@@ -59,7 +61,7 @@ namespace Roga
                         //remove
                         break;
                     case "filter":
-                        //remove
+                        panel3.Controls.Clear();
                         break;
                 }
                 switch (value)
@@ -92,7 +94,7 @@ namespace Roga
                         //add
                         break;
                     case "filter":
-                        //add
+                        InitFilterDetails();
                         break;
                     default:
                         break;
@@ -112,7 +114,7 @@ namespace Roga
 
             sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\back.png");
             sFilePath = Path.GetFullPath(sFile);
-            Back_Button.BackgroundImage= Image.FromFile(sFilePath);
+            Back_Button.BackgroundImage = Image.FromFile(sFilePath);
 
             sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\hand.png");
             sFilePath = Path.GetFullPath(sFile);
@@ -187,6 +189,9 @@ namespace Roga
                 graph.FillRectangle(Brushes.White, ImageSize);
             }
             pic.Image = picture;
+
+            imgNow = picture;
+            stackImage.Push(imgNow);
 
             Controls.Add(pic);
             pic.BringToFront();
@@ -284,6 +289,8 @@ namespace Roga
                 Image temp = Image.FromFile(selectedPath);
                 temp = resizeImage(temp, pic.Size);
                 pic.Image = temp;
+                imgNow = pic.Image;
+                stackImage.Push(imgNow);
                 Console.WriteLine(pic.Size.ToString());
             }
             else
@@ -294,6 +301,8 @@ namespace Roga
                 pic.Size = new Size(newWidth, newHeight);
                 pic.Location = new Point((Width / 2) - (newWidth / 2), (Height / 2) - (newHeight / 2));
                 pic.Image = Image.FromFile(selectedPath);
+                imgNow = pic.Image;
+                stackImage.Push(imgNow);
             }
             Controls.Add(pic);
             pic.BringToFront();
@@ -391,6 +400,8 @@ namespace Roga
                 Image temp = picture;
                 temp = resizeImage(temp, pic.Size);
                 pic.Image = temp;
+                imgNow = pic.Image;
+                stackImage.Push(imgNow);
                 Console.WriteLine(pic.Size.ToString());
             }
             else
@@ -401,6 +412,8 @@ namespace Roga
                 pic.Size = new Size(newWidth, newHeight);
                 pic.Location = new Point((Width / 2) - (newWidth / 2), (Height / 2) - (newHeight / 2));
                 pic.Image = picture;
+                imgNow = pic.Image;
+                stackImage.Push(imgNow);
             }
             Controls.Add(pic);
             pic.BringToFront();
@@ -412,7 +425,7 @@ namespace Roga
             return (Image)(new Bitmap(imgToResize, size));
         }
 
-        
+
         //pencil event
         //
         private void Pic_Draw_MouseUp(object sender, MouseEventArgs e)
@@ -487,10 +500,297 @@ namespace Roga
         void Form4_MouseWheel(object sender, MouseEventArgs e)
         {
         }
-        //
+
+        //Event ctrl + Z
+        private void MainScreen_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Z && (Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                //When user pressed Ctrl + Z, stackImage will be pop and imgNow return to previous state
+                //If stackImage has only one image, this is original image, user can't goback
+                if (stackImage.Count > 1)
+                {
+                    stackImage.Pop();
+                    imgNow = stackImage.Peek();
+                    pic.Image = imgNow;
+                }    
+            }
+        }
+
+        //Filter feature
+        #region Filter
+
+        private void InitFilterDetails()
+        {
+            PictureBox picGray, picTrans, picSepiaTone, picNegative, picRed, picGreen, picBlue;
+            picGray = new PictureBox();
+            picTrans = new PictureBox();
+            picSepiaTone = new PictureBox();
+            picNegative = new PictureBox();
+            picRed = new PictureBox();
+            picGreen = new PictureBox();
+            picBlue = new PictureBox();
+
+            //SetImage
+            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\GrayImg.png");
+            string sFilePath = Path.GetFullPath(sFile);
+            picGray.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\NegativeImg.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picNegative.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\TransparencyImg.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picTrans.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\SepiaImg.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picSepiaTone.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\RedImg.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picRed.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\GreenImg.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picGreen.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\BlueImg.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picBlue.Image = Image.FromFile(sFilePath);
+
+            //setSize
+            picGray.Size = picNegative.Size = picTrans.Size = picSepiaTone.Size = picRed.Size = picGreen.Size = picBlue.Size = new Size(80, 80);
+
+            //setSizeMode
+            picGray.SizeMode = picNegative.SizeMode = picTrans.SizeMode = picSepiaTone.SizeMode = picRed.SizeMode = picGreen.SizeMode = picBlue.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            //setEvent
+            picGray.Click += new EventHandler(picGray_Click);
+            picNegative.Click += new EventHandler(picNegative_Click);
+            picTrans.Click += new EventHandler(picTrans_Click);
+            picSepiaTone.Click += new EventHandler(picSepiaTone_Click);
+            picRed.Click += new EventHandler(picRed_Click);
+            picGreen.Click += new EventHandler(picGreen_Click);
+            picBlue.Click += new EventHandler(picBlue_Click);
+
+            //setPosition
+            picGray.Location = new Point(13, 20);
+            panel3.Controls.Add(picGray);
+            picNegative.Location = new Point(110, 20);
+            panel3.Controls.Add(picNegative);
+            picTrans.Location = new Point(13, 115);
+            panel3.Controls.Add(picTrans);
+            picSepiaTone.Location = new Point(110, 115);
+            panel3.Controls.Add(picSepiaTone);
+            picRed.Location = new Point(13, 210);
+            panel3.Controls.Add(picRed);
+            picGreen.Location = new Point(110, 210);
+            panel3.Controls.Add(picGreen);
+            picBlue.Location = new Point(13, 305);
+            panel3.Controls.Add(picBlue);
+
+        }
+
+        //GetARGB
+        private Bitmap GetArgbCopy(Image sourceImage)
+        {
+            Bitmap bmpNew = new Bitmap(sourceImage.Width, sourceImage.Height, PixelFormat.Format32bppArgb);
+
+
+            using (Graphics graphics = Graphics.FromImage(bmpNew))
+            {
+                graphics.DrawImage(sourceImage, new Rectangle(0, 0, bmpNew.Width, bmpNew.Height), new Rectangle(0, 0, bmpNew.Width, bmpNew.Height), GraphicsUnit.Pixel);
+                graphics.Flush();
+            }
+
+
+            return bmpNew;
+        }
+
+        //ApplyColorMatrix
+        private Bitmap ApplyColorMatrix(Image sourceImage, ColorMatrix colorMatrix)
+        {
+            Bitmap bmp32BppSource = GetArgbCopy(sourceImage);
+            Bitmap bmp32BppDest = new Bitmap(bmp32BppSource.Width, bmp32BppSource.Height, PixelFormat.Format32bppArgb);
+
+
+            using (Graphics graphics = Graphics.FromImage(bmp32BppDest))
+            {
+                ImageAttributes bmpAttributes = new ImageAttributes();
+                bmpAttributes.SetColorMatrix(colorMatrix);
+
+                graphics.DrawImage(bmp32BppSource, new Rectangle(0, 0, bmp32BppSource.Width, bmp32BppSource.Height),
+                                    0, 0, bmp32BppSource.Width, bmp32BppSource.Height, GraphicsUnit.Pixel, bmpAttributes);
+
+
+            }
+            bmp32BppSource.Dispose();
+            return bmp32BppDest;
+        }
+
+        //Transparency Filter
+        private Bitmap ImageWithTransparency(Image sourceImage)
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                                {
+                            new float[]{1, 0, 0, 0, 0},
+                            new float[]{0, 1, 0, 0, 0},
+                            new float[]{0, 0, 1, 0, 0},
+                            new float[]{0, 0, 0, 0.3f, 0},
+                            new float[]{0, 0, 0, 0, 1}
+                                });
+            return ApplyColorMatrix(sourceImage, colorMatrix);
+        }
+
+        //SepiaTone Filter
+        private Bitmap ImageWithSepiaTone(Image sourceImage)
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                       {
+                        new float[]{.393f, .349f, .272f, 0, 0},
+                        new float[]{.769f, .686f, .534f, 0, 0},
+                        new float[]{.189f, .168f, .131f, 0, 0},
+                        new float[]{0, 0, 0, 1, 0},
+                        new float[]{0, 0, 0, 0, 1}
+                       });
+            return ApplyColorMatrix(sourceImage, colorMatrix);
+        }
+
+        //Negative Filter
+        private Bitmap ImageWithNegative(Image sourceImage)
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                           {
+                            new float[]{-1, 0, 0, 0, 0},
+                            new float[]{0, -1, 0, 0, 0},
+                            new float[]{0, 0, -1, 0, 0},
+                            new float[]{0, 0, 0, 1, 0},
+                            new float[]{1, 1, 1, 1, 1}
+                           });
+            return ApplyColorMatrix(sourceImage, colorMatrix);
+        }
+
+        //Red Filter
+        private Bitmap ImageWithRed(Image sourceImage)
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                           {
+                            new float[]{0, 0, 0, 0, 0},
+                            new float[]{0, -1, 0, 0, 0},
+                            new float[]{0, 0, -1, 0, 0},
+                            new float[]{0, 0, 0, 1, 0},
+                            new float[]{1, 1, 1, 1, 1}
+                           });
+            return ApplyColorMatrix(sourceImage, colorMatrix);
+        }
+
+        //Green Filter
+        private Bitmap ImageWithGreen(Image sourceImage)
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                           {
+                            new float[]{-1, 0, 0, 0, 0},
+                            new float[]{0, 0, 0, 0, 0},
+                            new float[]{0, 0, -1, 0, 0},
+                            new float[]{0, 0, 0, 1, 0},
+                            new float[]{1, 1, 1, 1, 1}
+                           });
+            return ApplyColorMatrix(sourceImage, colorMatrix);
+        }
+
+        //Blue Filter
+        private Bitmap ImageWithBlue(Image sourceImage)
+        {
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                           {
+                            new float[]{-1, 0, 0, 0, 0},
+                            new float[]{0, -1, 0, 0, 0},
+                            new float[]{0, 0, 0, 0, 0},
+                            new float[]{0, 0, 0, 1, 0},
+                            new float[]{1, 1, 1, 1, 1}
+                           });
+            return ApplyColorMatrix(sourceImage, colorMatrix);
+        }
+
+        //pic..._Click
+        private void picGray_Click(object sender, EventArgs e)
+        {
+            Bitmap bit = new Bitmap(imgNow);
+            int width = bit.Width;
+            int height = bit.Height;
+
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                {
+                    Color color = bit.GetPixel(x, y);
+
+                    //extract ARGB value from p
+                    int a = color.A;
+                    int r = color.R;
+                    int g = color.G;
+                    int b = color.B;
+
+                    //caculate average
+                    int avg = (r + g + b) / 3;
+
+                    //set new pixel value
+                    bit.SetPixel(x, y, Color.FromArgb(a, avg, avg, avg));
+                }
+            imgNow = bit;
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+            //btnGray.BorderSize = 2;
+            //filterType = 1;
+        }
+
+        private void picNegative_Click(object sender, EventArgs e)
+        {
+            imgNow = ImageWithNegative(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        private void picTrans_Click(object sender, EventArgs e)
+        {
+            imgNow = ImageWithTransparency(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        private void picSepiaTone_Click(object sender, EventArgs e)
+        {
+            imgNow = ImageWithSepiaTone(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        private void picRed_Click(object sender, EventArgs e)
+        {
+            imgNow = ImageWithRed(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        private void picGreen_Click(object sender, EventArgs e)
+        {
+            imgNow = ImageWithGreen(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        private void picBlue_Click(object sender, EventArgs e)
+        {
+            imgNow = ImageWithBlue(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        #endregion
 
         //button onclick
-        //
         private void Pen_Button_Click(object sender, EventArgs e)
         {
             MouseType = "pen";
@@ -504,7 +804,8 @@ namespace Roga
 
         private void Save_Button_Click(object sender, EventArgs e)
         {
-            Thread t = new Thread((ThreadStart)(() => {
+            Thread t = new Thread((ThreadStart)(() =>
+            {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
                 saveFileDialog1.Title = " Save file...";
                 saveFileDialog1.InitialDirectory = "D:\\";

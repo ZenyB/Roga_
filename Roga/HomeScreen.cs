@@ -220,8 +220,7 @@ namespace Roga
             string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\blank.png");
             string sFilePath = Path.GetFullPath(sFile);
-            Image img = Image.FromFile(sFilePath);
-            MainScreen mainForm = new MainScreen(img);
+            MainScreen mainForm = new MainScreen();
             this.Hide();
             mainForm.ShowDialog();
         }

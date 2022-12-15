@@ -105,6 +105,9 @@
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="HomeScreen.resx">
+      <DependentUpon>HomeScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginScreen.resx">
       <DependentUpon>LoginScreen.cs</DependentUpon>
     </EmbeddedResource>
@@ -135,6 +138,13 @@
     <Content Include="Assets\Images\icons\save.png" />
     <Content Include="Assets\Images\icons\shape.png" />
     <Content Include="Assets\Images\icons\text.png" />
+    <Content Include="Assets\Images\Filter\BlueImg.png" />
+    <Content Include="Assets\Images\Filter\GrayImg.png" />
+    <Content Include="Assets\Images\Filter\GreenImg.png" />
+    <Content Include="Assets\Images\Filter\NegativeImg.png" />
+    <Content Include="Assets\Images\Filter\RedImg.png" />
+    <Content Include="Assets\Images\Filter\SepiaImg.png" />
+    <Content Include="Assets\Images\Filter\TransparencyImg.png" />
     <Content Include="Assets\Images\LoginScreen.jpg" />
     <Content Include="Assets\Images\logo.ico" />
     <Content Include="Assets\Images\logo.png" />
