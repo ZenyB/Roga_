@@ -23,6 +23,7 @@ namespace Roga
         bool isMouseDown = new Boolean();//this is used to evaluate whether our mousebutton is down or not
         string LastMouseType = string.Empty;//hold the lastest mouse type to remove the button events
         private string _mouseType;//hold the mouse type to add the button event
+        private Pen pen = new Pen(Color.Black, 3);
         private Image imgNow; //The image is being processed
         private Stack<Image> stackImage = new Stack<Image>(); //stack images has been processed
         public string MouseType
@@ -58,7 +59,7 @@ namespace Roga
                         //remove 
                         break;
                     case "shape":
-                        //remove
+                        removeShapesEvent();
                         break;
                     case "filter":
                         panel3.Controls.Clear();
@@ -91,7 +92,8 @@ namespace Roga
                         //add 
                         break;
                     case "shape":
-                        //add
+                        InitPenLineColorDetails();
+                        addShapesEvent();
                         break;
                     case "filter":
                         InitFilterDetails();
@@ -517,6 +519,214 @@ namespace Roga
             }
         }
 
+        //Init Right Panel With Width and Color of pen
+        //use method InitPenLineColorDetails() to generate details on right panel
+        #region SetWidthAndColorForPen
+        private void InitPenLineColorDetails()
+        {
+            //Panel penLine
+            Panel p = new Panel();
+            p.Size = new Size(150, 60);
+            p.BackColor = Color.FromArgb(80, 80, 80);
+            p.Location = new Point(26, 20);
+            //3 Line
+            CustomButton.VBButton btnLine1 = new CustomButton.VBButton();
+            CustomButton.VBButton btnLine2 = new CustomButton.VBButton();
+            CustomButton.VBButton btnLine3 = new CustomButton.VBButton();
+            btnLine1.Size = new Size(116, 10);
+            btnLine2.Size = new Size(116, 5);
+            btnLine3.Size = new Size(116, 3);
+            btnLine1.BackColor = btnLine2.BackColor = btnLine3.BackColor = Color.FromArgb(217, 217, 217);
+            btnLine1.Location = new Point(17, 11);
+            btnLine2.Location = new Point(17, 29);
+            btnLine3.Location = new Point(17, 42);
+            btnLine1.FlatStyle = btnLine2.FlatStyle = btnLine3.FlatStyle = FlatStyle.Flat;
+            btnLine1.BorderColor = btnLine2.BorderColor = btnLine3.BorderColor = Color.FromArgb(217, 217, 217);
+            btnLine1.BorderRadius = btnLine2.BorderRadius = btnLine3.BorderRadius = 0;
+            btnLine1.Cursor = btnLine2.Cursor = btnLine3.Cursor = Cursors.Hand;
+            btnLine1.Click += new EventHandler(SetWidth_10);
+            btnLine2.Click += new EventHandler(SetWidth_5);
+            btnLine3.Click += new EventHandler(SetWidth_3);
+            p.Controls.Add(btnLine1);
+            p.Controls.Add(btnLine2);
+            p.Controls.Add(btnLine3);
+            panel3.Controls.Add(p);
+            //Init SelectdColor
+            CustomButton.VBButton selectedColor = new CustomButton.VBButton();
+            selectedColor.Size = new Size(25, 25);
+            selectedColor.Location = new Point(30, 560);
+            selectedColor.BorderColor = Color.White;
+            selectedColor.BorderSize = 1;
+            selectedColor.BorderRadius = 0;
+            panel3.Controls.Add(selectedColor);
+            Label l = new Label();
+            l.Text = "Selected Color";
+            l.ForeColor = Color.White;
+            l.Location = new Point(60, 565);
+            l.AutoSize = true;
+            panel3.Controls.Add(l);
+            //Matrix of Color
+            CustomButton.VBButton[,] matrixColor = new CustomButton.VBButton[10, 3];
+            //set Size, Location, BackColor...
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    matrixColor[i, j] = new CustomButton.VBButton();
+                    matrixColor[i, j].Size = new Size(25, 25);
+                    matrixColor[i, j].Location = new Point(30 + j*34 + j*25, 100 + i*20 + i*25 );
+                    matrixColor[i, j].ForeColor = Color.Red;
+                    matrixColor[i, j].BorderColor = Color.White;
+                    matrixColor[i, j].BorderSize = 1;
+                    matrixColor[i, j].BorderRadius = 0;
+                    panel3.Controls.Add(matrixColor[i, j]);
+                }   
+            }
+            //setColor
+            matrixColor[0, 1].BackColor = Color.FromArgb(255, 255, 255);
+            matrixColor[1, 1].BackColor = Color.FromArgb(142, 142, 142);
+            matrixColor[2, 1].BackColor = Color.FromArgb(118, 70, 43);
+            matrixColor[3, 1].BackColor = Color.FromArgb(217, 165, 179);
+            matrixColor[4, 1].BackColor = Color.FromArgb(192, 127, 0);
+            matrixColor[5, 1].BackColor = Color.FromArgb(163, 156, 124);
+            matrixColor[6, 1].BackColor = Color.FromArgb(185, 215, 123);
+            matrixColor[7, 1].BackColor = Color.FromArgb(141, 186, 226);
+            matrixColor[8, 1].BackColor = Color.FromArgb(58, 67, 112);
+            //matrixColor[9, 1].BackColor = Color.FromArgb(156, 135, 184);
+            matrixColor[0, 2].BackColor = Color.FromArgb(0, 0, 0);
+            matrixColor[1, 2].BackColor = Color.FromArgb(66, 66, 66);
+            matrixColor[2, 2].BackColor = Color.FromArgb(112, 0, 0);
+            matrixColor[3, 2].BackColor = Color.FromArgb(255, 0, 0);
+            matrixColor[4, 2].BackColor = Color.FromArgb(148, 89, 0);
+            matrixColor[5, 2].BackColor = Color.FromArgb(255, 245, 0);
+            matrixColor[6, 2].BackColor = Color.FromArgb(52, 168, 83);
+            matrixColor[7, 2].BackColor = Color.FromArgb(24, 104, 174);
+            matrixColor[8, 2].BackColor = Color.FromArgb(27, 41, 114);
+            //matrixColor[9, 2].BackColor = Color.FromArgb(151, 71, 255);
+            //setEvent
+            for (int i = 0; i < 9; i++)
+            {
+                //matrixColor[i, 0].Click += new EventHandler(SetColorForBlank);
+                matrixColor[i, 0].BackColor = Color.White;
+                matrixColor[i, 0].BackColorChanged += delegate (object sender, EventArgs e) { CustomColor_BackColorChanged(sender, e, selectedColor); };
+                matrixColor[i, 0].Click += delegate (object sender, EventArgs e) { SetCustomColor(sender, e, selectedColor); };
+                matrixColor[i, 1].Click += delegate (object sender, EventArgs e) { SetColor(sender, e, selectedColor); };
+                matrixColor[i, 2].Click += delegate (object sender, EventArgs e) { SetColor(sender, e, selectedColor); };
+            }
+            //Init EditColor
+            Panel edit = new Panel();
+            edit.Size = new Size(147, 56);
+            edit.Location = new Point(28, 500);
+            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\EditColor.png");
+            string sFilePath = Path.GetFullPath(sFile);
+            edit.BackgroundImage = Image.FromFile(sFilePath);
+            edit.Click += delegate (object sender, EventArgs e) { editColor_Click(sender, e, matrixColor); };
+            panel3.Controls.Add(edit);
+            selectedColor.BackColor = Color.Black;
+        }
+
+        private void SetWidth_10(object sender, EventArgs e)
+        {
+            pen.Width = 10;
+        }
+        private void SetWidth_5(object sender, EventArgs e)
+        {
+            pen.Width = 5;
+        }
+        private void SetWidth_3(object sender, EventArgs e)
+        {
+            pen.Width = 3;
+        }
+
+        private void SetColor(object sender, EventArgs e, CustomButton.VBButton b)
+        {
+            CustomButton.VBButton button = (CustomButton.VBButton)sender;
+            b.BackColor = button.BackColor;
+            pen.Color = button.BackColor;
+        }
+        private void SetCustomColor(object sender, EventArgs e, CustomButton.VBButton b)
+        {
+            CustomButton.VBButton button = (CustomButton.VBButton)sender;
+            if (button.ForeColor != Color.Red)
+            {
+                b.BackColor = button.BackColor;
+                pen.Color = button.BackColor;
+            }    
+        }
+
+        //private void SetColorForBlank(object sender, EventArgs e)
+        //{
+        //    CustomButton.VBButton button = (CustomButton.VBButton)sender;
+        //    if (button.ForeColor == Color.Red)
+        //    {
+        //        ColorDialog color = new ColorDialog();
+        //        if (color.ShowDialog() == DialogResult.OK)
+        //        {
+        //            button.BackColor = color.Color;
+        //            button.ForeColor = Color.White;
+        //            pen.Color = button.BackColor;
+        //        }
+        //    }
+        //    else
+        //        pen.Color = button.BackColor;
+        //}
+        private void editColor_Click(object sender, EventArgs e, CustomButton.VBButton[,] matrixColor)
+        {
+            ColorDialog color = new ColorDialog();
+            if (color.ShowDialog() == DialogResult.OK)
+            {
+                //if BlankColor is not full, add new color, else delete first color
+                int blankPosition;
+                for (blankPosition = 0; blankPosition < 9; blankPosition++)
+                {
+                    if (matrixColor[blankPosition, 0].ForeColor == Color.Red)
+                    {
+                        break;
+                    }    
+                }
+                for (int i = 0; i < 9; i++)
+                {
+                    if (matrixColor[i, 0].ForeColor != Color.Red && matrixColor[i, 0].BackColor == color.Color)
+                    {
+                        if (blankPosition - 1 < i)
+                            return;
+                        CustomButton.VBButton temp = new CustomButton.VBButton();
+                        temp.BackColor = matrixColor[i, 0].BackColor;
+                        matrixColor[i, 0].BackColor = matrixColor[blankPosition - 1, 0].BackColor;
+                        matrixColor[blankPosition - 1, 0].BackColor = temp.BackColor;
+                        pen.Color = color.Color;
+                        return;
+                    }
+                }
+                for (int i = 0; i < 9; i++)
+                { 
+                    if (matrixColor[i, 0].ForeColor == Color.Red)
+                    {
+                        matrixColor[i, 0].ForeColor = Color.White;
+                        matrixColor[i, 0].BackColor = color.Color;
+                        pen.Color = color.Color;
+                        break;
+                    }    
+                    else if (i == 8)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            matrixColor[j, 0].BackColor = matrixColor[j + 1, 0].BackColor;
+                        }
+                        matrixColor[8, 0].BackColor = color.Color;
+                        pen.Color = color.Color;
+                    }  
+                }    
+            }    
+        }
+        private void CustomColor_BackColorChanged(object sender, EventArgs e, CustomButton.VBButton selectedColor)
+        {
+            CustomButton.VBButton b = (CustomButton.VBButton)sender;
+            selectedColor.BackColor = b.BackColor;
+        }
+        #endregion
+
         //Filter feature
         #region Filter
 
@@ -786,6 +996,60 @@ namespace Roga
             imgNow = ImageWithBlue(imgNow);
             pic.Image = imgNow;
             stackImage.Push(imgNow);
+        }
+
+        #endregion
+
+        //Add Shapes feature
+        #region Shapes
+        private int width, height, X, Y;
+
+        private void pic_Shapes_MouseDown(object sender, MouseEventArgs e)
+        {
+            X = e.X;
+            Y = e.Y;
+            pic.Refresh();
+            isMouseDown = true;
+        }
+
+        private void pic_Shapes_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMouseDown)
+            {
+                pic.Refresh();
+                pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
+                width = Math.Abs(e.X - X);
+                height = Math.Abs(e.Y - Y);
+                pic.CreateGraphics().DrawRectangle(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+            }
+        }
+
+        private void pic_Shapes_MouseUp(object sender, MouseEventArgs e)
+        {
+            using (Graphics g = Graphics.FromImage(imgNow))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                g.DrawRectangle(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), Math.Abs(e.X - X), Math.Abs(e.Y - Y));
+                //hasObject = true;
+                //leftTop = new Point(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y));
+                //rightBottom = new Point(leftTop.X + Math.Abs(e.X - X), leftTop.Y + Math.Abs(e.Y - Y));
+            }
+            isMouseDown = false;
+            pic.Invalidate();
+        }
+
+        private void addShapesEvent()
+        {
+            pic.MouseDown += new MouseEventHandler(pic_Shapes_MouseDown);
+            pic.MouseMove += new MouseEventHandler(pic_Shapes_MouseMove);
+            pic.MouseUp += new MouseEventHandler(pic_Shapes_MouseUp);
+        }
+
+        private void removeShapesEvent()
+        {
+            pic.MouseDown -= new MouseEventHandler(pic_Shapes_MouseDown);
+            pic.MouseMove -= new MouseEventHandler(pic_Shapes_MouseMove);
+            pic.MouseUp -= new MouseEventHandler(pic_Shapes_MouseUp);
         }
 
         #endregion
