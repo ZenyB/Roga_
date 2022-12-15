@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace Roga
 {
-    public partial class LoginScreen : Form
+    public partial class SignupScreen : Form
     {
-        public LoginScreen()
+        public SignupScreen()
         {
             InitializeComponent();
 
@@ -21,11 +21,6 @@ namespace Roga
             string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\LoginScreen.jpg");
             string sFilePath = Path.GetFullPath(sFile);
             pbBackground.Image = Image.FromFile(sFilePath);
-
-            sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\logo.png");
-            sFilePath = Path.GetFullPath(sFile);
-            pbLogo.Image = Image.FromFile(sFilePath);
         }
 
         private void txtUsername_Enter(object sender, EventArgs e)
@@ -46,18 +41,32 @@ namespace Roga
             }
         }
 
-        private void lbSignup_Click(object sender, EventArgs e)
+        private void txtPassword_Enter(object sender, EventArgs e)
         {
-            SignupScreen signupScreen = new SignupScreen();
-            this.Hide();
-            signupScreen.ShowDialog();
+            if (txtPassword.Text == "Enter password")
+            {
+                txtPassword.Text = "";
+                txtPassword.ForeColor = SystemColors.WindowText;
+                txtPassword.PasswordChar = '*';
+            }
         }
 
-        private void vbButton1_Click(object sender, EventArgs e)
+
+        private void txtConfirm_Enter(object sender, EventArgs e)
+        {
+            if (txtConfirm.Text == "Confirm password")
+            {
+                txtConfirm.Text = "";
+                txtConfirm.ForeColor = SystemColors.WindowText;
+                txtConfirm.PasswordChar = '*';
+            }
+        }
+
+        private void lbLogin_Click(object sender, EventArgs e)
         {
             this.Hide();
-            HomeScreen homeScreen = new HomeScreen();
-            homeScreen.ShowDialog();    
+            LoginScreen loginScreen = new LoginScreen();
+            loginScreen.ShowDialog();
         }
     }
 }

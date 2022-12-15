@@ -127,6 +127,7 @@
             this.lbSignup.Size = new System.Drawing.Size(135, 20);
             this.lbSignup.TabIndex = 8;
             this.lbSignup.Text = "Create an account?";
+            this.lbSignup.Click += new System.EventHandler(this.lbSignup_Click);
             // 
             // vbButton1
             // 
@@ -146,6 +147,7 @@
             this.vbButton1.Text = "Continue without account";
             this.vbButton1.TextColor = System.Drawing.Color.Black;
             this.vbButton1.UseVisualStyleBackColor = false;
+            this.vbButton1.Click += new System.EventHandler(this.vbButton1_Click);
             // 
             // btnLogin
             // 
