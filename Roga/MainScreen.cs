@@ -1211,7 +1211,7 @@ namespace Roga
         private Image Rotate_Image(Image imageSource)
         {
             Image img = new Bitmap(imageSource);
-            img.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            img.RotateFlip(RotateFlipType.Rotate270FlipNone);
             return img;
         }
 
