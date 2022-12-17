@@ -89,7 +89,7 @@ namespace Roga
                         //add
                         break;
                     case "crop":
-                        //add 
+                        InitCropDetails();
                         break;
                     case "shape":
                         InitPenLineColorDetails();
@@ -513,6 +513,9 @@ namespace Roga
                 if (stackImage.Count > 1)
                 {
                     stackImage.Pop();
+                    //If image change size -> resize picturebox
+                    if (imgNow.Size != stackImage.Peek().Size)
+                        resizePic(stackImage.Peek());
                     imgNow = stackImage.Peek();
                     pic.Image = imgNow;
                 }    
@@ -1059,6 +1062,193 @@ namespace Roga
         }
 
         #endregion
+
+        //Crop feature
+        #region Crop
+
+        int crpX = 0, crpY = 0, rectW, rectH;
+        Pen crpPen = new Pen(Color.White);
+
+        //resize picturebox when change image size
+        private void resizePic(Image imageSource)
+        {
+            pic.Size = imageSource.Size;
+            pic.Location = new Point((Width / 2) - (pic.Width / 2), (Height / 2) - (pic.Height / 2));
+        }
+
+        private void InitCropDetails()
+        {
+            rectW = imgNow.Width;
+            rectH = imgNow.Height;
+
+            PictureBox picSelect, picCrop, picRotate, picFlip;
+            picSelect = new PictureBox();
+            picCrop = new PictureBox();
+            picRotate = new PictureBox();
+            picFlip = new PictureBox();
+
+            //set image
+            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\select.png");
+            string sFilePath = Path.GetFullPath(sFile);
+            picSelect.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\crop.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picCrop.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\rotate.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picRotate.Image = Image.FromFile(sFilePath);
+
+            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\flip.png");
+            sFilePath = Path.GetFullPath(sFile);
+            picFlip.Image = Image.FromFile(sFilePath);
+
+            //set size
+            picSelect.Size = picCrop.Size = picRotate.Size = picFlip.Size = new Size(55, 55);
+
+            //set sizemode
+            picSelect.SizeMode = picCrop.SizeMode = picRotate.SizeMode = picFlip.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            //set position
+            picSelect.Location = new Point(13, 20);
+            panel3.Controls.Add(picSelect);
+            picCrop.Location = new Point(110, 20);
+            panel3.Controls.Add(picCrop);
+            picRotate.Location = new Point(13, 115);
+            panel3.Controls.Add(picRotate);
+            picFlip.Location = new Point(110, 115);
+            panel3.Controls.Add(picFlip);
+
+            //set event
+            picSelect.Click += new EventHandler(picSelect_Click);
+            picCrop.Click += new EventHandler(picCrop_Click);
+            picRotate.Click += new EventHandler(picRotate_Click);
+            picFlip.Click += new EventHandler(picFlip_Click);
+
+
+
+        }
+
+        //select 
+        private void pic_Select_MouseEnter(object sender, EventArgs e)
+        {
+            base.OnMouseEnter(e);
+            Cursor = Cursors.Cross;
+        }
+
+        private void pic_Select_MouseDown(object sender, MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (e.Button == MouseButtons.Left)
+            {
+                Cursor = Cursors.Cross;
+                crpPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                crpPen.Color = Color.Black;
+                crpPen.Width = 2;
+
+                crpX = e.X;
+                crpY = e.Y;
+            }
+        }
+
+        private void pic_Select_MouseMove(object sender, MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (e.Button == MouseButtons.Left)
+            {
+                pic.Refresh();
+                rectW = e.X - crpX;
+                rectH = e.Y - crpY;
+                Graphics g = pic.CreateGraphics();
+                g.DrawRectangle(crpPen, crpX, crpY, rectW, rectH);
+                g.Dispose();
+            }
+
+        }
+
+        private void picSelect_Click(object sender, EventArgs e)
+        {
+            pic.MouseDown += pic_Select_MouseDown;
+            pic.MouseMove += pic_Select_MouseMove;
+            pic.MouseEnter += pic_Select_MouseEnter;
+
+        }
+
+        //crop
+        private Image CropImage(Image sourceImage)
+        {
+            Cursor = Cursors.Default;
+            Bitmap bmp2 = new Bitmap(sourceImage.Width, sourceImage.Height);
+            pic.DrawToBitmap(bmp2, pic.ClientRectangle);
+
+            Bitmap crpImage = new Bitmap(rectW, rectH);
+
+            for (int i = 0; i < rectW; i++)
+            {
+                for (int j = 0; j < rectH; j++)
+                {
+                    Color pxlclr = bmp2.GetPixel(crpX + i, crpY + j);
+                    crpImage.SetPixel(i, j, pxlclr);
+                }
+            }
+            rectH = crpImage.Height;
+            rectW = crpImage.Width;
+            return (Image)crpImage;
+        }
+
+        private void picCrop_Click(object sender, EventArgs e)
+        {
+            imgNow = CropImage(imgNow);
+            resizePic(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        //rorate
+        private Image Rotate_Image(Image imageSource)
+        {
+            Image img = new Bitmap(imageSource);
+            img.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            return img;
+        }
+
+        private void picRotate_Click(object sender, EventArgs e)
+        {
+            imgNow = Rotate_Image(imgNow);
+            resizePic(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+        }
+
+        //flip
+        private Bitmap Flip_Image(Image sourceImage)
+        {
+            Bitmap flip = GetArgbCopy(sourceImage);
+            flip.RotateFlip(RotateFlipType.Rotate180FlipY);
+
+            return flip;
+        }
+
+        private void picFlip_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(imgNow.Width.ToString() + " " + imgNow.Height.ToString());
+            imgNow = Flip_Image(imgNow);
+            pic.Image = imgNow;
+            stackImage.Push(imgNow);
+            Console.WriteLine(imgNow.Width.ToString() + " " + imgNow.Height.ToString());
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            base.OnMouseEnter(e);
+            Cursor = Cursors.Default;
+        }
+
+        #endregion
+
 
         //button onclick
         private void Pen_Button_Click(object sender, EventArgs e)
