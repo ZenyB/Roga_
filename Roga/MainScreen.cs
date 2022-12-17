@@ -57,7 +57,7 @@ namespace Roga
                         //remove
                         break;
                     case "crop":
-                        //remove 
+                        Remove_Select();
                         break;
                     case "shape":
                         removeShapesEvent();
@@ -1169,6 +1169,13 @@ namespace Roga
 
         }
 
+        private void Remove_Select()
+        {
+            pic.MouseDown -= pic_Select_MouseDown;
+            pic.MouseMove -= pic_Select_MouseMove;
+            pic.MouseEnter -= pic_Select_MouseEnter;
+        }
+
         private void picSelect_Click(object sender, EventArgs e)
         {
             pic.MouseDown += pic_Select_MouseDown;
@@ -1196,6 +1203,8 @@ namespace Roga
             }
             rectH = crpImage.Height;
             rectW = crpImage.Width;
+            crpX = 0;
+            crpY = 0;
             return (Image)crpImage;
         }
 
