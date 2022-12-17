@@ -31,6 +31,7 @@ namespace Roga
             get { return _mouseType; }
             set
             {
+                RemoveRightPanelDetails();
                 _mouseType = value;
                 switch (LastMouseType)
                 {
@@ -62,7 +63,6 @@ namespace Roga
                         removeShapesEvent();
                         break;
                     case "filter":
-                        panel3.Controls.Clear();
                         break;
                 }
                 switch (value)
@@ -517,6 +517,12 @@ namespace Roga
                     pic.Image = imgNow;
                 }    
             }
+        }
+
+        //Remove all control on right panel
+        private void RemoveRightPanelDetails()
+        {
+            panel3.Controls.Clear();
         }
 
         //Init Right Panel With Width and Color of pen
