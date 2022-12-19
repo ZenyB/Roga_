@@ -125,6 +125,10 @@
   <ItemGroup>
     <Content Include="Assets\Images\btnBlank.PNG" />
     <Content Include="Assets\Images\btnImport.PNG" />
+    <Content Include="Assets\Images\Crop and rotate\crop.png" />
+    <Content Include="Assets\Images\Crop and rotate\flip.png" />
+    <Content Include="Assets\Images\Crop and rotate\rotate.png" />
+    <Content Include="Assets\Images\Crop and rotate\select.png" />
     <Content Include="Assets\Images\EditColor.png" />
     <Content Include="Assets\Images\icons\addpicture.png" />
     <Content Include="Assets\Images\icons\back.png" />
