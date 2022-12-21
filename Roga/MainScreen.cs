@@ -20,6 +20,7 @@ namespace Roga
     public partial class MainScreen : Form
     {
         Point lastPoint = Point.Empty;// null for a Point object
+        static private string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; //get current directory
         bool isMouseDown = new Boolean();//this is used to evaluate whether our mousebutton is down or not
         string LastMouseType = string.Empty;//hold the lastest mouse type to remove the button events
         private string _mouseType;//hold the mouse type to add the button event
@@ -93,6 +94,7 @@ namespace Roga
                         break;
                     case "shape":
                         InitPenLineColorDetails();
+                        InitShapesDetails();
                         addShapesEvent();
                         break;
                     case "filter":
@@ -104,64 +106,12 @@ namespace Roga
             }
         }
 
-        //constructor
-        //
+        #region constructor
+
         public MainScreen()
         {
             InitializeComponent();
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\pencil.jpg");
-            string sFilePath = Path.GetFullPath(sFile);
-            Pen_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\back.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Back_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\hand.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Hand_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\save.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Save_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\eraser.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Eraser_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\brightness.png");
-            sFilePath = Path.GetFullPath(sFile);
-            BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\color.png");
-            sFilePath = Path.GetFullPath(sFile);
-            ColorChannel_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\exposure.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Exposure_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\addpicture.png");
-            sFilePath = Path.GetFullPath(sFile);
-            AddPicture_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\text.png");
-            sFilePath = Path.GetFullPath(sFile);
-            AddText_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\crop.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Crop_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\shape.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Shape_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\filter.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Filter_Button.BackgroundImage = Image.FromFile(sFilePath);
-
+            InitBackgroundImageForButton();
 
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(1000, 800);
@@ -202,58 +152,7 @@ namespace Roga
         public MainScreen(string selectedPath)
         {
             InitializeComponent();
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\pencil.jpg");
-            string sFilePath = Path.GetFullPath(sFile);
-            Pen_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\back.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Back_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\hand.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Hand_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\save.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Save_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\eraser.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Eraser_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\brightness.png");
-            sFilePath = Path.GetFullPath(sFile);
-            BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\color.png");
-            sFilePath = Path.GetFullPath(sFile);
-            ColorChannel_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\exposure.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Exposure_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\addpicture.png");
-            sFilePath = Path.GetFullPath(sFile);
-            AddPicture_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\text.png");
-            sFilePath = Path.GetFullPath(sFile);
-            AddText_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\crop.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Crop_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\shape.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Shape_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\filter.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Filter_Button.BackgroundImage = Image.FromFile(sFilePath);
+            InitBackgroundImageForButton();
 
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(1000, 800);
@@ -313,58 +212,7 @@ namespace Roga
         public MainScreen(Image picture)
         {
             InitializeComponent();
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\pencil.jpg");
-            string sFilePath = Path.GetFullPath(sFile);
-            Pen_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\back.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Back_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\hand.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Hand_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\save.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Save_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\eraser.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Eraser_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\brightness.png");
-            sFilePath = Path.GetFullPath(sFile);
-            BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\color.png");
-            sFilePath = Path.GetFullPath(sFile);
-            ColorChannel_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\exposure.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Exposure_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\addpicture.png");
-            sFilePath = Path.GetFullPath(sFile);
-            AddPicture_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\text.png");
-            sFilePath = Path.GetFullPath(sFile);
-            AddText_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\crop.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Crop_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\shape.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Shape_Button.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\icons\filter.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Filter_Button.BackgroundImage = Image.FromFile(sFilePath);
+            InitBackgroundImageForButton();
 
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(1000, 800);
@@ -421,12 +269,39 @@ namespace Roga
             pic.BringToFront();
 
         }//creat a project with selected image
-        //
+
+        //method to set background image for button in constructor
+        private void InitBackgroundImageForButton()
+        {
+            Pen_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\pencil.jpg"));
+            Back_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\back.png"));
+            Hand_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\hand.png"));
+            Save_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\save.png"));
+            Eraser_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\eraser.png"));
+            BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\brightness.png"));
+            ColorChannel_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\color.png"));
+            Exposure_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\exposure.png"));
+            AddPicture_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\addpicture.png"));
+            AddText_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\text.png"));
+            Crop_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\crop.png"));
+            Shape_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\shape.png"));
+            Filter_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\filter.png"));
+        }
+        #endregion
+
+        //method to resize image
         static Image resizeImage(Image imgToResize, Size size)
         {
             return (Image)(new Bitmap(imgToResize, size));
         }
 
+        //method to get filePath
+        static private string getFilePath(string relativePath)
+        {
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, relativePath);
+            string sFilePath = Path.GetFullPath(sFile);
+            return sFilePath;
+        }
 
         //pencil event
         //
@@ -626,13 +501,10 @@ namespace Roga
             Panel edit = new Panel();
             edit.Size = new Size(147, 56);
             edit.Location = new Point(28, 500);
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\EditColor.png");
-            string sFilePath = Path.GetFullPath(sFile);
-            edit.BackgroundImage = Image.FromFile(sFilePath);
+            edit.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\EditColor.png"));
             edit.Click += delegate (object sender, EventArgs e) { editColor_Click(sender, e, matrixColor); };
             panel3.Controls.Add(edit);
-            selectedColor.BackColor = Color.Black;
+            selectedColor.BackColor = pen.Color;
         }
 
         private void SetWidth_10(object sender, EventArgs e)
@@ -751,34 +623,13 @@ namespace Roga
             picBlue = new PictureBox();
 
             //SetImage
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\GrayImg.png");
-            string sFilePath = Path.GetFullPath(sFile);
-            picGray.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\NegativeImg.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picNegative.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\TransparencyImg.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picTrans.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\SepiaImg.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picSepiaTone.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\RedImg.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picRed.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\GreenImg.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picGreen.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Filter\BlueImg.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picBlue.Image = Image.FromFile(sFilePath);
+            picGray.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Filter\GrayImg.png"));
+            picNegative.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Filter\NegativeImg.png"));
+            picTrans.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Filter\TransparencyImg.png"));
+            picSepiaTone.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Filter\SepiaImg.png"));
+            picRed.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Filter\RedImg.png"));
+            picGreen.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Filter\GreenImg.png"));
+            picBlue.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Filter\BlueImg.png"));
 
             //setSize
             picGray.Size = picNegative.Size = picTrans.Size = picSepiaTone.Size = picRed.Size = picGreen.Size = picBlue.Size = new Size(80, 80);
@@ -1012,6 +863,57 @@ namespace Roga
         //Add Shapes feature
         #region Shapes
         private int width, height, X, Y;
+        private bool shiftDown = false; //if user long press shift, shapes will be drawn based on the square 
+        private Pen penRect = new Pen(Color.LightSkyBlue, 1); //pen for rectangle around shapes
+        private Rectangle rectNow = new Rectangle(0, 0, 0, 0);
+        private Point startMouseMoveShape, endMouseMoveShape;
+        private bool canMove = false;
+
+        private void InitShapesDetails()
+        {
+            FlowLayoutPanel pShapes = new FlowLayoutPanel();
+            pShapes.AutoScroll = true;
+            pShapes.Location = new Point(12, 600);
+            pShapes.BackColor = Color.FromArgb(217, 217, 217);
+            pShapes.Size = new Size(180, 130);
+
+            CustomButton.VBButton[] lstButton = new CustomButton.VBButton[12];
+            for (int i = 0; i < 12; i++)
+            {
+                lstButton[i] = new CustomButton.VBButton();
+                lstButton[i].Name = i.ToString();
+                lstButton[i].BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\pencil.jpg"));
+            }
+            pShapes.Controls.Add(lstButton[0]);
+
+            CustomButton.VBButton b = new CustomButton.VBButton();
+            b.BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\pencil.jpg")), new Size(25, 25));
+            b.Size = new Size(25, 25);
+            b.BorderRadius = 0;
+            b.BorderSize = 0;
+            b.FlatStyle = FlatStyle.Flat;
+            //b.Location = new Point(2, 2);
+            pShapes.Controls.Add(b);
+
+            //sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Shapes\hexagon.png");
+            //sFilePath = Path.GetFullPath(sFile);
+            //CustomButton.VBButton b1 = new CustomButton.VBButton();
+            //b1.BackColor = Color.FromArgb(217, 217, 217);
+            //b1.BackgroundImage = resizeImage(Image.FromFile(sFilePath), new Size(25, 25));
+            //b1.BorderRadius = 0;
+            //b1.BorderSize = 0;
+            //b1.FlatStyle = FlatStyle.Flat;
+            //b1.Size = new Size(25, 25);
+            ////b1.Location = new Point(29, 2);
+            //pShapes.Controls.Add(b1);
+
+            panel3.Controls.Add(pShapes);
+            //pen for rectangle around shapes
+            penRect.DashStyle = DashStyle.DashDot;
+            //StartCap & EndCap for line
+            pen.StartCap = LineCap.Round;
+            pen.EndCap = LineCap.Round;
+        }
 
         private void pic_Shapes_MouseDown(object sender, MouseEventArgs e)
         {
@@ -1029,7 +931,25 @@ namespace Roga
                 pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
                 width = Math.Abs(e.X - X);
                 height = Math.Abs(e.Y - Y);
-                pic.CreateGraphics().DrawRectangle(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                if (shiftDown)
+                {
+                    width = height = Math.Min(width, height);
+                }
+                canMove = true;
+                //pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                //pic.CreateGraphics().DrawRectangle(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                //pic.CreateGraphics().DrawEllipse(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
             }
         }
 
@@ -1038,13 +958,57 @@ namespace Roga
             using (Graphics g = Graphics.FromImage(imgNow))
             {
                 g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.DrawRectangle(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), Math.Abs(e.X - X), Math.Abs(e.Y - Y));
+                int width, height;
+                width = Math.Abs(e.X - X);
+                height = Math.Abs(e.Y - Y);
+                if (shiftDown)
+                {
+                    width = height = Math.Min(width, height);
+                }
+
+                pic.CreateGraphics().DrawRectangle(penRect, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                //pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                //g.DrawLine(pen, X, Y, e.X, e.Y);
+                //g.DrawRectangle(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
+                //g.DrawEllipse(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
+                //g.DrawPolygon(pen, CaculateRightArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateLeftArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateDownArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateUpArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateRightTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height)));
+                g.DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculatePentagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateHexagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateFiveStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //g.DrawPolygon(pen, CaculateSixStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
                 //hasObject = true;
                 //leftTop = new Point(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y));
                 //rightBottom = new Point(leftTop.X + Math.Abs(e.X - X), leftTop.Y + Math.Abs(e.Y - Y));
             }
             isMouseDown = false;
-            pic.Invalidate();
+            shiftDown = false;
+            //pic.Invalidate();
+        }
+
+        private void this_Shapes_ShiftKey(object sender, KeyEventArgs e)
+        {
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                shiftDown = true;
+            }
+            else
+            {
+                shiftDown = false;
+            }
+        }
+
+        private void this_Shapes_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((Control.ModifierKeys & Keys.Shift) != Keys.Shift)
+            {
+                shiftDown = false;
+            }
         }
 
         private void addShapesEvent()
@@ -1052,6 +1016,8 @@ namespace Roga
             pic.MouseDown += new MouseEventHandler(pic_Shapes_MouseDown);
             pic.MouseMove += new MouseEventHandler(pic_Shapes_MouseMove);
             pic.MouseUp += new MouseEventHandler(pic_Shapes_MouseUp);
+            this.KeyDown += new KeyEventHandler(this_Shapes_ShiftKey);
+            this.KeyUp += new KeyEventHandler(this_Shapes_KeyUp);
         }
 
         private void removeShapesEvent()
@@ -1059,7 +1025,168 @@ namespace Roga
             pic.MouseDown -= new MouseEventHandler(pic_Shapes_MouseDown);
             pic.MouseMove -= new MouseEventHandler(pic_Shapes_MouseMove);
             pic.MouseUp -= new MouseEventHandler(pic_Shapes_MouseUp);
+            this.KeyDown -= new KeyEventHandler(this_Shapes_ShiftKey);
+            this.KeyUp -= new KeyEventHandler(this_Shapes_KeyUp);
+            pen.StartCap = LineCap.Square;
+            pen.EndCap = LineCap.Square;
         }
+
+        #region caculate points to draw polygon
+        //Create seven point to draw an arrow by drawPolygon (right)
+        private PointF[] CaculateRightArrow(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init, init, init };
+            points[0].X = x;                                    points[0].Y = y + (float)height / 4;
+            points[1].X = points[0].X + (float)width / 2;       points[1].Y = points[0].Y;
+            points[2].X = points[1].X;                          points[2].Y = y;
+            points[3].X = x + width;                            points[3].Y = y + (float)height / 2;
+            //mirror
+            points[4].X = points[2].X;                          points[4].Y = y + height;
+            points[5].X = points[1].X;                          points[5].Y = y + 3 * ((float)height / 4);
+            points[6].X = points[0].X;                          points[6].Y = points[5].Y;
+            return points;
+        }
+        //Create seven point to draw an arrow by drawPolygon (left)
+        private PointF[] CaculateLeftArrow(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init, init, init };
+            points[0].X = x;                                    points[0].Y = y + (float)height / 2;
+            points[1].X = x + (float)width / 2;                 points[1].Y = y;
+            points[2].X = points[1].X;                          points[2].Y = y + (float)height / 4;
+            points[3].X = x + width;                            points[3].Y = points[2].Y;
+            //mirror
+            points[4].X = points[3].X;                          points[4].Y = y + 3 * ((float)height / 4);
+            points[5].X = points[2].X;                          points[5].Y = points[4].Y;
+            points[6].X = points[1].X;                          points[6].Y = y + height;
+            return points;
+        }
+
+        //Create seven point to draw an arrow by drawPolygon (up)
+        private PointF[] CaculateUpArrow(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init, init, init };
+            points[0].X = x + (float)width / 2;                 points[0].Y = y;
+            points[1].X = x + width;                            points[1].Y = y + (float)height / 2;
+            points[2].X = x + 3 * ((float)width / 4);           points[2].Y = points[1].Y;
+            points[3].X = points[2].X;                          points[3].Y = y + height;
+            //mirror
+            points[4].X = x + (float)width / 4;                 points[4].Y = points[3].Y;
+            points[5].X = points[4].X;                          points[5].Y = points[2].Y;
+            points[6].X = x;                                    points[6].Y = points[5].Y;
+            return points;
+        }
+
+        //Create seven point to draw an arrow by drawPolygon (down)
+        private PointF[] CaculateDownArrow(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init, init, init };
+            points[0].X = x + (float)width / 2;                 points[0].Y = y + height;
+            points[1].X = x;                                    points[1].Y = y + (float)height / 2;
+            points[2].X = x + (float)width / 4;                 points[2].Y = points[1].Y;
+            points[3].X = points[2].X;                          points[3].Y = y;
+            //mirror
+            points[4].X = x + 3 * ((float)width / 4);           points[4].Y = points[3].Y;
+            points[5].X = points[4].X;                          points[5].Y = points[2].Y;
+            points[6].X = x + width;                            points[6].Y = points[5].Y;
+            return points;
+        }
+
+        private PointF[] CaculateIsoscelesTriangle(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init };
+            points[0].X = x;                                    points[0].Y = y + height;
+            points[1].X = x + (float)width / 2;                 points[1].Y = y;
+            points[2].X = x + width;                            points[2].Y = points[0].Y;
+            return points;
+        }
+
+        private PointF[] CaculateRightTriangle(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init };
+            points[0].X = x;                                    points[0].Y = y;
+            points[1].X = x;                                    points[1].Y = y + height;
+            points[2].X = x + width;                            points[2].Y = y + height;
+            return points;
+        }
+
+        private PointF[] CaculateRhombus(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init };
+            points[0].X = x + (float)width / 2;                 points[0].Y = y;
+            points[1].X = x + width;                            points[1].Y = y + ((float)1 / 2) * height;
+            points[2].X = points[0].X;                          points[2].Y = y + height;
+            points[3].X = x;                                    points[3].Y = points[1].Y;
+            return points;
+        }
+
+        private PointF[] CaculatePentagon(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init };
+            points[0].X = x + (float)width / 2;                 points[0].Y = y;
+            points[1].X = x + width;                            points[1].Y = y + ((float)3 / 8) * height;
+            points[2].X = x + ((float)13 / 16) * width;         points[2].Y = y + height;
+            points[3].X = x + ((float)3 / 16) * width;          points[3].Y = points[2].Y;
+            points[4].X = x;                                    points[4].Y = points[1].Y;
+            return points;
+        }
+
+        private PointF[] CaculateHexagon(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init, init };
+            points[0].X = x + (float)width / 2; points[0].Y = y;
+            points[1].X = x; points[1].Y = y + ((float)1 / 4) * height;
+            points[2].X = x; points[2].Y = y + ((float)3 / 4) * height;
+            points[3].X = points[0].X; points[3].Y = y + height;
+            points[4].X = x + width; points[4].Y = points[2].Y;
+            points[5].X = points[4].X; points[5].Y = points[1].Y;
+            return points;
+        }
+
+        private PointF[] CaculateFiveStar(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init, init, init, init, init, init };
+            points[0].X = x + (float)width / 2;                 points[0].Y = y;
+            points[1].X = x + ((float)11 / 18) * width;         points[1].Y = y + ((float)2 / 5) * height;
+            points[2].X = x + width;                            points[2].Y = points[1].Y;
+            points[3].X = x + ((float)2 / 3) * width;           points[3].Y = y + ((float)3 / 5) * height;
+            points[4].X = x + ((float)3 / 4) * width;           points[4].Y = y + height;
+            points[5].X = x + (float)width / 2;                 points[5].Y = y + ((float)4 / 5) * height;
+            points[6].X = x + ((float)1 / 4) * width;           points[6].Y = points[4].Y;
+            points[7].X = x + ((float)1 / 3) * width;           points[7].Y = points[3].Y;
+            points[8].X = x;                                    points[8].Y = points[2].Y;
+            points[9].X = x + ((float)7 / 18) * width;          points[9].Y = points[1].Y;
+            return points;
+        }
+
+        private PointF[] CaculateSixStar(int x, int y, int width, int height)
+        {
+            Point init = new Point(x, y);
+            PointF[] points = { init, init, init, init, init, init, init, init, init, init, init, init };
+            points[0].X = x + (float)width / 2;                 points[0].Y = y;
+            points[1].X = x + ((float)2 / 3) * width;           points[1].Y = y + ((float)1 / 4) * height;
+            points[2].X = x + width;                            points[2].Y = points[1].Y;
+            points[3].X = x + ((float)5 / 6) * width;           points[3].Y = y + ((float)1 / 2) * height;
+            points[4].X = points[2].X;                          points[4].Y = y + ((float)3 / 4) * height;
+            points[5].X = points[1].X;                          points[5].Y = points[4].Y;
+            points[6].X = points[0].X;                          points[6].Y = y + height;
+            points[7].X = x + ((float)1 / 3) * width;           points[7].Y = points[5].Y;
+            points[8].X = x;                                    points[8].Y = points[4].Y;
+            points[9].X = x + ((float)1 / 6) * width;           points[9].Y = points[3].Y;
+            points[10].X = x;                                   points[10].Y = points[2].Y;
+            points[11].X = points[7].X;                         points[11].Y = points[1].Y;
+            return points;
+        }
+        #endregion
 
         #endregion
 
@@ -1089,21 +1216,10 @@ namespace Roga
 
             //set image
             string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\select.png");
-            string sFilePath = Path.GetFullPath(sFile);
-            picSelect.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\crop.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picCrop.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\rotate.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picRotate.Image = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Crop and rotate\flip.png");
-            sFilePath = Path.GetFullPath(sFile);
-            picFlip.Image = Image.FromFile(sFilePath);
+            picSelect.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\select.png"));
+            picCrop.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\crop.png"));
+            picRotate.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\rotate.png"));
+            picFlip.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\flip.png"));
 
             //set size
             picSelect.Size = picCrop.Size = picRotate.Size = picFlip.Size = new Size(55, 55);
@@ -1259,7 +1375,7 @@ namespace Roga
         #endregion
 
 
-        //button onclick
+        #region button onclick
         private void Pen_Button_Click(object sender, EventArgs e)
         {
             MouseType = "pen";
@@ -1344,6 +1460,6 @@ namespace Roga
             MouseType = "filter";
             LastMouseType = MouseType;
         }
-        //
+        #endregion
     }
 }

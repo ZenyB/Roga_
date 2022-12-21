@@ -17,27 +17,16 @@ namespace Roga
     {
         //bool loginState = true;
         ImageList imageList = new ImageList();
+        static private string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; //get current directory
         public HomeScreen()
         {
             InitializeComponent();
 
-            //Create Icon
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\logo.ico");
-            string sFilePath = Path.GetFullPath(sFile);
-            Icon icon = Icon.ExtractAssociatedIcon(sFilePath);
-            this.Icon = icon;
-
-
             //Insert Logo
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\logo.png");
-            sFilePath = Path.GetFullPath(sFile);
-            pictureBox1.Image = Image.FromFile(sFilePath);
+            pictureBox1.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\logo.png"));
 
             //
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\testImage.png");
-            sFilePath = Path.GetFullPath(sFile);
-            Image avtImg = Image.FromFile(sFilePath);
+            Image avtImg = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\testImage.png"));
             //resize follow W or H
             if (avtImg.Width > avtImg.Height)
             {
@@ -51,30 +40,14 @@ namespace Roga
 
 
             //btnBackGround
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\btnImport.png");
-            sFilePath = Path.GetFullPath(sFile);
-            btnImport.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\btnBlank.png");
-            sFilePath = Path.GetFullPath(sFile);
-            btnBlank.BackgroundImage = Image.FromFile(sFilePath);
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\pen.png");
-            sFilePath = Path.GetFullPath(sFile);
-            btnRename.BackgroundImage = Image.FromFile(sFilePath);
-            btnRename.BackgroundImage = Image.FromFile(sFilePath);
+            btnImport.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\btnImport.png"));
+            btnBlank.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\btnBlank.png"));
+            btnRename.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\pen.png"));
 
             //ListViewImage
-
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\logo.png");
-            sFilePath = Path.GetFullPath(sFile);
-            imageList.Images.Add(Image.FromFile(sFile));
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\testImage.png");
-            sFilePath = Path.GetFullPath(sFile);
-            imageList.Images.Add(Image.FromFile(sFile));
-            sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\btnBlank.png");
-            sFilePath = Path.GetFullPath(sFile);
-            imageList.Images.Add(Image.FromFile(sFile));
+            imageList.Images.Add(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\logo.png")));
+            imageList.Images.Add(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\testImage.png")));
+            imageList.Images.Add(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\btnBlank.png")));
 
             listView1.View = View.LargeIcon;
             imageList.ImageSize = new Size(255, 255);
@@ -93,6 +66,13 @@ namespace Roga
             //    linkLabelLogin.Visible = true;
             //    listView1.Visible = false;
             //}
+        }
+
+        static private string getFilePath(string relativePath)
+        {
+            string sFile = System.IO.Path.Combine(sCurrentDirectory, relativePath);
+            string sFilePath = Path.GetFullPath(sFile);
+            return sFilePath;
         }
 
         public static Image resizeImage(Image imgToResize, Size size)
@@ -217,9 +197,6 @@ namespace Roga
         //A blank project
         private void btnBlank_Click(object sender, EventArgs e)
         {
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\blank.png");
-            string sFilePath = Path.GetFullPath(sFile);
             MainScreen mainForm = new MainScreen();
             this.Hide();
             mainForm.ShowDialog();
