@@ -1066,7 +1066,7 @@ namespace Roga
         //Crop feature
         #region Crop
 
-        int crpX = 0, crpY = 0, rectW, rectH;
+        int crpX = 0, crpY = 0, rectW, rectH, slX, slY;
         Pen crpPen = new Pen(Color.White);
 
         //resize picturebox when change image size
@@ -1149,8 +1149,8 @@ namespace Roga
                 crpPen.Color = Color.Black;
                 crpPen.Width = 2;
 
-                crpX = e.X;
-                crpY = e.Y;
+                crpX = slX = e.X;
+                crpY = slY = e.Y;
             }
         }
 
@@ -1160,8 +1160,24 @@ namespace Roga
             if (e.Button == MouseButtons.Left)
             {
                 pic.Refresh();
-                rectW = e.X - crpX;
-                rectH = e.Y - crpY;
+
+                crpX = Math.Min(slX, e.X);
+                if (crpX < 0)
+                    crpX = 0;
+                crpY = Math.Min(slY, e.Y);
+                if (crpY < 0)
+                    crpY = 0;
+
+                rectW = Math.Abs(e.X - slX);
+                if (e.X < 0)
+                    rectW = Math.Abs(0 - slX);
+                if (rectW + crpX >= imgNow.Width)
+                    rectW = imgNow.Width - slX - 1;
+                rectH = Math.Abs(e.Y - slY);
+                if (e.Y < 0)
+                    rectH = Math.Abs(0 - slY);
+                if (rectH + crpY >= imgNow.Height)
+                    rectH = imgNow.Height - slY - 1;
                 Graphics g = pic.CreateGraphics();
                 g.DrawRectangle(crpPen, crpX, crpY, rectW, rectH);
                 g.Dispose();
@@ -1203,8 +1219,8 @@ namespace Roga
             }
             rectH = crpImage.Height;
             rectW = crpImage.Width;
-            crpX = 0;
-            crpY = 0;
+            crpX = slX = 0;
+            crpY = slY = 0;
             return (Image)crpImage;
         }
 
@@ -1228,6 +1244,9 @@ namespace Roga
         {
             imgNow = Rotate_Image(imgNow);
             resizePic(imgNow);
+            rectW = imgNow.Width;
+            rectH = imgNow.Height;
+            crpX = crpY = slX = slY = 0;
             pic.Image = imgNow;
             stackImage.Push(imgNow);
         }
