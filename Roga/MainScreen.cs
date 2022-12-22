@@ -368,7 +368,6 @@ namespace Roga
             pic.MouseDown -= Pic_Draw_MouseDown;
             pic.MouseMove -= Pic_Draw_MouseMove;
             pic.MouseUp -= Pic_Draw_MouseUp;
-            RemoveRightPanelDetails();
         }
         #endregion
 
@@ -428,7 +427,6 @@ namespace Roga
             pic.MouseDown -= Pic_Eraser_MouseDown;
             pic.MouseMove -= Pic_Eraser_MouseMove;
             pic.MouseUp -= Pic_Eraser_MouseUp;
-            RemoveRightPanelDetails();
         }
 
         private void InitPenSize()
