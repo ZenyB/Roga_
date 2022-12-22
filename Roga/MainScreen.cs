@@ -33,6 +33,8 @@ namespace Roga
             set
             {
                 RemoveRightPanelDetails();
+                if (canMove != false)
+                    CanMove = false;
                 _mouseType = value;
                 switch (LastMouseType)
                 {
@@ -183,8 +185,6 @@ namespace Roga
                     newHeight = Height;
                     newWidth = (int)(Image.FromFile(selectedPath).Width * ((float)newHeight / Image.FromFile(selectedPath).Height));
                 }
-                Console.WriteLine(newWidth);
-                Console.WriteLine(newHeight);
                 pic.Size = new Size(newWidth, newHeight);
                 pic.Location = new Point((Width / 2) - (newWidth / 2) - 7, (Height / 2) - (newHeight / 2));
                 Image temp = Image.FromFile(selectedPath);
@@ -192,7 +192,6 @@ namespace Roga
                 pic.Image = temp;
                 imgNow = pic.Image;
                 stackImage.Push(imgNow);
-                Console.WriteLine(pic.Size.ToString());
             }
             else
             {
@@ -243,8 +242,6 @@ namespace Roga
                     newHeight = Height;
                     newWidth = (int)(picture.Width * ((float)newHeight / picture.Height));
                 }
-                Console.WriteLine(newWidth);
-                Console.WriteLine(newHeight);
                 pic.Size = new Size(newWidth, newHeight);
                 pic.Location = new Point((Width / 2) - (newWidth / 2) - 7, (Height / 2) - (newHeight / 2));
                 Image temp = picture;
@@ -252,7 +249,6 @@ namespace Roga
                 pic.Image = temp;
                 imgNow = pic.Image;
                 stackImage.Push(imgNow);
-                Console.WriteLine(pic.Size.ToString());
             }
             else
             {
@@ -387,13 +383,22 @@ namespace Roga
                 //If stackImage has only one image, this is original image, user can't goback
                 if (stackImage.Count > 1)
                 {
-                    stackImage.Pop();
-                    //If image change size -> resize picturebox
-                    if (imgNow.Size != stackImage.Peek().Size)
-                        resizePic(stackImage.Peek());
-                    imgNow = stackImage.Peek();
-                    pic.Image = imgNow;
-                }    
+                    if (canMove == false)
+                    {
+                        stackImage.Pop();
+                        //If image change size -> resize picturebox
+                        if (imgNow.Size != stackImage.Peek().Size)
+                            resizePic(stackImage.Peek());
+                        imgNow = stackImage.Peek();
+                        pic.Image = imgNow;
+                    }
+                }
+                if (canMove != false)
+                {
+                    canMove = false;
+                    rectNow = new Rectangle(0, 0, 0, 0);
+                }
+                pic.Refresh();
             }
         }
 
@@ -425,12 +430,25 @@ namespace Roga
             btnLine2.Location = new Point(17, 29);
             btnLine3.Location = new Point(17, 42);
             btnLine1.FlatStyle = btnLine2.FlatStyle = btnLine3.FlatStyle = FlatStyle.Flat;
-            btnLine1.BorderColor = btnLine2.BorderColor = btnLine3.BorderColor = Color.FromArgb(217, 217, 217);
+            btnLine1.BorderColor = btnLine2.BorderColor = btnLine3.BorderColor = Color.Black;
+                //set default width
+            switch (pen.Width)
+            {
+                case 3:
+                    btnLine3.BorderSize = 1;
+                    break;
+                case 5:
+                    btnLine2.BorderSize = 1;
+                    break;
+                case 10:
+                    btnLine1.BorderSize = 1;
+                    break;
+            }
             btnLine1.BorderRadius = btnLine2.BorderRadius = btnLine3.BorderRadius = 0;
             btnLine1.Cursor = btnLine2.Cursor = btnLine3.Cursor = Cursors.Hand;
-            btnLine1.Click += new EventHandler(SetWidth_10);
-            btnLine2.Click += new EventHandler(SetWidth_5);
-            btnLine3.Click += new EventHandler(SetWidth_3);
+            btnLine1.MouseDown += delegate (object sender, MouseEventArgs e) { SetWidth_10(sender, e, btnLine1, btnLine2, btnLine3); };
+            btnLine2.MouseDown += delegate (object sender, MouseEventArgs e) { SetWidth_5(sender, e, btnLine1, btnLine2, btnLine3); };
+            btnLine3.MouseDown += delegate (object sender, MouseEventArgs e) { SetWidth_3(sender, e, btnLine1, btnLine2, btnLine3); };
             p.Controls.Add(btnLine1);
             p.Controls.Add(btnLine2);
             p.Controls.Add(btnLine3);
@@ -493,47 +511,101 @@ namespace Roga
                 //matrixColor[i, 0].Click += new EventHandler(SetColorForBlank);
                 matrixColor[i, 0].BackColor = Color.White;
                 matrixColor[i, 0].BackColorChanged += delegate (object sender, EventArgs e) { CustomColor_BackColorChanged(sender, e, selectedColor); };
-                matrixColor[i, 0].Click += delegate (object sender, EventArgs e) { SetCustomColor(sender, e, selectedColor); };
-                matrixColor[i, 1].Click += delegate (object sender, EventArgs e) { SetColor(sender, e, selectedColor); };
-                matrixColor[i, 2].Click += delegate (object sender, EventArgs e) { SetColor(sender, e, selectedColor); };
+                matrixColor[i, 0].MouseDown += delegate (object sender, MouseEventArgs e) { SetCustomColor(sender, e, selectedColor); };
+                matrixColor[i, 1].MouseDown += delegate (object sender, MouseEventArgs e) { SetColor(sender, e, selectedColor); };
+                matrixColor[i, 2].MouseDown += delegate (object sender, MouseEventArgs e) { SetColor(sender, e, selectedColor); };
             }
             //Init EditColor
             Panel edit = new Panel();
             edit.Size = new Size(147, 56);
             edit.Location = new Point(28, 500);
             edit.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\EditColor.png"));
-            edit.Click += delegate (object sender, EventArgs e) { editColor_Click(sender, e, matrixColor); };
+            edit.MouseDown += delegate (object sender, MouseEventArgs e) { editColor_MouseDown(sender, e, matrixColor); };
             panel3.Controls.Add(edit);
             selectedColor.BackColor = pen.Color;
         }
 
-        private void SetWidth_10(object sender, EventArgs e)
+        private void SetWidth_10(object sender, MouseEventArgs e, CustomButton.VBButton btnLine1, CustomButton.VBButton btnLine2, CustomButton.VBButton btnLine3)
         {
-            pen.Width = 10;
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (pen.Width)
+                {
+                    case 3:
+                        btnLine3.BorderSize = 0;
+                        break;
+                    case 5:
+                        btnLine2.BorderSize = 0;
+                        break;
+                    case 10:
+                        btnLine1.BorderSize = 0;
+                        break;
+                }
+                pen.Width = 10;
+                btnLine1.BorderSize = 1;
+            }
         }
-        private void SetWidth_5(object sender, EventArgs e)
+        private void SetWidth_5(object sender, MouseEventArgs e, CustomButton.VBButton btnLine1, CustomButton.VBButton btnLine2, CustomButton.VBButton btnLine3)
         {
-            pen.Width = 5;
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (pen.Width)
+                {
+                    case 3:
+                        btnLine3.BorderSize = 0;
+                        break;
+                    case 5:
+                        btnLine2.BorderSize = 0;
+                        break;
+                    case 10:
+                        btnLine1.BorderSize = 0;
+                        break;
+                }
+                pen.Width = 5;
+                btnLine2.BorderSize = 1;
+            }
         }
-        private void SetWidth_3(object sender, EventArgs e)
+        private void SetWidth_3(object sender, MouseEventArgs e, CustomButton.VBButton btnLine1, CustomButton.VBButton btnLine2, CustomButton.VBButton btnLine3)
         {
-            pen.Width = 3;
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (pen.Width)
+                {
+                    case 3:
+                        btnLine3.BorderSize = 0;
+                        break;
+                    case 5:
+                        btnLine2.BorderSize = 0;
+                        break;
+                    case 10:
+                        btnLine1.BorderSize = 0;
+                        break;
+                }
+                pen.Width = 3;
+                btnLine3.BorderSize = 1;
+            }
         }
 
-        private void SetColor(object sender, EventArgs e, CustomButton.VBButton b)
+        private void SetColor(object sender, MouseEventArgs e, CustomButton.VBButton b)
         {
-            CustomButton.VBButton button = (CustomButton.VBButton)sender;
-            b.BackColor = button.BackColor;
-            pen.Color = button.BackColor;
-        }
-        private void SetCustomColor(object sender, EventArgs e, CustomButton.VBButton b)
-        {
-            CustomButton.VBButton button = (CustomButton.VBButton)sender;
-            if (button.ForeColor != Color.Red)
+            if (e.Button == MouseButtons.Left)
             {
+                CustomButton.VBButton button = (CustomButton.VBButton)sender;
                 b.BackColor = button.BackColor;
                 pen.Color = button.BackColor;
-            }    
+            }
+        }
+        private void SetCustomColor(object sender, MouseEventArgs e, CustomButton.VBButton b)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                CustomButton.VBButton button = (CustomButton.VBButton)sender;
+                if (button.ForeColor != Color.Red)
+                {
+                    b.BackColor = button.BackColor;
+                    pen.Color = button.BackColor;
+                }
+            }
         }
 
         //private void SetColorForBlank(object sender, EventArgs e)
@@ -552,54 +624,57 @@ namespace Roga
         //    else
         //        pen.Color = button.BackColor;
         //}
-        private void editColor_Click(object sender, EventArgs e, CustomButton.VBButton[,] matrixColor)
+        private void editColor_MouseDown(object sender, MouseEventArgs e, CustomButton.VBButton[,] matrixColor)
         {
-            ColorDialog color = new ColorDialog();
-            if (color.ShowDialog() == DialogResult.OK)
+            if (e.Button == MouseButtons.Left)
             {
-                //if BlankColor is not full, add new color, else delete first color
-                int blankPosition;
-                for (blankPosition = 0; blankPosition < 9; blankPosition++)
+                ColorDialog color = new ColorDialog();
+                if (color.ShowDialog() == DialogResult.OK)
                 {
-                    if (matrixColor[blankPosition, 0].ForeColor == Color.Red)
+                    //if BlankColor is not full, add new color, else delete first color
+                    int blankPosition;
+                    for (blankPosition = 0; blankPosition < 9; blankPosition++)
                     {
-                        break;
-                    }    
-                }
-                for (int i = 0; i < 9; i++)
-                {
-                    if (matrixColor[i, 0].ForeColor != Color.Red && matrixColor[i, 0].BackColor == color.Color)
+                        if (matrixColor[blankPosition, 0].ForeColor == Color.Red)
+                        {
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < 9; i++)
                     {
-                        if (blankPosition - 1 < i)
+                        if (matrixColor[i, 0].ForeColor != Color.Red && matrixColor[i, 0].BackColor == color.Color)
+                        {
+                            if (blankPosition - 1 < i)
+                                return;
+                            CustomButton.VBButton temp = new CustomButton.VBButton();
+                            temp.BackColor = matrixColor[i, 0].BackColor;
+                            matrixColor[i, 0].BackColor = matrixColor[blankPosition - 1, 0].BackColor;
+                            matrixColor[blankPosition - 1, 0].BackColor = temp.BackColor;
+                            pen.Color = color.Color;
                             return;
-                        CustomButton.VBButton temp = new CustomButton.VBButton();
-                        temp.BackColor = matrixColor[i, 0].BackColor;
-                        matrixColor[i, 0].BackColor = matrixColor[blankPosition - 1, 0].BackColor;
-                        matrixColor[blankPosition - 1, 0].BackColor = temp.BackColor;
-                        pen.Color = color.Color;
-                        return;
+                        }
+                    }
+                    for (int i = 0; i < 9; i++)
+                    {
+                        if (matrixColor[i, 0].ForeColor == Color.Red)
+                        {
+                            matrixColor[i, 0].ForeColor = Color.White;
+                            matrixColor[i, 0].BackColor = color.Color;
+                            pen.Color = color.Color;
+                            break;
+                        }
+                        else if (i == 8)
+                        {
+                            for (int j = 0; j < 8; j++)
+                            {
+                                matrixColor[j, 0].BackColor = matrixColor[j + 1, 0].BackColor;
+                            }
+                            matrixColor[8, 0].BackColor = color.Color;
+                            pen.Color = color.Color;
+                        }
                     }
                 }
-                for (int i = 0; i < 9; i++)
-                { 
-                    if (matrixColor[i, 0].ForeColor == Color.Red)
-                    {
-                        matrixColor[i, 0].ForeColor = Color.White;
-                        matrixColor[i, 0].BackColor = color.Color;
-                        pen.Color = color.Color;
-                        break;
-                    }    
-                    else if (i == 8)
-                    {
-                        for (int j = 0; j < 8; j++)
-                        {
-                            matrixColor[j, 0].BackColor = matrixColor[j + 1, 0].BackColor;
-                        }
-                        matrixColor[8, 0].BackColor = color.Color;
-                        pen.Color = color.Color;
-                    }  
-                }    
-            }    
+            }
         }
         private void CustomColor_BackColorChanged(object sender, EventArgs e, CustomButton.VBButton selectedColor)
         {
@@ -638,13 +713,13 @@ namespace Roga
             picGray.SizeMode = picNegative.SizeMode = picTrans.SizeMode = picSepiaTone.SizeMode = picRed.SizeMode = picGreen.SizeMode = picBlue.SizeMode = PictureBoxSizeMode.StretchImage;
 
             //setEvent
-            picGray.Click += new EventHandler(picGray_Click);
-            picNegative.Click += new EventHandler(picNegative_Click);
-            picTrans.Click += new EventHandler(picTrans_Click);
-            picSepiaTone.Click += new EventHandler(picSepiaTone_Click);
-            picRed.Click += new EventHandler(picRed_Click);
-            picGreen.Click += new EventHandler(picGreen_Click);
-            picBlue.Click += new EventHandler(picBlue_Click);
+            picGray.MouseDown += new MouseEventHandler(picGray_MouseDown);
+            picNegative.MouseDown += new MouseEventHandler(picNegative_MouseDown);
+            picTrans.MouseDown += new MouseEventHandler(picTrans_MouseDown);
+            picSepiaTone.MouseDown += new MouseEventHandler(picSepiaTone_MouseDown);
+            picRed.MouseDown += new MouseEventHandler(picRed_MouseDown);
+            picGreen.MouseDown += new MouseEventHandler(picGreen_MouseDown);
+            picBlue.MouseDown += new MouseEventHandler(picBlue_MouseDown);
 
             //setPosition
             picGray.Location = new Point(13, 20);
@@ -786,76 +861,97 @@ namespace Roga
         }
 
         //pic..._Click
-        private void picGray_Click(object sender, EventArgs e)
+        private void picGray_MouseDown(object sender, MouseEventArgs e)
         {
-            Bitmap bit = new Bitmap(imgNow);
-            int width = bit.Width;
-            int height = bit.Height;
+            if (e.Button == MouseButtons.Left)
+            {
+                Bitmap bit = new Bitmap(imgNow);
+                int width = bit.Width;
+                int height = bit.Height;
 
-            for (int y = 0; y < height; y++)
-                for (int x = 0; x < width; x++)
-                {
-                    Color color = bit.GetPixel(x, y);
+                for (int y = 0; y < height; y++)
+                    for (int x = 0; x < width; x++)
+                    {
+                        Color color = bit.GetPixel(x, y);
 
-                    //extract ARGB value from p
-                    int a = color.A;
-                    int r = color.R;
-                    int g = color.G;
-                    int b = color.B;
+                        //extract ARGB value from p
+                        int a = color.A;
+                        int r = color.R;
+                        int g = color.G;
+                        int b = color.B;
 
-                    //caculate average
-                    int avg = (r + g + b) / 3;
+                        //caculate average
+                        int avg = (r + g + b) / 3;
 
-                    //set new pixel value
-                    bit.SetPixel(x, y, Color.FromArgb(a, avg, avg, avg));
-                }
-            imgNow = bit;
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
-            //btnGray.BorderSize = 2;
-            //filterType = 1;
+                        //set new pixel value
+                        bit.SetPixel(x, y, Color.FromArgb(a, avg, avg, avg));
+                    }
+                imgNow = bit;
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+                //btnGray.BorderSize = 2;
+                //filterType = 1;
+            }
         }
 
-        private void picNegative_Click(object sender, EventArgs e)
+        private void picNegative_MouseDown(object sender, MouseEventArgs e)
         {
-            imgNow = ImageWithNegative(imgNow);
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
+            if (e.Button == MouseButtons.Left)
+            {
+                imgNow = ImageWithNegative(imgNow);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }    
         }
 
-        private void picTrans_Click(object sender, EventArgs e)
+        private void picTrans_MouseDown(object sender, MouseEventArgs e)
         {
-            imgNow = ImageWithTransparency(imgNow);
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
+            if (e.Button == MouseButtons.Left)
+            {
+                imgNow = ImageWithTransparency(imgNow);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }    
         }
 
-        private void picSepiaTone_Click(object sender, EventArgs e)
+        private void picSepiaTone_MouseDown(object sender, MouseEventArgs e)
         {
-            imgNow = ImageWithSepiaTone(imgNow);
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
+            if (e.Button == MouseButtons.Left)
+            {
+                imgNow = ImageWithSepiaTone(imgNow);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }
         }
 
-        private void picRed_Click(object sender, EventArgs e)
+        private void picRed_MouseDown(object sender, MouseEventArgs e)
         {
-            imgNow = ImageWithRed(imgNow);
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
+            if (e.Button == MouseButtons.Left)
+            {
+                imgNow = ImageWithRed(imgNow);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }
         }
 
-        private void picGreen_Click(object sender, EventArgs e)
+        private void picGreen_MouseDown(object sender, MouseEventArgs e)
         {
-            imgNow = ImageWithGreen(imgNow);
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
+            if (e.Button == MouseButtons.Left)
+            {
+                imgNow = ImageWithGreen(imgNow);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }
         }
 
-        private void picBlue_Click(object sender, EventArgs e)
+        private void picBlue_MouseDown(object sender, MouseEventArgs e)
         {
-            imgNow = ImageWithBlue(imgNow);
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
+            if (e.Button == MouseButtons.Left)
+            {
+                imgNow = ImageWithBlue(imgNow);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }
         }
 
         #endregion
@@ -865,47 +961,141 @@ namespace Roga
         private int width, height, X, Y;
         private bool shiftDown = false; //if user long press shift, shapes will be drawn based on the square 
         private Pen penRect = new Pen(Color.LightSkyBlue, 1); //pen for rectangle around shapes
+        private string shapesType = "0";
+        private Image imgTempShapes;
+        public string ShapesType
+        {
+            get
+            {
+                return shapesType;
+            }
+            set
+            {
+                if (canMove == true)
+                    CanMove = false;
+                shapesType = value;
+            }
+        }
         private Rectangle rectNow = new Rectangle(0, 0, 0, 0);
-        private Point startMouseMoveShape, endMouseMoveShape;
-        private bool canMove = false;
+        private Point startMouseMoveShape = new Point(0, 0);
+        private bool canMove = false, canResize = false;
+        private Point mouseDownLocation = new Point(0, 0); 
+        public bool CanMove
+        {
+            get
+            {
+                return canMove;
+            }
+            set
+            {
+                canMove = value;
+                imgTempShapes = new Bitmap(imgNow);
+                if (!canMove)
+                {
+                    using (Graphics g = Graphics.FromImage(imgTempShapes))
+                    {
+                        switch (ShapesType)
+                        {
+                            case "0":
+                                //g.DrawLine(pen, X, Y, e.X, e.Y);
+                                break;
+                            case "1":
+                                g.DrawEllipse(pen, rectNow);
+                                break;
+                            case "2":
+                                g.DrawRectangle(pen, rectNow);
+                                break;
+                            case "3":
+                                g.DrawPolygon(pen, CaculateRightTriangle(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "4":
+                                g.DrawPolygon(pen, CaculateIsoscelesTriangle(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "5":
+                                g.DrawPolygon(pen, CaculateRhombus(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "6":
+                                g.DrawPolygon(pen, CaculatePentagon(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "7":
+                                g.DrawPolygon(pen, CaculateHexagon(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "8":
+                                g.DrawPolygon(pen, CaculateFiveStar(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "9":
+                                g.DrawPolygon(pen, CaculateSixStar(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "10":
+                                g.DrawPolygon(pen, CaculateRightArrow(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "11":
+                                g.DrawPolygon(pen, CaculateLeftArrow(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "12":
+                                g.DrawPolygon(pen, CaculateUpArrow(rectNow.X, rectNow.Y, width, height));
+                                break;
+                            case "13":
+                                g.DrawPolygon(pen, CaculateDownArrow(rectNow.X, rectNow.Y, width, height));
+                                break;
+                        }
+                        imgNow = new Bitmap(imgTempShapes);
+                        pic.Image = imgNow;
+                        stackImage.Push(imgNow);
+                    }
+                    rectNow = new Rectangle(0, 0, 0, 0);
+                    pic.Refresh();
+                }
+                //if (canMove)
+                //    pic.Cursor = Cursors.SizeAll;
+                //else
+                //    pic.Cursor = Cursors.Default;
+            }
+        }
 
         private void InitShapesDetails()
         {
+            imgTempShapes = new Bitmap(imgNow);
             FlowLayoutPanel pShapes = new FlowLayoutPanel();
-            pShapes.AutoScroll = true;
-            pShapes.Location = new Point(12, 600);
+            //pShapes.AutoScroll = true;
+            pShapes.Location = new Point(23, 600);
             pShapes.BackColor = Color.FromArgb(217, 217, 217);
-            pShapes.Size = new Size(180, 130);
+            pShapes.Size = new Size(157, 100);
 
-            CustomButton.VBButton[] lstButton = new CustomButton.VBButton[12];
-            for (int i = 0; i < 12; i++)
+            CustomButton.VBButton[] lstButton = new CustomButton.VBButton[14];
+            for (int i = 0; i < 14; i++)
             {
                 lstButton[i] = new CustomButton.VBButton();
                 lstButton[i].Name = i.ToString();
-                lstButton[i].BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\pencil.jpg"));
+                lstButton[i].BorderRadius = 0;
+                lstButton[i].BorderSize = 0;
+                lstButton[i].BorderColor = Color.Blue;
+                lstButton[i].Size = new Size(25, 25);
+                lstButton[i].BackColor = Color.FromArgb(217, 217, 217);
+                pShapes.Controls.Add(lstButton[i]);
             }
-            pShapes.Controls.Add(lstButton[0]);
 
-            CustomButton.VBButton b = new CustomButton.VBButton();
-            b.BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\pencil.jpg")), new Size(25, 25));
-            b.Size = new Size(25, 25);
-            b.BorderRadius = 0;
-            b.BorderSize = 0;
-            b.FlatStyle = FlatStyle.Flat;
-            //b.Location = new Point(2, 2);
-            pShapes.Controls.Add(b);
+            for (int i = 0; i < 14; i++)
+            {
+                lstButton[i].MouseDown += delegate (object sender, MouseEventArgs e) { Shapes_Button_MouseDown(sender, e, lstButton); };
+            }
 
-            //sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\Shapes\hexagon.png");
-            //sFilePath = Path.GetFullPath(sFile);
-            //CustomButton.VBButton b1 = new CustomButton.VBButton();
-            //b1.BackColor = Color.FromArgb(217, 217, 217);
-            //b1.BackgroundImage = resizeImage(Image.FromFile(sFilePath), new Size(25, 25));
-            //b1.BorderRadius = 0;
-            //b1.BorderSize = 0;
-            //b1.FlatStyle = FlatStyle.Flat;
-            //b1.Size = new Size(25, 25);
-            ////b1.Location = new Point(29, 2);
-            //pShapes.Controls.Add(b1);
+            //set image
+            lstButton[0].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/line.png")), new Size(25, 25));
+            lstButton[1].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/ellipse.png")), new Size(25, 25));
+            lstButton[2].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/rectangle.png")), new Size(25, 25));
+            lstButton[3].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/rightTriangle.png")), new Size(25, 25));
+            lstButton[4].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/isoscelesTriangle.png")), new Size(25, 25));
+            lstButton[5].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/rhombus.png")), new Size(25, 25));
+            lstButton[6].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/pentagon.png")), new Size(25, 25));
+            lstButton[7].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/hexagon.png")), new Size(25, 25));
+            lstButton[8].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/fiveStar.png")), new Size(25, 25));
+            lstButton[9].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/sixStar.png")), new Size(25, 25));
+            lstButton[10].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/rightArrow.png")), new Size(25, 25));
+            lstButton[11].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/leftArrow.png")), new Size(25, 25));
+            lstButton[12].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/upArrow.png")), new Size(25, 25));
+            lstButton[13].BackgroundImage = resizeImage(Image.FromFile(getFilePath(@"../../../Roga/Assets/Images/shapes/downArrow.png")), new Size(25, 25));
+
 
             panel3.Controls.Add(pShapes);
             //pen for rectangle around shapes
@@ -915,17 +1105,186 @@ namespace Roga
             pen.EndCap = LineCap.Round;
         }
 
+        private void Shapes_Button_MouseDown(object sender, MouseEventArgs e, CustomButton.VBButton[] lstButton)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                CustomButton.VBButton button = (CustomButton.VBButton)sender;
+                switch (shapesType)
+                {
+                    case "0":
+                        lstButton[0].BorderSize = 0;
+                        break;
+                    case "1":
+                        lstButton[1].BorderSize = 0;
+                        break;
+                    case "2":
+                        lstButton[2].BorderSize = 0;
+                        break;
+                    case "3":
+                        lstButton[3].BorderSize = 0;
+                        break;
+                    case "4":
+                        lstButton[4].BorderSize = 0;
+                        break;
+                    case "5":
+                        lstButton[5].BorderSize = 0;
+                        break;
+                    case "6":
+                        lstButton[6].BorderSize = 0;
+                        break;
+                    case "7":
+                        lstButton[7].BorderSize = 0;
+                        break;
+                    case "8":
+                        lstButton[8].BorderSize = 0;
+                        break;
+                    case "9":
+                        lstButton[9].BorderSize = 0;
+                        break;
+                    case "10":
+                        lstButton[10].BorderSize = 0;
+                        break;
+                    case "11":
+                        lstButton[11].BorderSize = 0;
+                        break;
+                    case "12":
+                        lstButton[12].BorderSize = 0;
+                        break;
+                    case "13":
+                        lstButton[13].BorderSize = 0;
+                        break;
+                }
+                switch (button.Name)
+                {
+                    case "0":
+                        ShapesType = "0";
+                        break;
+                    case "1":
+                        ShapesType = "1";
+                        break;
+                    case "2":
+                        ShapesType = "2";
+                        break;
+                    case "3":
+                        ShapesType = "3";
+                        break;
+                    case "4":
+                        ShapesType = "4";
+                        break;
+                    case "5":
+                        ShapesType = "5";
+                        break;
+                    case "6":
+                        ShapesType = "6";
+                        break;
+                    case "7":
+                        ShapesType = "7";
+                        break;
+                    case "8":
+                        ShapesType = "8";
+                        break;
+                    case "9":
+                        ShapesType = "9";
+                        break;
+                    case "10":
+                        ShapesType = "10";
+                        break;
+                    case "11":
+                        ShapesType = "11";
+                        break;
+                    case "12":
+                        ShapesType = "12";
+                        break;
+                    case "13":
+                        ShapesType = "13";
+                        break;
+                }
+                switch (shapesType)
+                {
+                    case "0":
+                        lstButton[0].BorderSize = 1;
+                        break;
+                    case "1":
+                        lstButton[1].BorderSize = 1;
+                        break;
+                    case "2":
+                        lstButton[2].BorderSize = 1;
+                        break;
+                    case "3":
+                        lstButton[3].BorderSize = 1;
+                        break;
+                    case "4":
+                        lstButton[4].BorderSize = 1;
+                        break;
+                    case "5":
+                        lstButton[5].BorderSize = 1;
+                        break;
+                    case "6":
+                        lstButton[6].BorderSize = 1;
+                        break;
+                    case "7":
+                        lstButton[7].BorderSize = 1;
+                        break;
+                    case "8":
+                        lstButton[8].BorderSize = 1;
+                        break;
+                    case "9":
+                        lstButton[9].BorderSize = 1;
+                        break;
+                    case "10":
+                        lstButton[10].BorderSize = 1;
+                        break;
+                    case "11":
+                        lstButton[11].BorderSize = 1;
+                        break;
+                    case "12":
+                        lstButton[12].BorderSize = 1;
+                        break;
+                    case "13":
+                        lstButton[13].BorderSize = 1;
+                        break;
+                }
+            }
+        }
+
         private void pic_Shapes_MouseDown(object sender, MouseEventArgs e)
         {
-            X = e.X;
-            Y = e.Y;
-            pic.Refresh();
-            isMouseDown = true;
+            if (e.Button == MouseButtons.Left)
+            {
+                X = e.X;
+                Y = e.Y;
+                mouseDownLocation = e.Location;
+                if (canMove == false)
+                    pic.Refresh();
+                isMouseDown = true;
+                if ((e.X >= (rectNow.X - pen.Width - 3)) && (e.X <= (rectNow.X + rectNow.Width + pen.Width + 3))
+                    && (e.Y >= (rectNow.Y - pen.Width - 3)) && (e.Y <= (rectNow.Y + rectNow.Height + pen.Width + 3)))
+                {
+                    CanMove = true;
+                    startMouseMoveShape = e.Location;
+                }
+                else
+                {
+                    if (canMove)
+                        CanMove = false;
+                    else
+                        canMove = false;
+                }    
+            }
         }
 
         private void pic_Shapes_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isMouseDown)
+            if ((e.X >= (rectNow.X - pen.Width - 3)) && (e.X <= (rectNow.X + rectNow.Width + pen.Width + 3))
+                && (e.Y >= (rectNow.Y - pen.Width - 3)) && (e.Y <= (rectNow.Y + rectNow.Height + pen.Width + 3)))
+            {
+                pic.Cursor = Cursors.SizeAll;
+            }
+            else
+                pic.Cursor = Cursors.Default;
+            //MouseDown but cannot move, MouseMove event will draw a shapes
+            if (isMouseDown && !canMove)
             {
                 pic.Refresh();
                 pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
@@ -935,7 +1294,51 @@ namespace Roga
                 {
                     width = height = Math.Min(width, height);
                 }
-                canMove = true;
+                switch (ShapesType)
+                {
+                    case "0":
+                        pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                        break;
+                    case "1":
+                        pic.CreateGraphics().DrawEllipse(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                        break;
+                    case "2":
+                        pic.CreateGraphics().DrawRectangle(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                        break;
+                    case "3":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "4":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "5":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                        break;
+                    case "6":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "7":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "8":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "9":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "10":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "11":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "12":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                    case "13":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                        break;
+                }    
                 //pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
                 //pic.CreateGraphics().DrawRectangle(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
                 //pic.CreateGraphics().DrawEllipse(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
@@ -945,47 +1348,158 @@ namespace Roga
                 //pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
                 //pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
                 //pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                //pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
                 //pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
                 //pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
                 //pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
                 //pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
             }
+            //MouseDown and can move, relocation the rectNow
+            else if (isMouseDown && canMove)
+            {
+                rectNow.Location = new Point((e.X - mouseDownLocation.X) + rectNow.Left, (e.Y - mouseDownLocation.Y) + rectNow.Top);
+                mouseDownLocation = e.Location;
+                pic.Refresh();
+                pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
+                switch (ShapesType)
+                {
+                    case "0":
+                        pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                        break;
+                    case "1":
+                        pic.CreateGraphics().DrawEllipse(pen, rectNow);
+                        break;
+                    case "2":
+                        pic.CreateGraphics().DrawRectangle(pen, rectNow);
+                        break;
+                    case "3":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "4":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "5":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "6":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "7":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "8":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "9":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "10":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "11":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "12":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(rectNow.X, rectNow.Y, width, height));
+                        break;
+                    case "13":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(rectNow.X, rectNow.Y, width, height));
+                        break;
+                }
+            }
         }
 
         private void pic_Shapes_MouseUp(object sender, MouseEventArgs e)
         {
-            using (Graphics g = Graphics.FromImage(imgNow))
+            if (!canMove)
             {
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                int width, height;
-                width = Math.Abs(e.X - X);
-                height = Math.Abs(e.Y - Y);
-                if (shiftDown)
-                {
-                    width = height = Math.Min(width, height);
-                }
 
-                pic.CreateGraphics().DrawRectangle(penRect, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
-                //pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
-                //g.DrawLine(pen, X, Y, e.X, e.Y);
-                //g.DrawRectangle(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
-                //g.DrawEllipse(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
-                //g.DrawPolygon(pen, CaculateRightArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateLeftArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateDownArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateUpArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateRightTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height)));
-                g.DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculatePentagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateHexagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateFiveStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //g.DrawPolygon(pen, CaculateSixStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //hasObject = true;
-                //leftTop = new Point(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y));
-                //rightBottom = new Point(leftTop.X + Math.Abs(e.X - X), leftTop.Y + Math.Abs(e.Y - Y));
+                using (Graphics g = Graphics.FromImage(imgNow))
+                {
+                    if (e.X != X && e.Y != Y)
+                        canMove = true;
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                    int width, height;
+                    width = Math.Abs(e.X - X);
+                    height = Math.Abs(e.Y - Y);
+                    if (shiftDown)
+                    {
+                        width = height = Math.Min(width, height);
+                    }
+                    switch (ShapesType)
+                    {
+                        case "0":
+                            pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                            break;
+                        case "1":
+                            pic.CreateGraphics().DrawEllipse(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                            break;
+                        case "2":
+                            pic.CreateGraphics().DrawRectangle(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                            break;
+                        case "3":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "4":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "5":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                            break;
+                        case "6":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "7":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "8":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "9":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "10":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "11":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "12":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                        case "13":
+                            pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                            break;
+                    }
+                    if (shapesType != "0")
+                    {
+                        rectNow = new Rectangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                        pic.CreateGraphics().DrawRectangle(penRect, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                    }
+                    //pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                    //g.DrawLine(pen, X, Y, e.X, e.Y);
+                    //g.DrawRectangle(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
+                    //g.DrawEllipse(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
+                    //g.DrawPolygon(pen, CaculateRightArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateLeftArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateDownArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateUpArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateRightTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height)));
+                    //g.DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculatePentagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateHexagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateFiveStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //g.DrawPolygon(pen, CaculateSixStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    //hasObject = true;
+                    //leftTop = new Point(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y));
+                    //rightBottom = new Point(leftTop.X + Math.Abs(e.X - X), leftTop.Y + Math.Abs(e.Y - Y));
+                }
             }
+            else
+            {
+                pic.CreateGraphics().DrawRectangle(penRect, rectNow);
+            }    
             isMouseDown = false;
             shiftDown = false;
             //pic.Invalidate();
@@ -1378,11 +1892,9 @@ namespace Roga
 
         private void picFlip_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(imgNow.Width.ToString() + " " + imgNow.Height.ToString());
             imgNow = Flip_Image(imgNow);
             pic.Image = imgNow;
             stackImage.Push(imgNow);
-            Console.WriteLine(imgNow.Width.ToString() + " " + imgNow.Height.ToString());
         }
 
         protected override void OnMouseEnter(EventArgs e)
