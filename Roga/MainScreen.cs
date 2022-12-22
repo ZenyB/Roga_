@@ -389,12 +389,18 @@ namespace Roga
                 //If stackImage has only one image, this is original image, user can't goback
                 if (stackImage.Count > 1)
                 {
-                    stackImage.Pop();
-                    //If image change size -> resize picturebox
-                    if (imgNow.Size != stackImage.Peek().Size)
-                        resizePic(stackImage.Peek());
-                    imgNow = stackImage.Peek();
-                    pic.Image = imgNow;
+                    Console.WriteLine(stackImage.Count);
+                    Console.WriteLine(canMove);
+                    if (canMove == false)
+                    {
+                        stackImage.Pop();
+                        //If image change size -> resize picturebox
+                        if (imgNow.Size != stackImage.Peek().Size)
+                            resizePic(stackImage.Peek());
+                        imgNow = stackImage.Peek();
+                        pic.Image = imgNow;
+                    }
+                    Console.WriteLine(stackImage.Count);
                 }
                 if (canMove != false)
                 {
@@ -965,6 +971,7 @@ namespace Roga
         private bool shiftDown = false; //if user long press shift, shapes will be drawn based on the square 
         private Pen penRect = new Pen(Color.LightSkyBlue, 1); //pen for rectangle around shapes
         private string shapesType = "0";
+        private Image imgTempShapes;
         public string ShapesType
         {
             get
@@ -973,7 +980,8 @@ namespace Roga
             }
             set
             {
-                CanMove = false;
+                if (canMove == true)
+                    CanMove = false;
                 shapesType = value;
             }
         }
@@ -990,9 +998,11 @@ namespace Roga
             set
             {
                 canMove = value;
+                Console.WriteLine("CanMove" + canMove);
+                imgTempShapes = new Bitmap(imgNow);
                 if (!canMove)
                 {
-                    using (Graphics g = Graphics.FromImage(imgNow))
+                    using (Graphics g = Graphics.FromImage(imgTempShapes))
                     {
                         switch (ShapesType)
                         {
@@ -1039,9 +1049,12 @@ namespace Roga
                                 g.DrawPolygon(pen, CaculateDownArrow(rectNow.X, rectNow.Y, width, height));
                                 break;
                         }
+                        imgNow = new Bitmap(imgTempShapes);
+                        pic.Image = imgNow;
+                        stackImage.Push(imgNow);
+                        Console.WriteLine(stackImage.Count);
                     }
                     rectNow = new Rectangle(0, 0, 0, 0);
-                    stackImage.Push(imgNow);
                     pic.Refresh();
                 }
                 //if (canMove)
@@ -1053,6 +1066,7 @@ namespace Roga
 
         private void InitShapesDetails()
         {
+            imgTempShapes = new Bitmap(imgNow);
             FlowLayoutPanel pShapes = new FlowLayoutPanel();
             //pShapes.AutoScroll = true;
             pShapes.Location = new Point(23, 600);
@@ -1252,7 +1266,8 @@ namespace Roga
                 X = e.X;
                 Y = e.Y;
                 mouseDownLocation = e.Location;
-                pic.Refresh();
+                if (canMove == false)
+                    pic.Refresh();
                 isMouseDown = true;
                 if ((e.X >= (rectNow.X - pen.Width - 3)) && (e.X <= (rectNow.X + rectNow.Width + pen.Width + 3))
                     && (e.Y >= (rectNow.Y - pen.Width - 3)) && (e.Y <= (rectNow.Y + rectNow.Height + pen.Width + 3)))
@@ -1412,7 +1427,9 @@ namespace Roga
 
                 using (Graphics g = Graphics.FromImage(imgNow))
                 {
-                    canMove = true;
+                    if (e.X != X && e.Y != Y)
+                        canMove = true;
+                    Console.WriteLine(canMove + "mouseUp");
                     g.SmoothingMode = SmoothingMode.AntiAlias;
                     int width, height;
                     width = Math.Abs(e.X - X);
