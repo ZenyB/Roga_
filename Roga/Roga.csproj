@@ -151,9 +151,22 @@
     <Content Include="Assets\Images\Filter\SepiaImg.png" />
     <Content Include="Assets\Images\Filter\TransparencyImg.png" />
     <Content Include="Assets\Images\LoginScreen.jpg" />
-    <Content Include="Assets\Images\logo.ico" />
     <Content Include="Assets\Images\logo.png" />
     <Content Include="Assets\Images\pen.png" />
+    <Content Include="Assets\Images\Shapes\downArrow.png" />
+    <Content Include="Assets\Images\Shapes\ellipse.png" />
+    <Content Include="Assets\Images\Shapes\fiveStar.png" />
+    <Content Include="Assets\Images\Shapes\hexagon.png" />
+    <Content Include="Assets\Images\Shapes\isoscelesTriangle.png" />
+    <Content Include="Assets\Images\Shapes\leftArrow.png" />
+    <Content Include="Assets\Images\Shapes\line.png" />
+    <Content Include="Assets\Images\Shapes\pentagon.png" />
+    <Content Include="Assets\Images\Shapes\rectangle.png" />
+    <Content Include="Assets\Images\Shapes\rhombus.png" />
+    <Content Include="Assets\Images\Shapes\rightArrow.png" />
+    <Content Include="Assets\Images\Shapes\rightTriangle.png" />
+    <Content Include="Assets\Images\Shapes\sixStar.png" />
+    <Content Include="Assets\Images\Shapes\upArrow.png" />
     <Content Include="Assets\Images\test.PNG" />
     <Content Include="Assets\Images\testImage.png" />
   </ItemGroup>
