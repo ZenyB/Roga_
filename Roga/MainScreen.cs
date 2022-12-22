@@ -185,8 +185,6 @@ namespace Roga
                     newHeight = Height;
                     newWidth = (int)(Image.FromFile(selectedPath).Width * ((float)newHeight / Image.FromFile(selectedPath).Height));
                 }
-                Console.WriteLine(newWidth);
-                Console.WriteLine(newHeight);
                 pic.Size = new Size(newWidth, newHeight);
                 pic.Location = new Point((Width / 2) - (newWidth / 2) - 7, (Height / 2) - (newHeight / 2));
                 Image temp = Image.FromFile(selectedPath);
@@ -194,7 +192,6 @@ namespace Roga
                 pic.Image = temp;
                 imgNow = pic.Image;
                 stackImage.Push(imgNow);
-                Console.WriteLine(pic.Size.ToString());
             }
             else
             {
@@ -245,8 +242,6 @@ namespace Roga
                     newHeight = Height;
                     newWidth = (int)(picture.Width * ((float)newHeight / picture.Height));
                 }
-                Console.WriteLine(newWidth);
-                Console.WriteLine(newHeight);
                 pic.Size = new Size(newWidth, newHeight);
                 pic.Location = new Point((Width / 2) - (newWidth / 2) - 7, (Height / 2) - (newHeight / 2));
                 Image temp = picture;
@@ -254,7 +249,6 @@ namespace Roga
                 pic.Image = temp;
                 imgNow = pic.Image;
                 stackImage.Push(imgNow);
-                Console.WriteLine(pic.Size.ToString());
             }
             else
             {
@@ -389,8 +383,6 @@ namespace Roga
                 //If stackImage has only one image, this is original image, user can't goback
                 if (stackImage.Count > 1)
                 {
-                    Console.WriteLine(stackImage.Count);
-                    Console.WriteLine(canMove);
                     if (canMove == false)
                     {
                         stackImage.Pop();
@@ -400,7 +392,6 @@ namespace Roga
                         imgNow = stackImage.Peek();
                         pic.Image = imgNow;
                     }
-                    Console.WriteLine(stackImage.Count);
                 }
                 if (canMove != false)
                 {
@@ -998,7 +989,6 @@ namespace Roga
             set
             {
                 canMove = value;
-                Console.WriteLine("CanMove" + canMove);
                 imgTempShapes = new Bitmap(imgNow);
                 if (!canMove)
                 {
@@ -1052,7 +1042,6 @@ namespace Roga
                         imgNow = new Bitmap(imgTempShapes);
                         pic.Image = imgNow;
                         stackImage.Push(imgNow);
-                        Console.WriteLine(stackImage.Count);
                     }
                     rectNow = new Rectangle(0, 0, 0, 0);
                     pic.Refresh();
@@ -1429,7 +1418,6 @@ namespace Roga
                 {
                     if (e.X != X && e.Y != Y)
                         canMove = true;
-                    Console.WriteLine(canMove + "mouseUp");
                     g.SmoothingMode = SmoothingMode.AntiAlias;
                     int width, height;
                     width = Math.Abs(e.X - X);
@@ -1904,11 +1892,9 @@ namespace Roga
 
         private void picFlip_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(imgNow.Width.ToString() + " " + imgNow.Height.ToString());
             imgNow = Flip_Image(imgNow);
             pic.Image = imgNow;
             stackImage.Push(imgNow);
-            Console.WriteLine(imgNow.Width.ToString() + " " + imgNow.Height.ToString());
         }
 
         protected override void OnMouseEnter(EventArgs e)
