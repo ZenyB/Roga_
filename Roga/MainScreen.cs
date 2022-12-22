@@ -120,7 +120,7 @@ namespace Roga
             InitBackgroundImageForButton();
 
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
-            this.MinimumSize = new System.Drawing.Size(1000, 800);
+            this.MinimumSize = new System.Drawing.Size(Width, Height);
             MouseType = "";
 
             pic = new PictureBox();
@@ -161,7 +161,7 @@ namespace Roga
             InitBackgroundImageForButton();
 
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
-            this.MinimumSize = new System.Drawing.Size(1000, 800);
+            this.MinimumSize = new System.Drawing.Size(Width, Height);
             MouseType = "";
 
             pic = new PictureBox();
@@ -217,7 +217,7 @@ namespace Roga
             InitBackgroundImageForButton();
 
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
-            this.MinimumSize = new System.Drawing.Size(1000, 800);
+            this.MinimumSize = new System.Drawing.Size(Width, Height);
             MouseType = "";
 
             pic = new PictureBox();
