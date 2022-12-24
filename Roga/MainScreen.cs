@@ -973,13 +973,18 @@ namespace Roga
             {
                 if (canMove == true)
                     CanMove = false;
+                if (canResize == true)
+                    canResize = false;
                 shapesType = value;
             }
         }
         private Rectangle rectNow = new Rectangle(0, 0, 0, 0);
         private Point startMouseMoveShape = new Point(0, 0);
         private bool canMove = false, canResize = false;
-        private Point mouseDownLocation = new Point(0, 0); 
+        private Point mouseDownLocation = new Point(0, 0);
+        private PointF[] resizePoint = new PointF[8]; //8 point to resize on rectNow
+        int resizePointNowIndex = -1; //index of resize point now
+        int lineX = 0, lineY = 0;
         public bool CanMove
         {
             get
@@ -997,7 +1002,7 @@ namespace Roga
                         switch (ShapesType)
                         {
                             case "0":
-                                //g.DrawLine(pen, X, Y, e.X, e.Y);
+                                g.DrawLine(pen, X, Y,lineX, lineY);
                                 break;
                             case "1":
                                 g.DrawEllipse(pen, rectNow);
@@ -1046,10 +1051,14 @@ namespace Roga
                     rectNow = new Rectangle(0, 0, 0, 0);
                     pic.Refresh();
                 }
-                //if (canMove)
-                //    pic.Cursor = Cursors.SizeAll;
-                //else
-                //    pic.Cursor = Cursors.Default;
+            }
+        }
+        public bool CanResize
+        {
+            get { return canResize; }
+            set
+            {
+                canResize = value;
             }
         }
 
@@ -1103,6 +1112,11 @@ namespace Roga
             //StartCap & EndCap for line
             pen.StartCap = LineCap.Round;
             pen.EndCap = LineCap.Round;
+            //init 8 point to resize
+            for (int i = 0; i < 8; i++)
+            {
+                resizePoint[i] = new PointF(0, 0);
+            }
         }
 
         private void Shapes_Button_MouseDown(object sender, MouseEventArgs e, CustomButton.VBButton[] lstButton)
@@ -1258,33 +1272,149 @@ namespace Roga
                 if (canMove == false)
                     pic.Refresh();
                 isMouseDown = true;
-                if ((e.X >= (rectNow.X - pen.Width - 3)) && (e.X <= (rectNow.X + rectNow.Width + pen.Width + 3))
-                    && (e.Y >= (rectNow.Y - pen.Width - 3)) && (e.Y <= (rectNow.Y + rectNow.Height + pen.Width + 3)))
+                if (shapesType != "0")
                 {
-                    CanMove = true;
-                    startMouseMoveShape = e.Location;
-                }
+                    if ((e.X >= (rectNow.X - penRect.Width)) && (e.X <= (rectNow.X + rectNow.Width + penRect.Width))
+                        && (e.Y >= (rectNow.Y - penRect.Width)) && (e.Y <= (rectNow.Y + rectNow.Height + penRect.Width)))
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5) 
+                                && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                            {
+                                resizePointNowIndex = i;
+                                CanResize = true;
+                                break;
+                            }
+                        }
+                        CanMove = true;
+                        startMouseMoveShape = e.Location;
+                    }
+                    else
+                    {
+                        bool flag = true;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5)
+                                && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                            {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (flag)
+                            CanResize = false;
+                        if (canMove && !canResize)
+                            CanMove = false;
+                        else
+                            canMove = false;
+                    }
+                }  
                 else
                 {
-                    if (canMove)
-                        CanMove = false;
-                    else
-                        canMove = false;
-                }    
+                    canMove = false;
+                    canResize = false;
+                }
+                Console.WriteLine(canResize + "::" + canMove);
             }
         }
 
         private void pic_Shapes_MouseMove(object sender, MouseEventArgs e)
         {
-            if ((e.X >= (rectNow.X - pen.Width - 3)) && (e.X <= (rectNow.X + rectNow.Width + pen.Width + 3))
-                && (e.Y >= (rectNow.Y - pen.Width - 3)) && (e.Y <= (rectNow.Y + rectNow.Height + pen.Width + 3)))
+            //set pic.Cursor
+            if (shapesType != "0")
             {
-                pic.Cursor = Cursors.SizeAll;
+                if ((e.X >= (rectNow.X - penRect.Width)) && (e.X <= (rectNow.X + rectNow.Width + penRect.Width))
+                    && (e.Y >= (rectNow.Y - penRect.Width)) && (e.Y <= (rectNow.Y + rectNow.Height + penRect.Width)))
+                {
+                    pic.Cursor = Cursors.SizeAll;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5)
+                            && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                        {
+                            resizePointNowIndex = i;
+                            switch (resizePointNowIndex)
+                            {
+                                case 0:
+                                    pic.Cursor = Cursors.SizeNWSE;
+                                    break;
+                                case 1:
+                                    pic.Cursor = Cursors.SizeNS;
+                                    break;
+                                case 2:
+                                    pic.Cursor = Cursors.SizeNESW;
+                                    break;
+                                case 3:
+                                    pic.Cursor = Cursors.SizeWE;
+                                    break;
+                                case 4:
+                                    pic.Cursor = Cursors.SizeNWSE;
+                                    break;
+                                case 5:
+                                    pic.Cursor = Cursors.SizeNS;
+                                    break;
+                                case 6:
+                                    pic.Cursor = Cursors.SizeNESW;
+                                    break;
+                                case 7:
+                                    pic.Cursor = Cursors.SizeWE;
+                                    break;
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    bool flag = true;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5)
+                            && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                        {
+                            flag = false;
+                            resizePointNowIndex = i;
+                            switch (resizePointNowIndex)
+                            {
+                                case 0:
+                                    pic.Cursor = Cursors.SizeNWSE;
+                                    break;
+                                case 1:
+                                    pic.Cursor = Cursors.SizeNS;
+                                    break;
+                                case 2:
+                                    pic.Cursor = Cursors.SizeNESW;
+                                    break;
+                                case 3:
+                                    pic.Cursor = Cursors.SizeWE;
+                                    break;
+                                case 4:
+                                    pic.Cursor = Cursors.SizeNWSE;
+                                    break;
+                                case 5:
+                                    pic.Cursor = Cursors.SizeNS;
+                                    break;
+                                case 6:
+                                    pic.Cursor = Cursors.SizeNESW;
+                                    break;
+                                case 7:
+                                    pic.Cursor = Cursors.SizeWE;
+                                    break;
+                            }
+                            break;
+                        }
+                    }
+                    if (flag)
+                        pic.Cursor = Cursors.Default;
+                }
             }
             else
-                pic.Cursor = Cursors.Default;
-            //MouseDown but cannot move, MouseMove event will draw a shapes
-            if (isMouseDown && !canMove)
+            {
+
+            }
+            //MouseDown but cannot move and resize, MouseMove event will draw a shapes
+            if (isMouseDown && !canMove && !canResize)
             {
                 pic.Refresh();
                 pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
@@ -1338,26 +1468,128 @@ namespace Roga
                     case "13":
                         pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
                         break;
-                }    
-                //pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
-                //pic.CreateGraphics().DrawRectangle(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
-                //pic.CreateGraphics().DrawEllipse(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
-                //pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
+                }
             }
-            //MouseDown and can move, relocation the rectNow
-            else if (isMouseDown && canMove)
+            //MouseDown, can move but cannot resize, relocation the rectNow when move
+            else if (isMouseDown && canMove && !canResize)
             {
                 rectNow.Location = new Point((e.X - mouseDownLocation.X) + rectNow.Left, (e.Y - mouseDownLocation.Y) + rectNow.Top);
+                mouseDownLocation = e.Location;
+                pic.Refresh();
+                pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
+                switch (ShapesType)
+                {
+                    case "0":
+                        pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                        break;
+                    case "1":
+                        pic.CreateGraphics().DrawEllipse(pen, rectNow);
+                        break;
+                    case "2":
+                        pic.CreateGraphics().DrawRectangle(pen, rectNow);
+                        break;
+                    case "3":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "4":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "5":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "6":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "7":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "8":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "9":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "10":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "11":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "12":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                    case "13":
+                        pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
+                        break;
+                }
+            }
+            //MouseDown and can resize, resize and relocation the rectNow
+            else if (isMouseDown && canResize)
+            {
+                switch (resizePointNowIndex)
+                {
+                    case 0:
+                        if (e.Y <= rectNow.Bottom - 2 && e.X <= rectNow.Right)
+                        {
+                            pic.Cursor = Cursors.SizeNWSE;
+                            rectNow.Location = new Point(e.X, e.Y);
+                            rectNow.Size = new Size(rectNow.Width + (mouseDownLocation.X - e.X), rectNow.Height + (mouseDownLocation.Y - e.Y));
+                        }
+                        break;
+                    case 1:
+                        if (e.Y <= rectNow.Bottom - 2)
+                        {
+                            pic.Cursor = Cursors.SizeNS;
+                            rectNow.Location = new Point(rectNow.Left, e.Y);
+                            rectNow.Size = new Size(rectNow.Width, rectNow.Height + (mouseDownLocation.Y - e.Y));
+                        }
+                        break;
+                    case 2:
+                        if (e.X >= (rectNow.Left + 2) && e.Y <= (rectNow.Bottom - 2))
+                        {
+                            pic.Cursor = Cursors.SizeNESW;
+                            rectNow.Location = new Point(rectNow.Left, e.Y);
+                            rectNow.Size = new Size(rectNow.Width - (mouseDownLocation.X - e.X), rectNow.Height + (mouseDownLocation.Y - e.Y));
+                        }    
+                        break;
+                    case 3:
+                        if (e.X >= (rectNow.Left + 2))
+                        {
+                            pic.Cursor = Cursors.SizeWE;
+                            rectNow.Size = new Size(rectNow.Width - (mouseDownLocation.X - e.X), rectNow.Height);
+                        }
+                        break;
+                    case 4:
+                        if (e.X >= (rectNow.Left + 2) && e.Y >= (rectNow.Top + 2))
+                        {
+                            pic.Cursor = Cursors.SizeNWSE;
+                            rectNow.Size = new Size(rectNow.Width - (mouseDownLocation.X - e.X), rectNow.Height - (mouseDownLocation.Y - e.Y));
+                        }
+                        break;
+                    case 5:
+                        if (e.Y >= (rectNow.Top + 2))
+                        {
+                            pic.Cursor = Cursors.SizeNS;
+                            rectNow.Size = new Size(rectNow.Width, rectNow.Height - (mouseDownLocation.Y - e.Y));
+                        }
+                        break;
+                    case 6:
+                        if (e.X <= (rectNow.Right - 2) && e.Y >= (rectNow.Top + 2))
+                        {
+                            pic.Cursor = Cursors.SizeNESW;
+                            rectNow.Location = new Point(e.X, rectNow.Top);
+                            rectNow.Size = new Size(rectNow.Width + (mouseDownLocation.X - e.X), rectNow.Height - (mouseDownLocation.Y - e.Y));
+                        }
+                        break;
+                    case 7:
+                        if (e.X <= (rectNow.Right - 2))
+                        {
+                            pic.Cursor = Cursors.SizeWE;
+                            rectNow.Location = new Point(e.X, rectNow.Top);
+                            rectNow.Size = new Size(rectNow.Width + (mouseDownLocation.X - e.X), rectNow.Height);
+                        }
+                        break;
+                }
                 mouseDownLocation = e.Location;
                 pic.Refresh();
                 pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
@@ -1416,8 +1648,15 @@ namespace Roga
 
                 using (Graphics g = Graphics.FromImage(imgNow))
                 {
-                    if (e.X != X && e.Y != Y)
+                    if (e.X != X || e.Y != Y)
+                    {
                         canMove = true;
+                        canResize = true;
+                    }
+                    else
+                    {
+                        canResize = false;
+                    }
                     g.SmoothingMode = SmoothingMode.AntiAlias;
                     int width, height;
                     width = Math.Abs(e.X - X);
@@ -1430,6 +1669,8 @@ namespace Roga
                     {
                         case "0":
                             pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
+                            lineX = e.X;
+                            lineY = e.Y;
                             break;
                         case "1":
                             pic.CreateGraphics().DrawEllipse(pen, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
@@ -1471,26 +1712,37 @@ namespace Roga
                             pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height));
                             break;
                     }
-                    if (shapesType != "0")
+                    if (shapesType != "0" && canMove)
                     {
                         rectNow = new Rectangle(Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
+                        resizePoint[0].X = rectNow.Left - 2;
+                        resizePoint[0].Y = rectNow.Top - 2;
+                        resizePoint[1].X = rectNow.Left + (float)rectNow.Width / 2;
+                        resizePoint[1].Y = rectNow.Top - 2;
+                        resizePoint[2].X = rectNow.Left + rectNow.Width - 2;
+                        resizePoint[2].Y = rectNow.Top - 2;
+                        resizePoint[3].X = rectNow.Left + rectNow.Width - 2;
+                        resizePoint[3].Y = rectNow.Top + (float)rectNow.Height / 2;
+                        resizePoint[4].X = rectNow.Left + rectNow.Width - 2;
+                        resizePoint[4].Y = rectNow.Top + rectNow.Height - 2;
+                        resizePoint[5].X = rectNow.Left + (float)rectNow.Width / 2;
+                        resizePoint[5].Y = rectNow.Top + rectNow.Height - 2;
+                        resizePoint[6].X = rectNow.Left - 2;
+                        resizePoint[6].Y = rectNow.Top + rectNow.Height - 2;
+                        resizePoint[7].X = rectNow.Left - 2;
+                        resizePoint[7].Y = rectNow.Top + (float)rectNow.Height / 2 + 2;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            pic.CreateGraphics().FillRectangle(Brushes.White, resizePoint[i].X, resizePoint[i].Y, 5, 5);
+                            pic.CreateGraphics().DrawRectangle(new Pen(Color.Black, 1), resizePoint[i].X, resizePoint[i].Y, 5, 5);
+                        }
                         pic.CreateGraphics().DrawRectangle(penRect, Math.Min(e.X, X), Math.Min(e.Y, Y), width, height);
                     }
-                    //pic.CreateGraphics().DrawLine(pen, X, Y, e.X, e.Y);
-                    //g.DrawLine(pen, X, Y, e.X, e.Y);
-                    //g.DrawRectangle(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
-                    //g.DrawEllipse(pen, Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height);
-                    //g.DrawPolygon(pen, CaculateRightArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateLeftArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateDownArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateUpArrow(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateIsoscelesTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateRightTriangle(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height)));
-                    //g.DrawPolygon(pen, CaculateRhombus(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculatePentagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateHexagon(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateFiveStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
-                    //g.DrawPolygon(pen, CaculateSixStar(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y), width, height));
+                    else
+                    {
+                        CanMove = false;
+                        CanResize = false;
+                    }
                     //hasObject = true;
                     //leftTop = new Point(Math.Min(X, e.Location.X), Math.Min(Y, e.Location.Y));
                     //rightBottom = new Point(leftTop.X + Math.Abs(e.X - X), leftTop.Y + Math.Abs(e.Y - Y));
@@ -1499,9 +1751,31 @@ namespace Roga
             else
             {
                 pic.CreateGraphics().DrawRectangle(penRect, rectNow);
+                resizePoint[0].X = rectNow.Left - 2;
+                resizePoint[0].Y = rectNow.Top - 2;
+                resizePoint[1].X = rectNow.Left + (float)rectNow.Width / 2;
+                resizePoint[1].Y = rectNow.Top - 2;
+                resizePoint[2].X = rectNow.Left + rectNow.Width - 2;
+                resizePoint[2].Y = rectNow.Top - 2;
+                resizePoint[3].X = rectNow.Left + rectNow.Width - 2;
+                resizePoint[3].Y = rectNow.Top + (float)rectNow.Height / 2;
+                resizePoint[4].X = rectNow.Left + rectNow.Width - 2;
+                resizePoint[4].Y = rectNow.Top + rectNow.Height - 2;
+                resizePoint[5].X = rectNow.Left + (float)rectNow.Width / 2;
+                resizePoint[5].Y = rectNow.Top + rectNow.Height - 2;
+                resizePoint[6].X = rectNow.Left - 2;
+                resizePoint[6].Y = rectNow.Top + rectNow.Height - 2;
+                resizePoint[7].X = rectNow.Left - 2;
+                resizePoint[7].Y = rectNow.Top + (float)rectNow.Height / 2 + 2;
+                for (int i = 0; i < 8; i++)
+                {
+                    pic.CreateGraphics().FillRectangle(Brushes.White, resizePoint[i].X, resizePoint[i].Y, 5, 5);
+                    pic.CreateGraphics().DrawRectangle(new Pen(Color.Black, 1), resizePoint[i].X, resizePoint[i].Y, 5, 5);
+                }
             }    
             isMouseDown = false;
             shiftDown = false;
+            CanResize = false;
             //pic.Invalidate();
         }
 
