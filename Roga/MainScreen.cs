@@ -494,51 +494,7 @@ namespace Roga
                 if (_mouseType == "shape" && canMove)
                 {
                     pic.Refresh();
-                    switch (ShapesType)
-                    {
-                        case "0":
-                            pic.CreateGraphics().DrawLine(pen, headLine, tailLine);
-                            break;
-                        case "1":
-                            pic.CreateGraphics().DrawEllipse(pen, rectNow);
-                            break;
-                        case "2":
-                            pic.CreateGraphics().DrawRectangle(pen, rectNow);
-                            break;
-                        case "3":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "4":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "5":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "6":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "7":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "8":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "9":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "10":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "11":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "12":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "13":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                    }
+                    drawShapeOnPictureBox(rectNow);
                     if (shapesType == "0")
                     {
                         pic.CreateGraphics().DrawLine(pen, headLine, tailLine);
@@ -591,51 +547,7 @@ namespace Roga
                 if (_mouseType == "shape" && canMove)
                 {
                     pic.Refresh();
-                    switch (ShapesType)
-                    {
-                        case "0":
-                            pic.CreateGraphics().DrawLine(pen, headLine, tailLine);
-                            break;
-                        case "1":
-                            pic.CreateGraphics().DrawEllipse(pen, rectNow);
-                            break;
-                        case "2":
-                            pic.CreateGraphics().DrawRectangle(pen, rectNow);
-                            break;
-                        case "3":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "4":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "5":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "6":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "7":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "8":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "9":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "10":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "11":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "12":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "13":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                    }
+                    drawShapeOnPictureBox(rectNow);
                     if (shapesType == "0")
                     {
                         pic.CreateGraphics().DrawLine(pen, headLine, tailLine);
@@ -688,51 +600,7 @@ namespace Roga
                 if (_mouseType == "shape" && canMove)
                 {
                     pic.Refresh();
-                    switch (ShapesType)
-                    {
-                        case "0":
-                            pic.CreateGraphics().DrawLine(pen, headLine, tailLine);
-                            break;
-                        case "1":
-                            pic.CreateGraphics().DrawEllipse(pen, rectNow);
-                            break;
-                        case "2":
-                            pic.CreateGraphics().DrawRectangle(pen, rectNow);
-                            break;
-                        case "3":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "4":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateIsoscelesTriangle(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "5":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRhombus(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "6":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculatePentagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "7":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateHexagon(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "8":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateFiveStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "9":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateSixStar(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "10":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateRightArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "11":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateLeftArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "12":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateUpArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                        case "13":
-                            pic.CreateGraphics().DrawPolygon(pen, CaculateDownArrow(rectNow.X, rectNow.Y, rectNow.Width, rectNow.Height));
-                            break;
-                    }
+                    drawShapeOnPictureBox(rectNow);
                     if (shapesType == "0")
                     {
                         pic.CreateGraphics().DrawLine(pen, headLine, tailLine);
@@ -1977,7 +1845,6 @@ namespace Roga
             switch (ShapesType)
             {
                 case "0":
-                    //tailLine = e.Location;
                     pic.CreateGraphics().DrawLine(pen, headLine, tailLine);
                     break;
                 case "1":
