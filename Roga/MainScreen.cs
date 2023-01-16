@@ -54,8 +54,8 @@ namespace Roga
                     case "exposure":
                         //remove 
                         break;
-                    case "AddPicture":
-                        //remove
+                    case "addPicture":
+                        removeAddImageEvent();
                         break;
                     case "AddText":
                         //remove
@@ -89,10 +89,10 @@ namespace Roga
                     case "exposure":
                         //add 
                         break;
-                    case "AddPicture":
-                        //add
+                    case "addPicture":
+                        addAddImageEvent();
                         break;
-                    case "AddText":
+                    case "addText":
                         //add
                         break;
                     case "crop":
@@ -1168,7 +1168,7 @@ namespace Roga
             {
                 canMove = value;
                 imgTempShapes = new Bitmap(imgNow);
-                if (!canMove)
+                if (!canMove && _mouseType == "shape")
                 {
                     using (Graphics g = Graphics.FromImage(imgTempShapes))
                     {
@@ -1226,6 +1226,21 @@ namespace Roga
                     rectNow = new Rectangle(0, 0, 0, 0);
                     pic.Refresh();
                 }
+                if (!canMove && _mouseType == "addPicture")
+                {
+                    if (imgAddNow != null)
+                    {
+                        using (Graphics g = Graphics.FromImage(imgTempShapes))
+                        {
+                            g.DrawImage(imgAddNow, imgLocation);
+                            imgNow = new Bitmap(imgTempShapes);
+                            pic.Image = imgNow;
+                            stackImage.Push(imgNow);
+                        }
+                        imgLocation = new Point(0, 0);
+                        pic.Refresh();
+                    }    
+                }    
             }
         }
         public bool CanResize
@@ -1234,6 +1249,10 @@ namespace Roga
             set
             {
                 canResize = value;
+                if (!canResize && _mouseType == "addPicture" && imgTemp != null)
+                {
+                    imgAddNow = new Bitmap(imgTemp);
+                }    
             }
         }
 
@@ -2158,7 +2177,6 @@ namespace Roga
             picFlip = new PictureBox();
 
             //set image
-            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             picSelect.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\select.png"));
             picCrop.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\crop.png"));
             picRotate.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\rotate.png"));
@@ -2331,6 +2349,393 @@ namespace Roga
 
         #endregion
 
+        //Add image
+        #region Add image
+        Point imgLocation = new Point(0, 0);
+        Image imgAddNow = null;
+        Image imgSourceAdd = null;
+
+        private void InitAddImage(Image img)
+        {
+            //resize img to draw on pic
+            int tempW = imgNow.Width - img.Width;
+            int tempH = imgNow.Height - img.Height;
+            if (tempH > 0 && tempW < 0)
+            {
+                img = resizeImage(img, new Size(imgNow.Width, (int)(img.Height * ((float)imgNow.Width / img.Width) - 0.5)));
+            }    
+            else if (tempH < 0 && tempW > 0)
+            {
+                img = resizeImage(img, new Size((int)(img.Width * ((float)imgNow.Height / img.Height) - 0.5), imgNow.Height));
+            }    
+            else if (tempH > 0 && tempW > 0)
+            {
+                if (imgNow.Width - img.Width > imgNow.Height - img.Height)
+                {
+                    img = resizeImage(img, new Size((int)(img.Width * ((float)imgNow.Height / img.Height) - 0.5), imgNow.Height));
+                }    
+                else
+                {
+                    img = resizeImage(img, new Size(imgNow.Width, (int)(img.Height * ((float)imgNow.Width / img.Width) - 0.5)));
+                }    
+            }    
+            else
+            {
+                if (imgNow.Width - img.Width > imgNow.Height - img.Height)
+                {
+                    img = resizeImage(img, new Size((int)(img.Width * ((float)imgNow.Height / img.Height) - 0.5), imgNow.Height));
+                }
+                else
+                {
+                    img = resizeImage(img, new Size(imgNow.Width, (int)(img.Height * ((float)imgNow.Width / img.Width) - 0.5)));
+                }
+            }
+            imgAddNow = new Bitmap(img);
+            pic.CreateGraphics().DrawImage(imgAddNow, imgLocation);
+            pic.CreateGraphics().DrawRectangle(penRect, new Rectangle(imgLocation, imgAddNow.Size));
+            //draw resizePoint
+            resizePoint[0].X = imgLocation.X - 2;
+            resizePoint[0].Y = imgLocation.Y - 2;
+            resizePoint[1].X = imgLocation.X + (float)imgAddNow.Width / 2 - 2;
+            resizePoint[1].Y = imgLocation.Y - 2;
+            resizePoint[2].X = imgLocation.X + imgAddNow.Width - 2;
+            resizePoint[2].Y = imgLocation.Y - 2;
+            resizePoint[3].X = imgLocation.X + imgAddNow.Width - 2;
+            resizePoint[3].Y = imgLocation.Y + (float)imgAddNow.Height / 2 - 2;
+            resizePoint[4].X = imgLocation.X + imgAddNow.Width - 2;
+            resizePoint[4].Y = imgLocation.Y + imgAddNow.Height - 2;
+            resizePoint[5].X = resizePoint[1].X;
+            resizePoint[5].Y = imgLocation.Y + imgAddNow.Height - 2;
+            resizePoint[6].X = imgLocation.X - 2;
+            resizePoint[6].Y = imgLocation.Y + imgAddNow.Height - 2;
+            resizePoint[7].X = imgLocation.X - 2;
+            resizePoint[7].Y = resizePoint[3].Y;
+            for (int i = 0; i < 8; i++)
+            {
+                pic.CreateGraphics().FillRectangle(Brushes.White, resizePoint[i].X, resizePoint[i].Y, 5, 5);
+                pic.CreateGraphics().DrawRectangle(new Pen(Color.Black, 1), resizePoint[i].X, resizePoint[i].Y, 5, 5);
+            }
+
+            penRect.DashStyle = DashStyle.DashDot;
+            imgSourceAdd = new Bitmap(imgAddNow);
+            imgTemp = new Bitmap(imgAddNow); ;
+            canMove = true;
+        }
+
+        private void pic_AddImage_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                X = e.X;
+                Y = e.Y;
+                mouseDownLocation = e.Location;
+                if (canMove == false)
+                    return;
+                    //pic.Refresh();
+                isMouseDown = true;
+                //if mouseDownLocation in rectNow, set canMove & canResize
+                if ((e.X >= (imgLocation.X - penRect.Width)) && (e.X <= (imgLocation.X + imgAddNow.Width + penRect.Width))
+                    && (e.Y >= (imgLocation.Y - penRect.Width)) && (e.Y <= (imgLocation.Y + imgAddNow.Height + penRect.Width)))
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5)
+                            && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                        {
+                            resizePointNowIndex = i;
+                            CanResize = true;
+                            break;
+                        }
+                    }
+                    CanMove = true;
+                    startMouseMoveShape = e.Location;
+                }
+                else
+                {
+                    bool flag = true;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5)
+                            && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        canResize = false;
+                    else
+                    {
+                        canMove = true;
+                        canResize = true;
+                    }    
+                    if (!canResize)
+                    {
+                        CanMove = false;
+                    }    
+                    //if (canMove && !canResize)
+                    //    CanMove = false;
+                    //else if (canMove && canResize)
+                    //    canMove = false;
+
+                }
+            }    
+        }
+
+        private void pic_AddImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            //set pic.Cursor
+            if (!canResize)
+            {
+                if (canMove)
+                {
+                    if ((e.X >= (imgLocation.X - penRect.Width)) && (e.X <= (imgLocation.X + imgAddNow.Width + penRect.Width))
+                        && (e.Y >= (imgLocation.Y - penRect.Width)) && (e.Y <= (imgLocation.Y + imgAddNow.Height + penRect.Width)))
+                    {
+                        pic.Cursor = Cursors.SizeAll;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5)
+                                && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                            {
+                                resizePointNowIndex = i;
+                                switch (resizePointNowIndex)
+                                {
+                                    case 0:
+                                        pic.Cursor = Cursors.SizeNWSE;
+                                        break;
+                                    case 1:
+                                        pic.Cursor = Cursors.SizeNS;
+                                        break;
+                                    case 2:
+                                        pic.Cursor = Cursors.SizeNESW;
+                                        break;
+                                    case 3:
+                                        pic.Cursor = Cursors.SizeWE;
+                                        break;
+                                    case 4:
+                                        pic.Cursor = Cursors.SizeNWSE;
+                                        break;
+                                    case 5:
+                                        pic.Cursor = Cursors.SizeNS;
+                                        break;
+                                    case 6:
+                                        pic.Cursor = Cursors.SizeNESW;
+                                        break;
+                                    case 7:
+                                        pic.Cursor = Cursors.SizeWE;
+                                        break;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        bool flag = true;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            if ((e.X >= resizePoint[i].X) && (e.X <= resizePoint[i].X + 5)
+                                && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
+                            {
+                                flag = false;
+                                resizePointNowIndex = i;
+                                switch (resizePointNowIndex)
+                                {
+                                    case 0:
+                                        pic.Cursor = Cursors.SizeNWSE;
+                                        break;
+                                    case 1:
+                                        pic.Cursor = Cursors.SizeNS;
+                                        break;
+                                    case 2:
+                                        pic.Cursor = Cursors.SizeNESW;
+                                        break;
+                                    case 3:
+                                        pic.Cursor = Cursors.SizeWE;
+                                        break;
+                                    case 4:
+                                        pic.Cursor = Cursors.SizeNWSE;
+                                        break;
+                                    case 5:
+                                        pic.Cursor = Cursors.SizeNS;
+                                        break;
+                                    case 6:
+                                        pic.Cursor = Cursors.SizeNESW;
+                                        break;
+                                    case 7:
+                                        pic.Cursor = Cursors.SizeWE;
+                                        break;
+                                }
+                                break;
+                            }
+                        }
+                        if (flag)
+                            pic.Cursor = Cursors.Default;
+                    }
+                }
+                else
+                {
+                    pic.Cursor = Cursors.Default;
+                }    
+            }
+
+            //MouseDown but cannot move and resize, MouseMove do nothing
+            if (isMouseDown && !canMove && !canResize)
+            {
+
+            }
+            //MouseDown, can move but cannot resize, relocation imgLocation when move
+            else if (isMouseDown && canMove && !canResize)
+            {
+                pic.Refresh();
+                pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
+                imgLocation = new Point((e.X - mouseDownLocation.X) + imgLocation.X, (e.Y - mouseDownLocation.Y) + imgLocation.Y);
+                mouseDownLocation = e.Location;
+                pic.CreateGraphics().DrawImage(imgAddNow, imgLocation);
+
+            }
+            //MouseDown and can resize, resize and relocation the imgAddNow, imgLocation
+            else if (isMouseDown && canResize)
+            {
+                //set cursor and resize rectNow/line
+                //resize and relocation rectNow
+                //if (!shiftDown)
+                {
+                    switch (resizePointNowIndex)
+                    {
+                        case 0:
+                            if (e.Y <= imgLocation.Y + imgTemp.Height - 2 && e.X <= imgLocation.X + imgTemp.Width - 2)
+                            {
+                                pic.Cursor = Cursors.SizeNWSE;
+                                imgLocation = new Point(e.X, e.Y);
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width + (mouseDownLocation.X - e.X), imgTemp.Height + (mouseDownLocation.Y - e.Y)));
+                            }
+                            break;
+                        case 1:
+                            if (e.Y <= imgLocation.Y + imgTemp.Height - 2)
+                            {
+                                pic.Cursor = Cursors.SizeNS;
+                                imgLocation = new Point(imgLocation.X, e.Y);
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width, imgTemp.Height + (mouseDownLocation.Y - e.Y)));
+                            }
+                            break;
+                        case 2:
+                            if (e.X >= (imgLocation.X + 2) && e.Y <= (imgLocation.Y + imgTemp.Height - 2))
+                            {
+                                pic.Cursor = Cursors.SizeNESW;
+                                imgLocation = new Point(rectNow.Left, e.Y);
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width - (mouseDownLocation.X - e.X), imgTemp.Height + (mouseDownLocation.Y - e.Y)));
+                            }
+                            break;
+                        case 3:
+                            if (e.X >= (imgLocation.X + 2))
+                            {
+                                pic.Cursor = Cursors.SizeWE;
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width - (mouseDownLocation.X - e.X), imgTemp.Height));
+                            }
+                            break;
+                        case 4:
+                            if (e.X >= (imgLocation.X + 2) && e.Y >= (imgLocation.Y + 2))
+                            {
+                                pic.Cursor = Cursors.SizeNWSE;
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width - (mouseDownLocation.X - e.X), imgTemp.Height - (mouseDownLocation.Y - e.Y)));
+                            }
+                            break;
+                        case 5:
+                            if (e.Y >= (imgLocation.Y + 2))
+                            {
+                                pic.Cursor = Cursors.SizeNS;
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width, imgTemp.Height - (mouseDownLocation.Y - e.Y)));
+                            }
+                            break;
+                        case 6:
+                            if (e.X <= (imgLocation.X + imgTemp.Width - 2) && e.Y >= (imgLocation.Y + 2))
+                            {
+                                pic.Cursor = Cursors.SizeNESW;
+                                imgLocation = new Point(e.X, imgLocation.Y);
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width + (mouseDownLocation.X - e.X), imgTemp.Height - (mouseDownLocation.Y - e.Y)));
+                            }
+                            break;
+                        case 7:
+                            if (e.X <= (imgLocation.X + imgTemp.Width - 2))
+                            {
+                                pic.Cursor = Cursors.SizeWE;
+                                imgLocation = new Point(e.X, imgLocation.Y);
+                                imgTemp = resizeImage(imgSourceAdd, new Size(imgTemp.Width + (mouseDownLocation.X - e.X), imgTemp.Height));
+                            }
+                            break;
+                    }
+                }
+
+
+                mouseDownLocation = e.Location;
+                pic.Refresh();
+                pic.CreateGraphics().SmoothingMode = SmoothingMode.AntiAlias;
+                //draw shape
+                pic.CreateGraphics().DrawImage(imgTemp, imgLocation);
+            }
+        }
+
+        private void pic_AddImage_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (canResize)
+            {
+                CanResize = false;
+            }
+            if (canMove)
+            {
+                resizePoint[0].X = imgLocation.X - 2;
+                resizePoint[0].Y = imgLocation.Y - 2;
+                resizePoint[1].X = imgLocation.X + (float)imgAddNow.Width / 2 - 2;
+                resizePoint[1].Y = imgLocation.Y - 2;
+                resizePoint[2].X = imgLocation.X + imgAddNow.Width - 2;
+                resizePoint[2].Y = imgLocation.Y - 2;
+                resizePoint[3].X = imgLocation.X + imgAddNow.Width - 2;
+                resizePoint[3].Y = imgLocation.Y + (float)imgAddNow.Height / 2 - 2;
+                resizePoint[4].X = imgLocation.X + imgAddNow.Width - 2;
+                resizePoint[4].Y = imgLocation.Y + imgAddNow.Height - 2;
+                resizePoint[5].X = resizePoint[1].X;
+                resizePoint[5].Y = imgLocation.Y + imgAddNow.Height - 2;
+                resizePoint[6].X = imgLocation.X - 2;
+                resizePoint[6].Y = imgLocation.Y + imgAddNow.Height - 2;
+                resizePoint[7].X = imgLocation.X - 2;
+                resizePoint[7].Y = resizePoint[3].Y;
+                for (int i = 0; i < 8; i++)
+                {
+                    pic.CreateGraphics().FillRectangle(Brushes.White, resizePoint[i].X, resizePoint[i].Y, 5, 5);
+                    pic.CreateGraphics().DrawRectangle(new Pen(Color.Black, 1), resizePoint[i].X, resizePoint[i].Y, 5, 5);
+                }
+                pic.CreateGraphics().DrawRectangle(penRect, new Rectangle(imgLocation, imgTemp.Size));
+            }    
+            else
+            {
+                CanResize = false;
+            }    
+            
+            isMouseDown = false;
+            shiftDown = false;
+        }
+
+        private void addAddImageEvent()
+        {
+            this.KeyDown += this_Shapes_ShiftKey;
+            this.KeyUp += this_Shapes_KeyUp;
+            pic.MouseDown += new MouseEventHandler(pic_AddImage_MouseDown);
+            pic.MouseMove += new MouseEventHandler(pic_AddImage_MouseMove);
+            pic.MouseUp += new MouseEventHandler(pic_AddImage_MouseUp);
+        }
+
+        private void removeAddImageEvent()
+        {
+            this.KeyDown -= this_Shapes_ShiftKey;
+            this.KeyUp -= this_Shapes_KeyUp;
+            pic.MouseDown -= new MouseEventHandler(pic_AddImage_MouseDown);
+            pic.MouseMove -= new MouseEventHandler(pic_AddImage_MouseMove);
+            pic.MouseUp -= new MouseEventHandler(pic_AddImage_MouseUp);
+        }
+
+        #endregion
 
         #region button onclick
         private void Pen_Button_Click(object sender, EventArgs e)
@@ -2390,8 +2795,30 @@ namespace Roga
 
         private void AddPicture_Button_Click(object sender, EventArgs e)
         {
-            MouseType = "AddPicture";
+            MouseType = "addPicture";
             LastMouseType = MouseType;
+            Thread t = new Thread((ThreadStart)(() =>
+            {
+                OpenFileDialog open = new OpenFileDialog();
+                open.Title = " Open file...";
+                open.InitialDirectory = "D:\\";
+                open.DefaultExt = "jpg";
+                open.Filter = " Image file (*.BMP,*.JPG,*.JPEG,*.PNG)|*.bmp;*.jpg;*.jpeg;*.png";
+                if (open.ShowDialog() == DialogResult.OK)
+                {
+                    BeforeAddImage newForm = new BeforeAddImage(Image.FromFile(open.FileName));
+                    newForm.ShowDialog();
+                    if (newForm.getImageToAdd() != null)
+                    {
+                        InitAddImage(newForm.getImageToAdd());
+                    }    
+                }    
+            }));
+
+            // Run your code from a thread that joins the STA Thread
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();
         }
 
         private void AddText_Button_Click(object sender, EventArgs e)

@@ -152,7 +152,7 @@ namespace Roga
         {
             //DemoChangeAVT
             OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "PNG, JPG, JPEG Files|*.png; *.jpg; *.jpeg";
+            open.Filter = "(BMP, PNG, JPG, JPEG Files)|*.bmp;*.png; *.jpg; *.jpeg";
             if (open.ShowDialog() == DialogResult.OK)
             {
                 Image imgAvt = Image.FromFile(open.FileName);
@@ -184,7 +184,7 @@ namespace Roga
         private void btnImport_Click(object sender, EventArgs e)
         {
             OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "PNG, JPG, JPEG Files|*.png; *.jpg; *.jpeg";
+            open.Filter = "(BMP, PNG, JPG, JPEG Files)|*.bmp;*.png; *.jpg; *.jpeg";
             if (open.ShowDialog() == DialogResult.OK)
             {
                 Image img = Image.FromFile(open.FileName);
