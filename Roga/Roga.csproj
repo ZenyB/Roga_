@@ -48,6 +48,12 @@
     <Compile Include="CustomTrackbar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="BeforeAddImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BeforeAddImage.Designer.cs">
+      <DependentUpon>BeforeAddImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +114,9 @@
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BeforeAddImage.resx">
+      <DependentUpon>BeforeAddImage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HomeScreen.resx">
       <DependentUpon>HomeScreen.cs</DependentUpon>
     </EmbeddedResource>
