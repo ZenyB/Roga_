@@ -2988,6 +2988,29 @@ namespace Roga
             MouseType = "";
         }
 
+        private void Back_Button_Click(object sender, EventArgs e)
+        {
+            if (stackImage.Count > 1)
+            {
+                pic.Cursor = Cursors.Default;
+                if (canMove == false)
+                {
+                    stackImage.Pop();
+                    //If image change size -> resize picturebox
+                    if (imgNow.Size != stackImage.Peek().Size)
+                        resizePic(stackImage.Peek());
+                    imgNow = stackImage.Peek();
+                    pic.Image = imgNow;
+                }
+            }
+            if (canMove != false)
+            {
+                canMove = false;
+                rectNow = new Rectangle(0, 0, 0, 0);
+            }
+            pic.Refresh();
+        }
+
         private void Save_Button_Click(object sender, EventArgs e)
         {
             Thread t = new Thread((ThreadStart)(() =>

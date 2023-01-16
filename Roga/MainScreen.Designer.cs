@@ -259,6 +259,7 @@
             this.Back_Button.Size = new System.Drawing.Size(55, 55);
             this.Back_Button.TabIndex = 3;
             this.Back_Button.UseVisualStyleBackColor = true;
+            this.Back_Button.Click += new System.EventHandler(this.Back_Button_Click);
             // 
             // Save_Button
             // 
