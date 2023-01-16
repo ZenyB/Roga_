@@ -2751,9 +2751,13 @@ namespace Roga
                 return _typeRGB;
             }
             set 
-            { 
+            {
+                if (_typeRGB != value)
+                {
+                    imgNowFake = imgProcess;
+                    //stackImage.Push(imgNowFake);
+                }
                 _typeRGB = value;
-                imgNowFake = imgProcess;
             } 
         }
         public void Add_ColorRGB_Channel()
@@ -2913,7 +2917,7 @@ namespace Roga
             {
                 new float[] {1,0,0,0,0},
                 new float[] {0,1,0,0,0},
-                new float[] {0,0,1f + (trueValue / 1000),0,0},
+                new float[] {0,0,1f + (trueValue / 200),0,0},
                 new float[] {0,0,0,1,0},
                 new float[] {0,0,0,0,1},
             });
@@ -2934,7 +2938,7 @@ namespace Roga
             float trueValue = 0 - bar.Value;
             ColorMatrix colorMatrix = new ColorMatrix(new float[][]
             {
-                new float[] {1f + (trueValue / 1000),0,0,0,0},
+                new float[] {1f + (trueValue / 200),0,0,0,0},
                 new float[] {0,1, 0,0,0},
                 new float[] {0,0,1,0,0},
                 new float[] {0,0,0,1,0},
@@ -2959,7 +2963,7 @@ namespace Roga
             ColorMatrix colorMatrix = new ColorMatrix(new float[][]
             {
                 new float[] {1, 0,0,0,0},
-                new float[] {0, 1f + (trueValue / 1000), 0,0,0},
+                new float[] {0, 1f + (trueValue / 200), 0,0,0},
                 new float[] {0,0,1,0,0},
                 new float[] {0,0,0,1,0},
                 new float[] {0,0,0,0,1},
