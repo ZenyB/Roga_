@@ -187,8 +187,10 @@ namespace Roga
             open.Filter = "(BMP, PNG, JPG, JPEG Files)|*.bmp;*.png; *.jpg; *.jpeg";
             if (open.ShowDialog() == DialogResult.OK)
             {
-                Image img = Image.FromFile(open.FileName);
-                MainScreen mainForm = new MainScreen(img);
+                Image temp = Image.FromFile(open.FileName);
+                Image img = new Bitmap(temp);
+                temp.Dispose();
+                MainScreen mainForm = new MainScreen(img, open.FileName);
                 this.Hide();
                 mainForm.ShowDialog();
             }
