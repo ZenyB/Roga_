@@ -2218,6 +2218,17 @@ namespace Roga
             picCrop.Click += new EventHandler(picCrop_Click);
             picRotate.Click += new EventHandler(picRotate_Click);
             picFlip.Click += new EventHandler(picFlip_Click);
+
+            picSelect.MouseEnter += new EventHandler(Select_Enter);
+            picCrop.MouseEnter += new EventHandler(Select_Enter);
+            picRotate.MouseEnter += new EventHandler(Select_Enter);
+            picFlip.MouseEnter += new EventHandler(Select_Enter);
+        }
+
+        private void Select_Enter(object sender, EventArgs e)
+        {
+            PictureBox pictmp = (PictureBox)sender;
+            pictmp.Cursor = Cursors.Hand;
         }
 
         //select 
@@ -2945,6 +2956,10 @@ namespace Roga
             {
                 Cursor = Cursors.Cross;
             }
+            else
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         private void pic_AddText_MouseDown(object sender, MouseEventArgs e)
@@ -2957,6 +2972,10 @@ namespace Roga
                 {
                     Draw_Text();
                     addtext = false;
+
+                    tboxX = txtX = e.X;
+                    tboxY = txtY = e.Y;
+                    return;
                 }
                 Cursor = Cursors.Cross;
                 crpPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
@@ -2965,6 +2984,7 @@ namespace Roga
 
                 tboxX = txtX = e.X;
                 tboxY = txtY = e.Y;
+                addtext = true;
             }
         }
 
@@ -2974,7 +2994,7 @@ namespace Roga
 
             if (e.Button == MouseButtons.Left)
             {
-                if (addtext == false)
+                if (addtext == true)
                 {
                     if (e.Button == MouseButtons.Left)
                     {
@@ -3014,9 +3034,8 @@ namespace Roga
             pic.Refresh();
             if (e.Button == MouseButtons.Left)
             {
-                if (addtext == false)
+                if (addtext == true)
                 {
-                    Label l = new Label();
                     txtAddText.Text = "Add text";
                     txtAddText.AutoSize = true;
                     txtAddText.Size = new Size(tboxWidth, tboxHeight);
@@ -3024,9 +3043,9 @@ namespace Roga
                     txtAddText.BorderStyle = BorderStyle.FixedSingle;
                     txtAddText.Enter += new EventHandler(txt_Enter);
                     //txtAddText.Leave += new EventHandler(txt_Leave);
-                    //txt.BackColor = Color.Transparent;
                     pic.Controls.Add(txtAddText);
                     addtext = true;
+                    Cursor = Cursors.Default;
                 }
             }
         }
@@ -3042,14 +3061,17 @@ namespace Roga
 
         private void Draw_Text()
         {
-            Bitmap bit = new Bitmap(pic.Image);
-            Graphics g = Graphics.FromImage(bit);
-            g.DrawString(txtAddText.Text, fontText, new SolidBrush(txtAddText.ForeColor), txtAddText.Location.X, txtAddText.Location.Y);
-            pic.Controls.Remove(txtAddText);
-            txtAddText.Text = "";
-            imgNow = new Bitmap(bit);
-            pic.Image = imgNow;
-            stackImage.Push(imgNow);
+            if (addtext == true)
+            {
+                Bitmap bit = new Bitmap(pic.Image);
+                Graphics g = Graphics.FromImage(bit);
+                g.DrawString(txtAddText.Text, fontText, new SolidBrush(txtAddText.ForeColor), txtAddText.Location.X, txtAddText.Location.Y);
+                pic.Controls.Remove(txtAddText);
+                txtAddText.Text = "";
+                imgNow = new Bitmap(bit);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }
         }
 
         private void cbFont_SelectedIndexChanged(object sender, EventArgs e)
