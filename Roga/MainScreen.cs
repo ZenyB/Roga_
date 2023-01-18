@@ -27,6 +27,7 @@ namespace Roga
         private Pen pen = new Pen(Color.Black, 3);
         private Image imgNow; //The image is being processed
         private Stack<Image> stackImage = new Stack<Image>(); //stack images has been processed
+        string fileNameNow = ""; //location of current image
         public string MouseType
         {
             get { return _mouseType; }
@@ -210,13 +211,14 @@ namespace Roga
             pic.BringToFront();
 
         }//create a project with image path
-        public MainScreen(Image picture)
+        public MainScreen(Image picture, string fileName)
         {
             InitializeComponent();
             InitBackgroundImageForButton();
 
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(Width, Height);
+            fileNameNow = fileName;
             MouseType = "";
 
             pic = new PictureBox();
@@ -316,31 +318,37 @@ namespace Roga
         }
 
         //Event ctrl + Z
+
+        private void backImage()
+        {
+            if (stackImage.Count > 1)
+            {
+                pic.Cursor = Cursors.Default;
+                if (canMove == false)
+                {
+                    stackImage.Pop();
+                    //If image change size -> resize picturebox
+                    if (imgNow.Size != stackImage.Peek().Size)
+                        resizePic(stackImage.Peek());
+                    imgNow = stackImage.Peek();
+                    pic.Image = imgNow;
+                }
+            }
+            if (canMove != false)
+            {
+                canMove = false;
+                rectNow = new Rectangle(0, 0, 0, 0);
+            }
+            pic.Refresh();
+        }    
+
         private void MainScreen_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Z && (Control.ModifierKeys & Keys.Control) == Keys.Control)
             {
                 //When user pressed Ctrl + Z, stackImage will be pop and imgNow return to previous state
                 //If stackImage has only one image, this is original image, user can't goback
-                if (stackImage.Count > 1)
-                {
-                    pic.Cursor = Cursors.Default;
-                    if (canMove == false)
-                    {
-                        stackImage.Pop();
-                        //If image change size -> resize picturebox
-                        if (imgNow.Size != stackImage.Peek().Size)
-                            resizePic(stackImage.Peek());
-                        imgNow = stackImage.Peek();
-                        pic.Image = imgNow;
-                    }
-                }
-                if (canMove != false)
-                {
-                    canMove = false;
-                    rectNow = new Rectangle(0, 0, 0, 0);
-                }
-                pic.Refresh();
+                backImage();
             }
         }
 
@@ -2749,24 +2757,208 @@ namespace Roga
             MouseType = "";
         }
 
+        private void Back_Button_Click(object sender, EventArgs e)
+        {
+            backImage();
+        }
+
+        private void createBlankForNew()
+        {
+            stackImage.Clear();
+            Controls.Remove(pic);
+            pic = new PictureBox();
+
+            pic.Anchor = 0;
+            pic.Location = new Point(400, 260);
+            pic.Name = "pictureBox1";
+            pic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            pic.TabIndex = 0;
+            pic.TabStop = false;
+            pic.SendToBack();
+
+            int newHeight, newWidth;
+            newWidth = this.picturePanel2.Width;
+            newHeight = this.picturePanel2.Height;
+            pic.Size = new Size(newWidth, newHeight);
+            pic.Location = new Point((Width / 2) - (newWidth / 2), (Height / 2) - (newHeight / 2));
+            Bitmap picture = new Bitmap(newWidth, newHeight);
+            using (Graphics graph = Graphics.FromImage(picture))
+            {
+                Rectangle ImageSize = new Rectangle(0, 0, newWidth, newHeight);
+                graph.FillRectangle(Brushes.White, ImageSize);
+            }
+            pic.Image = picture;
+
+            imgNow = picture;
+            setLocation(imgNow);
+            stackImage.Push(imgNow);
+
+            Controls.Add(pic);
+            pic.BringToFront();
+        }
+
+        private void newToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                MouseType = "";
+                if (MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (!saveImage())
+                    {
+                        return;
+                    }
+                }
+                createBlankForNew();
+            }    
+        }
+
+        private void openToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                OpenFileDialog open = new OpenFileDialog();
+                open.Filter = "(BMP, PNG, JPG, JPEG Files)|*.bmp;*.png; *.jpg; *.jpeg";
+                if (open.ShowDialog() == DialogResult.OK)
+                {
+                    MouseType = "";
+                    if (MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        if (!saveImage())
+                        {
+                            return;
+                        }    
+                    }
+                    fileNameNow = open.FileName;
+                    Image tempp = Image.FromFile(open.FileName);
+                    Image img = new Bitmap(tempp);
+                    tempp.Dispose();
+
+                    MouseType = "";
+                    stackImage.Clear();
+                    Controls.Remove(pic);
+                    pic = new PictureBox();
+
+                    pic.Anchor = 0;
+                    pic.Location = new Point(400, 260);
+                    pic.Name = "pictureBox1";
+                    pic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+                    pic.TabIndex = 0;
+                    pic.TabStop = false;
+                    pic.SendToBack();
+
+                    if (img.Width > Width || img.Height > Height)
+                    {
+                        int newHeight, newWidth;
+                        if (img.Width > img.Height)
+                        {
+                            newWidth = Width - 225 * 2;
+                            newHeight = (int)(img.Height * ((float)newWidth / img.Width));
+                        }
+                        else
+                        {
+                            newHeight = Height - 50;
+                            newWidth = (int)(img.Width * ((float)newHeight / img.Height));
+                        }
+                        pic.Size = new Size(newWidth, newHeight);
+                        Image temp = img;
+                        temp = resizeImage(temp, pic.Size);
+                        pic.Image = temp;
+                        imgNow = pic.Image;
+                        setLocation(imgNow);
+                        stackImage.Push(imgNow);
+                    }
+                    else
+                    {
+                        int newHeight, newWidth;
+                        newWidth = img.Width;
+                        newHeight = img.Height;
+                        pic.Size = new Size(newWidth, newHeight);
+                        pic.Image = img;
+                        imgNow = pic.Image;
+                        setLocation(imgNow);
+                        stackImage.Push(imgNow);
+                    }
+                    Controls.Add(pic);
+                    pic.BringToFront();
+                }
+            }
+        }
+
+        private void saveToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                MouseType = "";
+                if (File.Exists(fileNameNow))
+                {
+                    imgNow.Save(fileNameNow);
+                }    
+                else
+                {
+                    saveImage();
+                }    
+            }
+        }
+
+        private void saveAsToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                saveImage();
+            }
+        }
+
+        private void exitToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                MouseType = "";
+                if (MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (!saveImage())
+                        return;
+                }
+                Application.Exit();
+            }
+        }
+
+        private bool saveImage()
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Title = " Save file...";
+            saveFileDialog1.InitialDirectory = "D:\\";
+            saveFileDialog1.DefaultExt = "jpg";
+            saveFileDialog1.Filter = " Image file (*.BMP,*.JPG,*.JPEG, *.PNG)|*.bmp;*.jpg;*.jpeg;*.png";
+            saveFileDialog1.OverwritePrompt = true;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    MouseType = "";
+                    pic.Image.Save(saveFileDialog1.FileName);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message, "Roga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         private void Save_Button_Click(object sender, EventArgs e)
         {
-            Thread t = new Thread((ThreadStart)(() =>
+            MouseType = "";
+            if (File.Exists(fileNameNow))
             {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Title = " Save file...";
-                saveFileDialog1.InitialDirectory = "D:\\";
-                saveFileDialog1.DefaultExt = "jpg";
-                saveFileDialog1.Filter = " Image file (*.BMP,*.JPG,*.JPEG)|*.bmp;*.jpg;*.jpeg ";
-                saveFileDialog1.OverwritePrompt = true;
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                    pic.Image.Save(saveFileDialog1.FileName);
-            }));
-
-            // Run your code from a thread that joins the STA Thread
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-            t.Join();
+                imgNow.Save(fileNameNow);
+            }
+            else
+            {
+                saveImage();
+            }
         }
 
         private void Eraser_Button_Click(object sender, EventArgs e)
@@ -2806,12 +2998,15 @@ namespace Roga
                 open.Filter = " Image file (*.BMP,*.JPG,*.JPEG,*.PNG)|*.bmp;*.jpg;*.jpeg;*.png";
                 if (open.ShowDialog() == DialogResult.OK)
                 {
-                    BeforeAddImage newForm = new BeforeAddImage(Image.FromFile(open.FileName));
+                    Image temp = Image.FromFile(open.FileName);
+                    Image img = new Bitmap(temp);
+                    temp.Dispose();
+                    BeforeAddImage newForm = new BeforeAddImage(img);
                     newForm.ShowDialog();
                     if (newForm.getImageToAdd() != null)
                     {
                         InitAddImage(newForm.getImageToAdd());
-                    }    
+                    }
                 }    
             }));
 
