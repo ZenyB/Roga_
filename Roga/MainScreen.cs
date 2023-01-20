@@ -1505,6 +1505,7 @@ namespace Roga
                                 && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
                             {
                                 flag = false;
+                                startMouseMoveShape = e.Location;
                                 break;
                             }
                         }
