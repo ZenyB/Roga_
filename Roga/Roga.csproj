@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomTextbox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomTextbox.Designer.cs">
+      <DependentUpon>CustomTextbox.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomTrackbar.cs">
       <SubType>Component</SubType>
     </Compile>

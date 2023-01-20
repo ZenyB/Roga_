@@ -22,6 +22,7 @@ namespace Roga
         Point lastPoint = Point.Empty;// null for a Point object
         static private string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; //get current directory
         bool isMouseDown = new Boolean();//this is used to evaluate whether our mousebutton is down or not
+        bool isSelect = false;//this is used to know when seleclt feature is choose
         string LastMouseType = string.Empty;//hold the lastest mouse type to remove the button events
         private string _mouseType;//hold the mouse type to add the button event
         private Pen pen = new Pen(Color.Black, 3);
@@ -59,10 +60,11 @@ namespace Roga
                         removeAddImageEvent();
                         break;
                     case "AddText":
-                        //remove
+                        Remove_AddText();
                         break;
                     case "crop":
                         Remove_Select();
+                        isSelect = false;
                         break;
                     case "shape":
                         removeShapesEvent();
@@ -93,11 +95,12 @@ namespace Roga
                     case "addPicture":
                         addAddImageEvent();
                         break;
-                    case "addText":
-                        //add
+                    case "AddText":
+                        InitTextDetails();
                         break;
                     case "crop":
                         InitCropDetails();
+                        isSelect = true;
                         break;
                     case "shape":
                         InitShapesDetails();
@@ -648,6 +651,7 @@ namespace Roga
                 CustomButton.VBButton button = (CustomButton.VBButton)sender;
                 b.BackColor = button.BackColor;
                 pen.Color = button.BackColor;
+                txtAddText.ForeColor = pen.Color;
             }
         }
         private void SetCustomColor(object sender, MouseEventArgs e, CustomButton.VBButton b)
@@ -659,6 +663,7 @@ namespace Roga
                 {
                     b.BackColor = button.BackColor;
                     pen.Color = button.BackColor;
+                    txtAddText.ForeColor = pen.Color;
                 }
             }
         }
@@ -706,6 +711,7 @@ namespace Roga
                             matrixColor[i, 0].BackColor = matrixColor[blankPosition - 1, 0].BackColor;
                             matrixColor[blankPosition - 1, 0].BackColor = temp.BackColor;
                             pen.Color = color.Color;
+                            txtAddText.ForeColor = pen.Color;
                             return;
                         }
                     }
@@ -716,6 +722,7 @@ namespace Roga
                             matrixColor[i, 0].ForeColor = Color.White;
                             matrixColor[i, 0].BackColor = color.Color;
                             pen.Color = color.Color;
+                            txtAddText.ForeColor = pen.Color;
                             break;
                         }
                         else if (i == 8)
@@ -726,6 +733,7 @@ namespace Roga
                             }
                             matrixColor[8, 0].BackColor = color.Color;
                             pen.Color = color.Color;
+                            txtAddText.ForeColor = pen.Color;
                         }
                     }
                 }
@@ -2176,8 +2184,7 @@ namespace Roga
 
         private void InitCropDetails()
         {
-            rectW = imgNow.Width;
-            rectH = imgNow.Height;
+            resetSelect();
 
             PictureBox picSelect, picCrop, picRotate, picFlip;
             picSelect = new PictureBox();
@@ -2212,58 +2219,78 @@ namespace Roga
             picCrop.Click += new EventHandler(picCrop_Click);
             picRotate.Click += new EventHandler(picRotate_Click);
             picFlip.Click += new EventHandler(picFlip_Click);
+
+            picSelect.MouseEnter += new EventHandler(Select_Enter);
+            picCrop.MouseEnter += new EventHandler(Select_Enter);
+            picRotate.MouseEnter += new EventHandler(Select_Enter);
+            picFlip.MouseEnter += new EventHandler(Select_Enter);
+        }
+
+        private void Select_Enter(object sender, EventArgs e)
+        {
+            PictureBox pictmp = (PictureBox)sender;
+            pictmp.Cursor = Cursors.Hand;
         }
 
         //select 
         private void pic_Select_MouseEnter(object sender, EventArgs e)
         {
             base.OnMouseEnter(e);
-            Cursor = Cursors.Cross;
+            if (isSelect == true)
+            {
+
+                Cursor = Cursors.Cross;
+            }
         }
 
         private void pic_Select_MouseDown(object sender, MouseEventArgs e)
         {
             base.OnMouseDown(e);
-
-            if (e.Button == MouseButtons.Left)
+            if (isSelect == true)
             {
-                Cursor = Cursors.Cross;
-                crpPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                crpPen.Color = Color.Black;
-                crpPen.Width = 2;
+                if (e.Button == MouseButtons.Left)
+                {
+                    Cursor = Cursors.Cross;
+                    crpPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                    crpPen.Color = Color.Black;
+                    crpPen.Width = 2;
 
-                crpX = slX = e.X;
-                crpY = slY = e.Y;
+                    crpX = slX = e.X;
+                    crpY = slY = e.Y;
+                }
             }
         }
 
         private void pic_Select_MouseMove(object sender, MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (e.Button == MouseButtons.Left)
+            if (isSelect == true)
             {
-                pic.Refresh();
+                if (e.Button == MouseButtons.Left)
+                {
+                    pic.Refresh();
 
-                crpX = Math.Min(slX, e.X);
-                if (crpX < 0)
-                    crpX = 0;
-                crpY = Math.Min(slY, e.Y);
-                if (crpY < 0)
-                    crpY = 0;
+                    crpX = Math.Min(slX, e.X);
+                    if (crpX < 0)
+                        crpX = 0;
+                    crpY = Math.Min(slY, e.Y);
+                    if (crpY < 0)
+                        crpY = 0;
 
-                rectW = Math.Abs(e.X - slX);
-                if (e.X < 0)
-                    rectW = Math.Abs(0 - slX);
-                if (rectW + crpX >= imgNow.Width)
-                    rectW = imgNow.Width - slX - 1;
-                rectH = Math.Abs(e.Y - slY);
-                if (e.Y < 0)
-                    rectH = Math.Abs(0 - slY);
-                if (rectH + crpY >= imgNow.Height)
-                    rectH = imgNow.Height - slY - 1;
-                Graphics g = pic.CreateGraphics();
-                g.DrawRectangle(crpPen, crpX, crpY, rectW, rectH);
-                g.Dispose();
+                    rectW = Math.Abs(e.X - slX);
+                    if (e.X < 0)
+                        rectW = Math.Abs(0 - slX);
+                    if (rectW + crpX >= imgNow.Width)
+                        rectW = imgNow.Width - slX - 1;
+                    rectH = Math.Abs(e.Y - slY);
+                    if (e.Y < 0)
+                        rectH = Math.Abs(0 - slY);
+                    if (rectH + crpY >= imgNow.Height)
+                        rectH = imgNow.Height - slY - 1;
+                    Graphics select = pic.CreateGraphics();
+                    select.DrawRectangle(crpPen, crpX, crpY, rectW, rectH);
+                    select.Dispose();
+                }
             }
 
         }
@@ -2332,6 +2359,7 @@ namespace Roga
             crpX = crpY = slX = slY = 0;
             pic.Image = imgNow;
             stackImage.Push(imgNow);
+            resetSelect();
         }
 
         //flip
@@ -2339,7 +2367,6 @@ namespace Roga
         {
             Bitmap flip = GetArgbCopy(sourceImage);
             flip.RotateFlip(RotateFlipType.Rotate180FlipY);
-
             return flip;
         }
 
@@ -2348,12 +2375,20 @@ namespace Roga
             imgNow = Flip_Image(imgNow);
             pic.Image = imgNow;
             stackImage.Push(imgNow);
+            resetSelect();
         }
 
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
             Cursor = Cursors.Default;
+        }
+
+        private void resetSelect()
+        {
+            rectW = imgNow.Width;
+            rectH = imgNow.Height;
+            crpX = crpY = slX = slY = 0;
         }
 
         #endregion
@@ -2744,6 +2779,398 @@ namespace Roga
             pic.MouseUp -= new MouseEventHandler(pic_AddImage_MouseUp);
         }
 
+        #endregion
+
+        //Text feature
+        #region AddText
+        private Pen pentext = new Pen(Brushes.Black, 3);
+        private CustomTextbox txtAddText = new CustomTextbox();
+        private bool addtext = false;
+        private Font fontText = new Font("Arial", 13);
+        private ComboBox cbFont = new ComboBox();
+        private NumericUpDown numSize = new NumericUpDown();
+        private GroupBox grpFontStyle = new GroupBox();
+        private CheckBox cbItalic = new CheckBox();
+        private CheckBox cbBold = new CheckBox();
+        private CheckBox cbUnderline = new CheckBox();
+        private Button btnCustom = new Button();
+        private Brush colorText = Brushes.Black;
+
+        private void InitTextDetails()
+        {
+            txtAddText.Font = fontText;
+
+            foreach (FontFamily oneFontFamily in FontFamily.Families)
+            {
+                cbFont.Items.Add(oneFontFamily.Name);
+            }
+            cbFont.Location = new Point(10, 10);
+            cbFont.Text = txtAddText.Font.Name.ToString();
+            cbFont.SelectedIndexChanged += new EventHandler(cbFont_SelectedIndexChanged);
+            panel3.Controls.Add(cbFont);
+
+            numSize.Value = 13;
+            numSize.Minimum = 1;
+            numSize.Location = new Point(10, 50);
+            numSize.ValueChanged += new EventHandler(numSize_ValueChanged);
+            panel3.Controls.Add((NumericUpDown)numSize);
+
+            grpFontStyle.Text = "Font Style";
+            grpFontStyle.BackColor = SystemColors.Control;
+            cbItalic.Checked = false;
+            cbItalic.Text = "I";
+            cbItalic.Font = new Font(Font, FontStyle.Italic);
+            cbItalic.Location = new Point(10, 20);
+            cbBold.Checked = false;
+            cbBold.Text = "B";
+            cbBold.Font = new Font(Font, FontStyle.Bold);
+            cbBold.Location = new Point(10, 40);
+            cbUnderline.Checked = false;
+            cbUnderline.Text = "U";
+            cbUnderline.Font = new Font(Font, FontStyle.Underline);
+            cbUnderline.Location = new Point(10, 60);
+            grpFontStyle.Controls.Add(cbBold);
+            grpFontStyle.Controls.Add(cbItalic);
+            grpFontStyle.Controls.Add(cbUnderline);
+            grpFontStyle.AutoSize = false;
+            grpFontStyle.Size = new Size(190, 12);
+            grpFontStyle.Location = new Point(10, 90);
+            grpFontStyle.AutoSize = true;
+            cbBold.CheckedChanged += new EventHandler(FontStyle_Changed);
+            cbItalic.CheckedChanged += new EventHandler(FontStyle_Changed);
+            cbUnderline.CheckedChanged += new EventHandler(FontStyle_Changed);
+            panel3.Controls.Add(grpFontStyle);
+
+            btnCustom.Size = new Size(50, 25);
+            btnCustom.BackColor = Color.LightGray;
+            btnCustom.Text = "Font";
+            btnCustom.Click += new EventHandler(btnCustom_Click);
+            btnCustom.Location = new Point(140, 13);
+            panel3.Controls.Add(btnCustom);
+
+            InitAddTextColor();
+
+            pic.MouseDown += pic_AddText_MouseDown;
+            pic.MouseUp += pic_AddText_MouseUp;
+            pic.MouseMove += pic_AddText_MouseMove;
+            pic.MouseEnter += pic_AddText_MouseEnter;
+        }
+
+        private void btnCustom_Click(object sender, EventArgs e)
+        {
+            FontDialog font = new FontDialog();
+            DialogResult result = font.ShowDialog();
+            fontText = font.Font;
+            txtAddText.SelectionFont = font.Font;
+        }
+
+        //Init color for text
+        #region ColorText
+        private void InitAddTextColor()
+        {
+            CustomButton.VBButton selectedColor = new CustomButton.VBButton();
+            selectedColor.Size = new Size(25, 25);
+            selectedColor.Location = new Point(30, 680);
+            selectedColor.BorderColor = Color.White;
+            selectedColor.BorderSize = 1;
+            selectedColor.BorderRadius = 0;
+            panel3.Controls.Add(selectedColor);
+            Label l = new Label();
+            l.Text = "Selected Color";
+            l.ForeColor = Color.White;
+            l.Location = new Point(60, 685);
+            l.AutoSize = true;
+            panel3.Controls.Add(l);
+            //Matrix of Color
+            CustomButton.VBButton[,] matrixColor = new CustomButton.VBButton[10, 3];
+            //set Size, Location, BackColor...
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    matrixColor[i, j] = new CustomButton.VBButton();
+                    matrixColor[i, j].Size = new Size(25, 25);
+                    matrixColor[i, j].Location = new Point(30 + j * 34 + j * 25, 100 + grpFontStyle.Size.Height + i * 20 + i * 25);
+                    matrixColor[i, j].ForeColor = Color.Red;
+                    matrixColor[i, j].BorderColor = Color.White;
+                    matrixColor[i, j].BorderSize = 1;
+                    matrixColor[i, j].BorderRadius = 0;
+                    panel3.Controls.Add(matrixColor[i, j]);
+                }
+            }
+            //setColor
+            matrixColor[0, 1].BackColor = Color.FromArgb(255, 255, 255);
+            matrixColor[1, 1].BackColor = Color.FromArgb(142, 142, 142);
+            matrixColor[2, 1].BackColor = Color.FromArgb(118, 70, 43);
+            matrixColor[3, 1].BackColor = Color.FromArgb(217, 165, 179);
+            matrixColor[4, 1].BackColor = Color.FromArgb(192, 127, 0);
+            matrixColor[5, 1].BackColor = Color.FromArgb(163, 156, 124);
+            matrixColor[6, 1].BackColor = Color.FromArgb(185, 215, 123);
+            matrixColor[7, 1].BackColor = Color.FromArgb(141, 186, 226);
+            matrixColor[8, 1].BackColor = Color.FromArgb(58, 67, 112);
+            //matrixColor[9, 1].BackColor = Color.FromArgb(156, 135, 184);
+            matrixColor[0, 2].BackColor = Color.FromArgb(0, 0, 0);
+            matrixColor[1, 2].BackColor = Color.FromArgb(66, 66, 66);
+            matrixColor[2, 2].BackColor = Color.FromArgb(112, 0, 0);
+            matrixColor[3, 2].BackColor = Color.FromArgb(255, 0, 0);
+            matrixColor[4, 2].BackColor = Color.FromArgb(148, 89, 0);
+            matrixColor[5, 2].BackColor = Color.FromArgb(255, 245, 0);
+            matrixColor[6, 2].BackColor = Color.FromArgb(52, 168, 83);
+            matrixColor[7, 2].BackColor = Color.FromArgb(24, 104, 174);
+            matrixColor[8, 2].BackColor = Color.FromArgb(27, 41, 114);
+            //matrixColor[9, 2].BackColor = Color.FromArgb(151, 71, 255);
+            //setEvent
+            for (int i = 0; i < 9; i++)
+            {
+                //matrixColor[i, 0].Click += new EventHandler(SetColorForBlank);
+                matrixColor[i, 0].BackColor = Color.White;
+                matrixColor[i, 0].BackColorChanged += delegate (object sender, EventArgs e) { CustomColor_BackColorChanged(sender, e, selectedColor); };
+                matrixColor[i, 0].MouseDown += delegate (object sender, MouseEventArgs e) { SetCustomColor(sender, e, selectedColor); };
+                matrixColor[i, 1].MouseDown += delegate (object sender, MouseEventArgs e) { SetColor(sender, e, selectedColor); };
+                matrixColor[i, 2].MouseDown += delegate (object sender, MouseEventArgs e) { SetColor(sender, e, selectedColor); };
+            }
+            //Init EditColor
+            Panel edit = new Panel();
+            edit.Size = new Size(147, 56);
+            edit.Location = new Point(28, 610);
+            edit.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\EditColor.png"));
+            edit.MouseDown += delegate (object sender, MouseEventArgs e) { editColor_MouseDown(sender, e, matrixColor); };
+            panel3.Controls.Add(edit);
+            selectedColor.BackColor = pen.Color;
+        }
+        #endregion
+
+        //Set size of textbox
+        #region size
+        int tboxX = 0, tboxY = 0;
+        int tboxWidth = 0, tboxHeight = 0;
+        private int txtX = 0, txtY = 0;
+
+        private void new_textbox()
+        {
+            tboxX = tboxY = txtX = txtY = 0;
+        }
+        private void pic_AddText_MouseEnter(object sender, EventArgs e)
+        {
+            base.OnMouseEnter(e);
+            if (addtext == false)
+            {
+                Cursor = Cursors.Cross;
+            }
+            else
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void pic_AddText_MouseDown(object sender, MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (e.Button == MouseButtons.Left)
+            {
+                if (addtext == true)
+                {
+                    Draw_Text();
+                    addtext = false;
+
+                    tboxX = txtX = e.X;
+                    tboxY = txtY = e.Y;
+                    return;
+                }
+                Cursor = Cursors.Cross;
+                crpPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                crpPen.Color = Color.Black;
+                crpPen.Width = 2;
+
+                tboxX = txtX = e.X;
+                tboxY = txtY = e.Y;
+                addtext = true;
+            }
+        }
+
+        private void pic_AddText_MouseMove(object sender, MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (e.Button == MouseButtons.Left)
+            {
+                if (addtext == true)
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        pic.Refresh();
+
+                        tboxX = Math.Min(txtX, e.X);
+                        if (tboxX < 0)
+                            tboxX = 0;
+                        tboxY = Math.Min(txtY, e.Y);
+                        if (tboxY < 0)
+                            tboxY = 0;
+
+                        tboxWidth = Math.Abs(e.X - txtX);
+                        if (e.X < 0)
+                            tboxWidth = Math.Abs(0 - txtX);
+                        if (tboxWidth + tboxX >= imgNow.Width)
+                            tboxWidth = imgNow.Width - txtX - 1;
+                        tboxHeight = Math.Abs(e.Y - txtY);
+                        if (e.Y < 0)
+                            tboxHeight = Math.Abs(0 - txtY);
+                        if (tboxHeight + tboxY >= imgNow.Height)
+                            tboxHeight = imgNow.Height - txtY - 1;
+                        Graphics select = pic.CreateGraphics();
+                        select.DrawRectangle(crpPen, tboxX, tboxY, tboxWidth, tboxHeight);
+                        select.Dispose();
+                    }
+                }
+            }
+
+
+        }
+
+        private void pic_AddText_MouseUp(object sender, MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+
+            pic.Refresh();
+            if (e.Button == MouseButtons.Left)
+            {
+                if (addtext == true)
+                {
+                    txtAddText.Text = "Add text";
+                    txtAddText.AutoSize = true;
+                    txtAddText.Size = new Size(tboxWidth, tboxHeight);
+                    txtAddText.Location = new Point(tboxX, tboxY);
+                    txtAddText.BorderStyle = BorderStyle.FixedSingle;
+                    txtAddText.Enter += new EventHandler(txt_Enter);
+                    //txtAddText.Leave += new EventHandler(txt_Leave);
+                    pic.Controls.Add(txtAddText);
+                    addtext = true;
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void txt_Enter(object sender, EventArgs e)
+        {
+            if (txtAddText.Text == "Add text")
+            {
+                txtAddText.Text = "";
+            }
+        }
+        #endregion
+
+        private void Draw_Text()
+        {
+            if (addtext == true)
+            {
+                Bitmap bit = new Bitmap(pic.Image);
+                Graphics g = Graphics.FromImage(bit);
+                g.DrawString(txtAddText.Text, fontText, new SolidBrush(txtAddText.ForeColor), txtAddText.Location.X, txtAddText.Location.Y);
+                pic.Controls.Remove(txtAddText);
+                txtAddText.Text = "";
+                imgNow = new Bitmap(bit);
+                pic.Image = imgNow;
+                stackImage.Push(imgNow);
+            }
+        }
+
+        private void cbFont_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fontText = new Font(cbFont.Text, fontText.Size);
+            txtAddText.SelectionFont = fontText;
+        }
+
+        private void numSize_ValueChanged(object sender, EventArgs e)
+        {
+            fontText = new Font(fontText.FontFamily.Name, (float)numSize.Value);
+            txtAddText.SelectionFont = fontText;
+        }
+
+        private void FontStyle_Changed(object sender, EventArgs e)
+        {
+            if (cbBold.Checked == true)
+            {
+                if (cbItalic.Checked == true)
+                {
+                    if (cbUnderline.Checked == true)
+                    {
+                        Font newFont = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
+                        fontText = newFont;
+
+                    }
+                    else
+                    {
+                        Font newFont1 = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Bold | FontStyle.Italic);
+                        fontText = newFont1;
+
+                    }
+                }
+                else
+                {
+                    if (cbUnderline.Checked == true)
+                    {
+                        Font newFont2 = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Bold | FontStyle.Underline);
+                        fontText = newFont2;
+
+                    }
+                    else
+                    {
+                        Font newFont1 = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Bold);
+                        fontText = newFont1;
+
+                    }
+                }
+
+            }
+            else
+            {
+                if (cbItalic.Checked == true)
+                {
+                    if (cbUnderline.Checked == true)
+                    {
+                        Font newFont = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Italic | FontStyle.Underline);
+                        fontText = newFont;
+
+                    }
+                    else
+                    {
+                        Font newFont1 = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Italic);
+                        fontText = newFont1;
+
+                    }
+                }
+                else
+                {
+                    if (cbUnderline.Checked == true)
+                    {
+                        Font newFont2 = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Underline);
+                        fontText = newFont2;
+
+                    }
+                    else
+                    {
+                        Font newFont1 = new Font(fontText.FontFamily.Name, fontText.Size, FontStyle.Regular);
+                        fontText = newFont1;
+
+                    }
+                }
+            }
+            txtAddText.SelectionFont = fontText;
+        }
+
+        private void txt_Leave(object sender, EventArgs e)
+        {
+            Draw_Text();
+        }
+
+        private void Remove_AddText()
+        {
+            pic.MouseDown -= pic_AddText_MouseDown;
+            pic.MouseUp -= pic_AddText_MouseUp;
+            pic.MouseMove -= pic_AddText_MouseMove;
+            pic.MouseEnter -= pic_AddText_MouseEnter;
+        }
         #endregion
 
         #region button onclick
