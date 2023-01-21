@@ -440,6 +440,7 @@ namespace Roga
                     matrixColor[i, j].BorderColor = Color.White;
                     matrixColor[i, j].BorderSize = 1;
                     matrixColor[i, j].BorderRadius = 0;
+                    matrixColor[i, j].Cursor = Cursors.Hand;
                     panel3.Controls.Add(matrixColor[i, j]);
                 }   
             }
@@ -478,6 +479,7 @@ namespace Roga
             Panel edit = new Panel();
             edit.Size = new Size(147, 56);
             edit.Location = new Point(28, 500);
+            edit.Cursor = Cursors.Hand;
             edit.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\EditColor.png"));
             edit.MouseDown += delegate (object sender, MouseEventArgs e) { editColor_MouseDown(sender, e, matrixColor); };
             panel3.Controls.Add(edit);
@@ -899,6 +901,9 @@ namespace Roga
             //setSizeMode
             picGray.SizeMode = picNegative.SizeMode = picTrans.SizeMode = picSepiaTone.SizeMode = picRed.SizeMode = picGreen.SizeMode = picBlue.SizeMode = PictureBoxSizeMode.StretchImage;
 
+            //setCursor
+            picGray.Cursor = picNegative.Cursor = picTrans.Cursor = picSepiaTone.Cursor = picRed.Cursor = picGreen.Cursor = picBlue.Cursor = Cursors.Hand;
+
             //setEvent
             picGray.MouseDown += new MouseEventHandler(picGray_MouseDown);
             picNegative.MouseDown += new MouseEventHandler(picNegative_MouseDown);
@@ -1292,6 +1297,7 @@ namespace Roga
                 lstButton[i].BorderColor = Color.Blue;
                 lstButton[i].Size = new Size(25, 25);
                 lstButton[i].BackColor = Color.FromArgb(217, 217, 217);
+                lstButton[i].Cursor = Cursors.Hand;
                 pShapes.Controls.Add(lstButton[i]);
             }
 
@@ -1513,6 +1519,7 @@ namespace Roga
                                 && (e.Y >= resizePoint[i].Y) && (e.Y <= resizePoint[i].Y + 5))
                             {
                                 flag = false;
+                                startMouseMoveShape = e.Location;
                                 break;
                             }
                         }

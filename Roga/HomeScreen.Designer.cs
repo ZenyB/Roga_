@@ -239,9 +239,9 @@ namespace Roga
             // 
             this.btnRename.BackColor = System.Drawing.Color.MediumSlateBlue;
             this.btnRename.BackgroundColor = System.Drawing.Color.MediumSlateBlue;
-            this.btnRename.BorderColor = System.Drawing.Color.SlateBlue;
+            this.btnRename.BorderColor = System.Drawing.Color.Gray;
             this.btnRename.BorderRadius = 18;
-            this.btnRename.BorderSize = 2;
+            this.btnRename.BorderSize = 1;
             this.btnRename.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRename.FlatAppearance.BorderSize = 0;
             this.btnRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

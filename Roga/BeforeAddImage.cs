@@ -62,6 +62,11 @@ namespace Roga
             picRotate.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\rotate.png"));
             picFlip.Image = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\Crop and rotate\flip.png"));
 
+            picSelect.Cursor = Cursors.Hand;
+            picCrop.Cursor = Cursors.Hand;
+            picRotate.Cursor = Cursors.Hand;
+            picFlip.Cursor = Cursors.Hand;
+
             picSelect.Size = picCrop.Size = picRotate.Size = picFlip.Size = new Size(75, 75);
 
             picSelect.SizeMode = picCrop.SizeMode = picRotate.SizeMode = picFlip.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -78,6 +83,7 @@ namespace Roga
             Button buttonAdd = new Button();
             buttonAdd.Location = new Point(20, 210);
             buttonAdd.Text = "Add";
+            buttonAdd.Cursor = Cursors.Hand;
             buttonAdd.BackColor = Color.DimGray;
             buttonAdd.ForeColor = Color.White;
             buttonAdd.FlatStyle = FlatStyle.Flat;

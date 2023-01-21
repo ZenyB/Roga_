@@ -45,9 +45,9 @@ namespace Roga
             btnRename.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\pen.png"));
 
             //ListViewImage
-            imageList.Images.Add(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\logo.png")));
-            imageList.Images.Add(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\testImage.png")));
-            imageList.Images.Add(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\btnBlank.png")));
+            imageList.Images.Add(handleBeforeListImage(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\logo.png"))));
+            imageList.Images.Add(handleBeforeListImage(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\testImage.png"))));
+            imageList.Images.Add(handleBeforeListImage(Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\btnBlank.png"))));
 
             listView1.View = View.LargeIcon;
             imageList.ImageSize = new Size(255, 255);
@@ -93,6 +93,29 @@ namespace Roga
         private void Form1_Resize(object sender, EventArgs e)
         {
             this.Invalidate();
+        }
+
+        private Image handleBeforeListImage(Image img)
+        {
+            Image result = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\BackgoundForListImage.png"));
+            Image temp = new Bitmap(255, 255);
+            if (img.Width > img.Height)
+            {
+                temp = resizeImage(img, new Size(255, (int)(img.Height * (255 / (float)img.Width))));
+                using (Graphics g = Graphics.FromImage(result))
+                {
+                    g.DrawImage(temp, new PointF(0, 127.5f - (float)temp.Height / 2));
+                }
+            }    
+            else
+            {
+                temp = resizeImage(img, new Size((int)(img.Width * (255 / (float)img.Height)), 255));
+                using (Graphics g = Graphics.FromImage(result))
+                {
+                    g.DrawImage(temp, new PointF(127.5f - (float)temp.Width/ 2, 0));
+                }
+            }      
+            return result;
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -158,11 +181,11 @@ namespace Roga
                 Image imgAvt = Image.FromFile(open.FileName);
                 if (imgAvt.Width > imgAvt.Height)
                 {
-                    imgAvt = resizeImage(imgAvt, new Size(90 * imgAvt.Width / imgAvt.Height, 90));
+                    imgAvt = resizeImage(imgAvt, new Size((int)(90 * (float)imgAvt.Width / imgAvt.Height), 90));
                 }
                 else
                 {
-                    imgAvt = resizeImage(imgAvt, new Size(90, imgAvt.Width * imgAvt.Height / 90));
+                    imgAvt = resizeImage(imgAvt, new Size(90, (int)((float)imgAvt.Width * imgAvt.Height / 90)));
                 }
                 ptbAvt.Image = imgAvt;
             }
