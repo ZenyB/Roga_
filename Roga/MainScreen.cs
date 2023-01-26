@@ -44,6 +44,7 @@ namespace Roga
                         Remove_Draw();
                         break;
                     case "brightness&contrast":
+                        Remove_BrighnessAndContrast();
                         //remove brightness
                         break;
                     case "eraser":
@@ -51,6 +52,7 @@ namespace Roga
                         //remove eraser
                         break;
                     case "RGB":
+                        Remove_ColorRGB_Channel();
                         //remove Color Channel
                         break;
                     case "exposure":
@@ -79,6 +81,8 @@ namespace Roga
                         Add_Draw();
                         break;
                     case "brightness&contrast":
+                        InitBrighnessAndContrast();
+                        Add_BrighnessAndContrast();
                         //add brightness
                         break;
                     case "eraser":
@@ -87,6 +91,8 @@ namespace Roga
                         //add eraser
                         break;
                     case "RGB":
+                        InitColorRGB();
+                        Add_ColorRGB_Channel();
                         //add Color Channel
                         break;
                     case "exposure":
@@ -3178,6 +3184,365 @@ namespace Roga
             pic.MouseEnter -= pic_AddText_MouseEnter;
         }
         #endregion
+
+        //Color Channel feature
+        #region ColorRGB
+        private Image imgNowFake;
+        private Image imgProcess;
+        private int _typeRGB;
+        public int TypeRGB
+        {
+            get
+            {
+                return _typeRGB;
+            }
+            set
+            {
+                if (_typeRGB != value)
+                {
+                    imgNowFake = imgProcess;
+                    //stackImage.Push(imgNowFake);
+                }
+                _typeRGB = value;
+            }
+        }
+        public void Add_ColorRGB_Channel()
+        {
+            imgProcess = imgNow;
+            imgNowFake = imgNow;
+        }
+        public void Remove_ColorRGB_Channel()
+        {
+            imgNow = imgProcess;
+            pic.Image = imgNow;
+        }
+        public void InitColorRGB()
+        {
+            // 
+            // Green_Trackbar
+            // 
+            CustomTrackbar Green_Trackbar = new CustomTrackbar();
+            Green_Trackbar.BackColor = Color.Transparent;
+            Green_Trackbar.BarInnerColor = System.Drawing.Color.Green;
+            Green_Trackbar.BarOuterColor = System.Drawing.Color.Green;
+            Green_Trackbar.BarPenColor = System.Drawing.Color.White;
+            Green_Trackbar.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            Green_Trackbar.ElapsedInnerColor = Color.Black;
+            Green_Trackbar.ElapsedOuterColor = Color.Black;
+            Green_Trackbar.LargeChange = ((uint)(5u));
+            Green_Trackbar.Location = new System.Drawing.Point(70, 16);
+            Green_Trackbar.Maximum = 100;
+            Green_Trackbar.Minimum = -100;
+            Green_Trackbar.Name = "Green_Trackbar";
+            Green_Trackbar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            Green_Trackbar.Size = new System.Drawing.Size(56, 406);
+            Green_Trackbar.SmallChange = ((uint)(1u));
+            Green_Trackbar.TabIndex = 5;
+            Green_Trackbar.Text = "customTrackbar1";
+            Green_Trackbar.ThumbRoundRectSize = new System.Drawing.Size(8, 8);
+            Green_Trackbar.ThumbSize = 2;
+            Green_Trackbar.Value = 0;
+            Green_Trackbar.ValueChanged += Green_Trackbar_ValueChanged;
+            Green_Trackbar.MouseUp += Green_Trackbar_MouseUp;
+            panel3.Controls.Add(Green_Trackbar);
+            // 
+            // Red_Trackbar
+            // 
+            CustomTrackbar Red_Trackbar = new CustomTrackbar();
+            Red_Trackbar.BackColor = System.Drawing.Color.Transparent;
+            Red_Trackbar.BarInnerColor = System.Drawing.Color.Maroon;
+            Red_Trackbar.BarOuterColor = System.Drawing.Color.Maroon;
+            Red_Trackbar.BarPenColor = System.Drawing.SystemColors.ButtonHighlight;
+            Red_Trackbar.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            Red_Trackbar.ElapsedInnerColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Red_Trackbar.ElapsedOuterColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Red_Trackbar.LargeChange = ((uint)(5u));
+            Red_Trackbar.Location = new System.Drawing.Point(17, 16);
+            Red_Trackbar.Maximum = 100;
+            Red_Trackbar.Minimum = -100;
+            Red_Trackbar.Name = "Red_Trackbar";
+            Red_Trackbar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            Red_Trackbar.Size = new System.Drawing.Size(56, 406);
+            Red_Trackbar.SmallChange = ((uint)(1u));
+            Red_Trackbar.TabIndex = 7;
+            Red_Trackbar.Text = "customTrackbar1";
+            Red_Trackbar.ThumbRoundRectSize = new System.Drawing.Size(8, 8);
+            Red_Trackbar.ThumbSize = 2;
+            Red_Trackbar.Value = 0;
+            Red_Trackbar.ValueChanged += Red_Trackbar_ValueChanged;
+            Red_Trackbar.MouseUp += Red_Trackbar_MouseUp;
+            panel3.Controls.Add(Red_Trackbar);
+            // 
+            // Blue_Trackbar
+            // 
+            CustomTrackbar Blue_Trackbar = new CustomTrackbar();
+            Blue_Trackbar.BackColor = System.Drawing.Color.Transparent;
+            Blue_Trackbar.BarInnerColor = System.Drawing.Color.Navy;
+            Blue_Trackbar.BarOuterColor = System.Drawing.Color.Navy;
+            Blue_Trackbar.BarPenColor = System.Drawing.SystemColors.ButtonHighlight;
+            Blue_Trackbar.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            Blue_Trackbar.ElapsedInnerColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Blue_Trackbar.ElapsedOuterColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Blue_Trackbar.LargeChange = ((uint)(5u));
+            Blue_Trackbar.Location = new System.Drawing.Point(125, 16);
+            Blue_Trackbar.Maximum = 100;
+            Blue_Trackbar.Minimum = -100;
+            Blue_Trackbar.Name = "Blue_Trackbar";
+            Blue_Trackbar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            Blue_Trackbar.Size = new System.Drawing.Size(56, 406);
+            Blue_Trackbar.SmallChange = ((uint)(5u));
+            Blue_Trackbar.TabIndex = 9;
+            Blue_Trackbar.Text = "customTrackbar2";
+            Blue_Trackbar.ThumbInnerColor = System.Drawing.Color.WhiteSmoke;
+            Blue_Trackbar.ThumbRoundRectSize = new System.Drawing.Size(8, 8);
+            Blue_Trackbar.ThumbSize = 2;
+            Blue_Trackbar.Value = 0;
+            Blue_Trackbar.ValueChanged += Blue_Trackbar_ValueChanged;
+            Blue_Trackbar.MouseUp += Blue_Trackbar_MouseUp;
+            panel3.Controls.Add(Blue_Trackbar);
+            //
+            // Label
+            // 
+            Label lb = new Label();
+            lb.AutoSize = true;
+            lb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            lb.Location = new System.Drawing.Point(40, 451);
+            lb.Name = "lb";
+            lb.Size = new System.Drawing.Size(148, 26);
+            lb.TabIndex = 0;
+            lb.Text = "Color Channel";
+            lb.BringToFront();
+            panel3.Controls.Add(lb);
+        }
+
+        private void Blue_Trackbar_ValueChanged(object sender, EventArgs e)
+        {
+            TypeRGB = 3;
+            CustomTrackbar bar = (CustomTrackbar)sender;
+            float trueValue = 0 - bar.Value;
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+            {
+                new float[] {1,0,0,0,0},
+                new float[] {0,1,0,0,0},
+                new float[] {0,0,1f + (trueValue / 200),0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {0,0,0,0,1},
+            });
+            Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
+            imgProcess = bitmap;
+            pic.Image = imgProcess;
+        }
+        private void Blue_Trackbar_MouseUp(object sender, MouseEventArgs e)
+        {
+            CustomTrackbar bar = (CustomTrackbar)sender;
+            stackImage.Push(imgProcess);
+        }
+
+        private void Red_Trackbar_ValueChanged(object sender, EventArgs e)
+        {
+            TypeRGB = 1;
+            CustomTrackbar bar = (CustomTrackbar)sender;
+            float trueValue = 0 - bar.Value;
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+            {
+                new float[] {1f + (trueValue / 200),0,0,0,0},
+                new float[] {0,1, 0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {0,0,0,0,1},
+            });
+            Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
+            imgProcess = bitmap;
+            pic.Image = imgProcess;
+        }
+        private void Red_Trackbar_MouseUp(object sender, MouseEventArgs e)
+        {
+            stackImage.Push(imgProcess);
+        }
+
+        private void Green_Trackbar_ValueChanged(object sender, EventArgs e)
+        {
+            TypeRGB = 2;
+            CustomTrackbar bar = (CustomTrackbar)sender;
+            float trueValue = 0 - bar.Value;
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+            {
+                new float[] {1, 0,0,0,0},
+                new float[] {0, 1f + (trueValue / 200), 0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {0,0,0,0,1},
+            });
+            Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
+            imgProcess = bitmap;
+            pic.Image = imgProcess;
+        }
+        private void Green_Trackbar_MouseUp(object sender, MouseEventArgs e)
+        {
+            stackImage.Push(imgProcess);
+        }
+        #endregion
+
+        //Brightness & Contrast
+        #region BrighnessAndContrast
+        public void Add_BrighnessAndContrast()
+        {
+            imgProcess = imgNow;
+            imgNowFake = imgNow;
+        }
+        public void Remove_BrighnessAndContrast()
+        {
+            imgNow = imgProcess;
+            pic.Image = imgNow;
+        }
+
+        public void InitBrighnessAndContrast()
+        {
+            // 
+            // Brighness_Trackbar
+            // 
+            CustomTrackbar Brighness_Trackbar = new CustomTrackbar();
+            Brighness_Trackbar.BackColor = Color.Transparent;
+            Brighness_Trackbar.BarInnerColor = System.Drawing.Color.FromArgb(40, 51, 90);
+            Brighness_Trackbar.BarOuterColor = System.Drawing.Color.FromArgb(40, 51, 90);
+            Brighness_Trackbar.BarPenColor = System.Drawing.Color.White;
+            Brighness_Trackbar.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            Brighness_Trackbar.ElapsedInnerColor = Color.Black;
+            Brighness_Trackbar.ElapsedOuterColor = Color.Black;
+            Brighness_Trackbar.LargeChange = ((uint)(5u));
+            Brighness_Trackbar.Location = new System.Drawing.Point(35, 16);
+            Brighness_Trackbar.Maximum = 100;
+            Brighness_Trackbar.Minimum = -100;
+            Brighness_Trackbar.Name = "Green_Trackbar";
+            Brighness_Trackbar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            Brighness_Trackbar.Size = new System.Drawing.Size(56, 406);
+            Brighness_Trackbar.SmallChange = ((uint)(1u));
+            Brighness_Trackbar.TabIndex = 5;
+            Brighness_Trackbar.Text = "customTrackbar1";
+            Brighness_Trackbar.ThumbRoundRectSize = new System.Drawing.Size(8, 8);
+            Brighness_Trackbar.ThumbSize = 2;
+            Brighness_Trackbar.Value = 0;
+            Brighness_Trackbar.ValueChanged += Brighness_Trackbar_ValueChanged;
+            Brighness_Trackbar.MouseUp += Brighness_Trackbar_MouseUp;
+            panel3.Controls.Add(Brighness_Trackbar);
+
+            // 
+            // Contrast_Trackbar
+            // 
+            CustomTrackbar Contrast_Trackbar = new CustomTrackbar();
+            Contrast_Trackbar.BackColor = System.Drawing.Color.Transparent;
+            Contrast_Trackbar.BarInnerColor = System.Drawing.Color.FromArgb(40, 51, 90);
+            Contrast_Trackbar.BarOuterColor = System.Drawing.Color.FromArgb(40, 51, 90);
+            Contrast_Trackbar.BarPenColor = System.Drawing.SystemColors.ButtonHighlight;
+            Contrast_Trackbar.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            Contrast_Trackbar.ElapsedInnerColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Contrast_Trackbar.ElapsedOuterColor = System.Drawing.SystemColors.ActiveCaptionText;
+            Contrast_Trackbar.LargeChange = ((uint)(5u));
+            Contrast_Trackbar.Location = new System.Drawing.Point(110, 16);
+            Contrast_Trackbar.Maximum = 100;
+            Contrast_Trackbar.Minimum = -100;
+            Contrast_Trackbar.Name = "Red_Trackbar";
+            Contrast_Trackbar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            Contrast_Trackbar.Size = new System.Drawing.Size(56, 406);
+            Contrast_Trackbar.SmallChange = ((uint)(1u));
+            Contrast_Trackbar.TabIndex = 7;
+            Contrast_Trackbar.Text = "customTrackbar1";
+            Contrast_Trackbar.ThumbRoundRectSize = new System.Drawing.Size(8, 8);
+            Contrast_Trackbar.ThumbSize = 2;
+            Contrast_Trackbar.Value = 0;
+            Contrast_Trackbar.ValueChanged += Contrast_Trackbar_ValueChanged;
+            Contrast_Trackbar.MouseUp += Contrast_Trackbar_MouseUp;
+            panel3.Controls.Add(Contrast_Trackbar);
+            //
+            // Label
+            // 
+            Label lb = new Label();
+            lb.AutoSize = true;
+            lb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            lb.Location = new System.Drawing.Point(20, 451);
+            lb.Name = "lb";
+            lb.Size = new System.Drawing.Size(148, 26);
+            lb.TabIndex = 0;
+            lb.Text = "Brighness   Contrast";
+            lb.BringToFront();
+            panel3.Controls.Add(lb);
+
+        }
+
+        private void Contrast_Trackbar_MouseUp(object sender, MouseEventArgs e)
+        {
+            stackImage.Push(imgProcess);
+        }
+
+        private void Contrast_Trackbar_ValueChanged(object sender, EventArgs e)
+        {
+            TypeRGB = 5;
+            CustomTrackbar bar = (CustomTrackbar)sender;
+            float c = 1 + -bar.Value * 0.01f;
+            float t = (1.0f - c) / 2.0f;
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+            {
+                new float[] {c,0,0,0,0},
+                new float[] {0,c,0,0,0},
+                new float[] {0,0,c,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {t,t,t,0,1},
+            });
+            ImageAttributes imageAttributes = new ImageAttributes();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            Image _img = imgNowFake;
+
+            //PictureBox1.Image
+
+            Graphics _g = default(Graphics);
+
+            Bitmap bm_dest = new Bitmap(Convert.ToInt32(_img.Width), Convert.ToInt32(_img.Height));
+
+            _g = Graphics.FromImage(bm_dest);
+
+            _g.DrawImage(_img, new Rectangle(0, 0, bm_dest.Width + 1, bm_dest.Height + 1), 0, 0, bm_dest.Width + 1, bm_dest.Height + 1, GraphicsUnit.Pixel, imageAttributes);
+
+            imgProcess = bm_dest;
+            pic.Image = imgProcess;
+        }
+
+        private void Brighness_Trackbar_MouseUp(object sender, MouseEventArgs e)
+        {
+            stackImage.Push(imgProcess);
+        }
+
+        private void Brighness_Trackbar_ValueChanged(object sender, EventArgs e)
+        {
+            TypeRGB = 4;
+            CustomTrackbar bar = (CustomTrackbar)sender;
+            float c = -bar.Value * 0.001f;
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+            {
+                new float[] {1,0,0,0,0},
+                new float[] {0,1,0,0,0},
+                new float[] {0,0,1,0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {c,c,c,0,1},
+            });
+            ImageAttributes imageAttributes = new ImageAttributes();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            Image _img = imgNowFake;
+
+            //PictureBox1.Image
+
+            Graphics _g = default(Graphics);
+
+            Bitmap bm_dest = new Bitmap(Convert.ToInt32(_img.Width), Convert.ToInt32(_img.Height));
+
+            _g = Graphics.FromImage(bm_dest);
+
+            _g.DrawImage(_img, new Rectangle(0, 0, bm_dest.Width + 1, bm_dest.Height + 1), 0, 0, bm_dest.Width + 1, bm_dest.Height + 1, GraphicsUnit.Pixel, imageAttributes);
+
+            imgProcess = bm_dest;
+            pic.Image = imgProcess;
+        }
+        #endregion
+
 
         #region button onclick
         private void Pen_Button_Click(object sender, EventArgs e)
