@@ -137,6 +137,7 @@
             this.btnSignup.BorderColor = System.Drawing.Color.SteelBlue;
             this.btnSignup.BorderRadius = 10;
             this.btnSignup.BorderSize = 2;
+            this.btnSignup.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSignup.FlatAppearance.BorderSize = 0;
             this.btnSignup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSignup.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -152,6 +153,7 @@
             // lbLogin
             // 
             this.lbLogin.AutoSize = true;
+            this.lbLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lbLogin.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lbLogin.ForeColor = System.Drawing.Color.SteelBlue;
             this.lbLogin.Location = new System.Drawing.Point(669, 332);

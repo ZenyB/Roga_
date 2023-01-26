@@ -37,6 +37,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contactUsRogagmailcomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.Shape_Button = new System.Windows.Forms.Button();
@@ -44,7 +45,7 @@
             this.Filter_Button = new System.Windows.Forms.Button();
             this.AddText_Button = new System.Windows.Forms.Button();
             this.AddPicture_Button = new System.Windows.Forms.Button();
-            this.Exposure_Button = new System.Windows.Forms.Button();
+            this.Saturation_Button = new System.Windows.Forms.Button();
             this.ColorChannel_Button = new System.Windows.Forms.Button();
             this.BrightnessAndContrast_Button = new System.Windows.Forms.Button();
             this.Pen_Button = new System.Windows.Forms.Button();
@@ -57,7 +58,6 @@
             this.pic = new System.Windows.Forms.PictureBox();
             this.picturePanel2 = new PicturePanel();
             this.picturePanel1 = new PicturePanel();
-            this.contactUsRogagmailcomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -94,7 +94,7 @@
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.newToolStripMenuItem_MouseDown);
             // 
@@ -102,7 +102,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.openToolStripMenuItem_MouseDown);
             // 
@@ -110,7 +110,7 @@
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveToolStripMenuItem_MouseDown);
             // 
@@ -118,7 +118,7 @@
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveAsToolStripMenuItem_MouseDown);
             // 
@@ -126,7 +126,7 @@
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.exitToolStripMenuItem_MouseDown);
             // 
@@ -143,6 +143,13 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // contactUsRogagmailcomToolStripMenuItem
+            // 
+            this.contactUsRogagmailcomToolStripMenuItem.Enabled = false;
+            this.contactUsRogagmailcomToolStripMenuItem.Name = "contactUsRogagmailcomToolStripMenuItem";
+            this.contactUsRogagmailcomToolStripMenuItem.Size = new System.Drawing.Size(287, 26);
+            this.contactUsRogagmailcomToolStripMenuItem.Text = "Contact us: Roga@gmail.com";
             // 
             // panel2
             // 
@@ -165,7 +172,7 @@
             this.panel5.Controls.Add(this.Filter_Button);
             this.panel5.Controls.Add(this.AddText_Button);
             this.panel5.Controls.Add(this.AddPicture_Button);
-            this.panel5.Controls.Add(this.Exposure_Button);
+            this.panel5.Controls.Add(this.Saturation_Button);
             this.panel5.Controls.Add(this.ColorChannel_Button);
             this.panel5.Controls.Add(this.BrightnessAndContrast_Button);
             this.panel5.Controls.Add(this.Pen_Button);
@@ -239,18 +246,18 @@
             this.AddPicture_Button.UseVisualStyleBackColor = true;
             this.AddPicture_Button.Click += new System.EventHandler(this.AddPicture_Button_Click);
             // 
-            // Exposure_Button
+            // Saturation_Button
             // 
-            this.Exposure_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Saturation_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Exposure_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Exposure_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Exposure_Button.Location = new System.Drawing.Point(18, 173);
-            this.Exposure_Button.Name = "Exposure_Button";
-            this.Exposure_Button.Size = new System.Drawing.Size(55, 55);
-            this.Exposure_Button.TabIndex = 4;
-            this.Exposure_Button.UseVisualStyleBackColor = true;
-            this.Exposure_Button.Click += new System.EventHandler(this.Exposure_Button_Click);
+            this.Saturation_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Saturation_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Saturation_Button.Location = new System.Drawing.Point(18, 173);
+            this.Saturation_Button.Name = "Saturation_Button";
+            this.Saturation_Button.Size = new System.Drawing.Size(55, 55);
+            this.Saturation_Button.TabIndex = 4;
+            this.Saturation_Button.UseVisualStyleBackColor = true;
+            this.Saturation_Button.Click += new System.EventHandler(this.Exposure_Button_Click);
             // 
             // ColorChannel_Button
             // 
@@ -392,13 +399,6 @@
             this.picturePanel1.Size = new System.Drawing.Size(200, 100);
             this.picturePanel1.TabIndex = 0;
             // 
-            // contactUsRogagmailcomToolStripMenuItem
-            // 
-            this.contactUsRogagmailcomToolStripMenuItem.Enabled = false;
-            this.contactUsRogagmailcomToolStripMenuItem.Name = "contactUsRogagmailcomToolStripMenuItem";
-            this.contactUsRogagmailcomToolStripMenuItem.Size = new System.Drawing.Size(287, 26);
-            this.contactUsRogagmailcomToolStripMenuItem.Text = "Contact us: Roga@gmail.com";
-            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
@@ -451,7 +451,7 @@
         private System.Windows.Forms.Button Filter_Button;
         private System.Windows.Forms.Button AddText_Button;
         private System.Windows.Forms.Button AddPicture_Button;
-        private System.Windows.Forms.Button Exposure_Button;
+        private System.Windows.Forms.Button Saturation_Button;
         private System.Windows.Forms.Button ColorChannel_Button;
         private System.Windows.Forms.Button BrightnessAndContrast_Button;
         private System.Windows.Forms.Button Shape_Button;
