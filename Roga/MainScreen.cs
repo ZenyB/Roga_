@@ -55,7 +55,8 @@ namespace Roga
                         Remove_ColorRGB_Channel();
                         //remove Color Channel
                         break;
-                    case "exposure":
+                    case "saturation":
+                        Remove_Saturation();
                         //remove 
                         break;
                     case "addPicture":
@@ -95,8 +96,9 @@ namespace Roga
                         Add_ColorRGB_Channel();
                         //add Color Channel
                         break;
-                    case "exposure":
-                        //add 
+                    case "saturation":
+                        InitSaturation();
+                        Add_Saturation();
                         break;
                     case "addPicture":
                         addAddImageEvent();
@@ -287,7 +289,7 @@ namespace Roga
             Eraser_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\eraser.png"));
             BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\brightness.png"));
             ColorChannel_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\color.png"));
-            Exposure_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\exposure.png"));
+            Saturation_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\exposure.png"));
             AddPicture_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\addpicture.png"));
             AddText_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\text.png"));
             Crop_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\crop.png"));
@@ -3543,6 +3545,100 @@ namespace Roga
         }
         #endregion
 
+        #region Saturation
+        const float rwgt = 0.3086f;
+        const float gwgt = 0.6094f;
+        const float bwgt = 0.0820f;
+        static private float saturation = 1.0f;
+
+        public void Add_Saturation()
+        {
+            imgProcess = imgNow;
+            imgNowFake = imgNow;
+        }
+        public void Remove_Saturation()
+        {
+            imgNow = imgProcess;
+            pic.Image = imgNow;
+        }
+
+        private void InitSaturation()
+        {
+            //Saturation trackbar
+            CustomTrackbar Saturation_Trackbar = new CustomTrackbar();
+            Saturation_Trackbar.BackColor = Color.Transparent;
+            Saturation_Trackbar.BarInnerColor = System.Drawing.Color.FromArgb(40, 51, 90);
+            Saturation_Trackbar.BarOuterColor = System.Drawing.Color.FromArgb(40, 51, 90);
+            Saturation_Trackbar.BarPenColor = System.Drawing.Color.White;
+            Saturation_Trackbar.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            Saturation_Trackbar.ElapsedInnerColor = Color.Black;
+            Saturation_Trackbar.ElapsedOuterColor = Color.Black;
+            Saturation_Trackbar.LargeChange = ((uint)(5u));
+            Saturation_Trackbar.Location = new System.Drawing.Point(35, 16);
+            Saturation_Trackbar.Maximum = 100;
+            Saturation_Trackbar.Minimum = -100;
+            Saturation_Trackbar.Name = "Green_Trackbar";
+            Saturation_Trackbar.Orientation = System.Windows.Forms.Orientation.Vertical;
+            Saturation_Trackbar.Size = new System.Drawing.Size(56, 406);
+            Saturation_Trackbar.SmallChange = ((uint)(1u));
+            Saturation_Trackbar.TabIndex = 5;
+            Saturation_Trackbar.Text = "customTrackbar1";
+            Saturation_Trackbar.ThumbRoundRectSize = new System.Drawing.Size(8, 8);
+            Saturation_Trackbar.ThumbSize = 2;
+            Saturation_Trackbar.Value = 0;
+            Saturation_Trackbar.ValueChanged += Saturation_Trackbar_ValueChanged;
+            Saturation_Trackbar.MouseUp += Saturation_Trackbar_MouseUp;
+            panel3.Controls.Add(Saturation_Trackbar);
+
+            Label lb = new Label();
+            lb.AutoSize = true;
+            lb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            lb.Location = new System.Drawing.Point(20, 451);
+            lb.Name = "lb";
+            lb.Size = new System.Drawing.Size(148, 26);
+            lb.TabIndex = 0;
+            lb.Text = "Saturation";
+            lb.BringToFront();
+            panel3.Controls.Add(lb);
+        }
+
+        private void Saturation_Trackbar_ValueChanged(object sender, EventArgs e)
+        {
+            TypeRGB = 6;
+            CustomTrackbar bar = (CustomTrackbar)sender;
+            saturation = 1f - (bar.Value / 100f);
+            float baseSat = 1.0f - saturation;
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+            {
+                new float[] {baseSat * rwgt + saturation, baseSat * rwgt, baseSat * rwgt, 0,0},
+                new float[] {baseSat * gwgt, baseSat * gwgt + saturation, baseSat * gwgt, 0,0},
+                new float[] {baseSat * bwgt, baseSat * bwgt, baseSat * bwgt + saturation, 0,0},
+                new float[] {0,0,0,1,0},
+                new float[] {0,0,0,0,1},
+            });
+            ImageAttributes imageAttributes = new ImageAttributes();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            Image _img = imgNowFake;
+
+            //PictureBox1.Image
+
+            Graphics _g = default(Graphics);
+
+            Bitmap bm_dest = new Bitmap(Convert.ToInt32(_img.Width), Convert.ToInt32(_img.Height));
+
+            _g = Graphics.FromImage(bm_dest);
+
+            _g.DrawImage(_img, new Rectangle(0, 0, bm_dest.Width + 1, bm_dest.Height + 1), 0, 0, bm_dest.Width + 1, bm_dest.Height + 1, GraphicsUnit.Pixel, imageAttributes);
+
+            imgProcess = bm_dest;
+            pic.Image = imgProcess;
+        }
+
+        private void Saturation_Trackbar_MouseUp(object sender, MouseEventArgs e)
+        {
+            stackImage.Push(imgProcess);
+        }
+        #endregion
 
         #region button onclick
         private void Pen_Button_Click(object sender, EventArgs e)
@@ -3780,7 +3876,7 @@ namespace Roga
 
         private void Exposure_Button_Click(object sender, EventArgs e)
         {
-            MouseType = "exposure";
+            MouseType = "saturation";
             LastMouseType = MouseType;
         }
 
