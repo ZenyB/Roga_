@@ -342,6 +342,7 @@ namespace Roga
                     if (imgNow.Size != stackImage.Peek().Size)
                         resizePic(stackImage.Peek());
                     imgNow = stackImage.Peek();
+                    imgProcess = new Bitmap(imgNow);
                     pic.Image = imgNow;
                 }
             }
@@ -3216,7 +3217,7 @@ namespace Roga
         public void Remove_ColorRGB_Channel()
         {
             imgNow = imgProcess;
-            pic.Image = imgNow;
+            pic.Image = new Bitmap(imgNow);
         }
         public void InitColorRGB()
         {
@@ -3332,7 +3333,7 @@ namespace Roga
             });
             Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
             imgProcess = bitmap;
-            pic.Image = imgProcess;
+            pic.Image = new Bitmap(imgProcess);
         }
         private void Blue_Trackbar_MouseUp(object sender, MouseEventArgs e)
         {
@@ -3355,7 +3356,7 @@ namespace Roga
             });
             Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
             imgProcess = bitmap;
-            pic.Image = imgProcess;
+            pic.Image = new Bitmap(imgProcess);
         }
         private void Red_Trackbar_MouseUp(object sender, MouseEventArgs e)
         {
@@ -3377,7 +3378,7 @@ namespace Roga
             });
             Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
             imgProcess = bitmap;
-            pic.Image = imgProcess;
+            pic.Image = new Bitmap(imgProcess);
         }
         private void Green_Trackbar_MouseUp(object sender, MouseEventArgs e)
         {
@@ -3385,7 +3386,7 @@ namespace Roga
         }
         #endregion
 
-        //Brightness & Contrast
+        //Brightness & Contrast feature
         #region BrighnessAndContrast
         public void Add_BrighnessAndContrast()
         {
@@ -3395,7 +3396,7 @@ namespace Roga
         public void Remove_BrighnessAndContrast()
         {
             imgNow = imgProcess;
-            pic.Image = imgNow;
+            pic.Image = new Bitmap(imgNow);
         }
 
         public void InitBrighnessAndContrast()
@@ -3505,7 +3506,7 @@ namespace Roga
             _g.DrawImage(_img, new Rectangle(0, 0, bm_dest.Width + 1, bm_dest.Height + 1), 0, 0, bm_dest.Width + 1, bm_dest.Height + 1, GraphicsUnit.Pixel, imageAttributes);
 
             imgProcess = bm_dest;
-            pic.Image = imgProcess;
+            pic.Image = new Bitmap(imgProcess);
         }
 
         private void Brighness_Trackbar_MouseUp(object sender, MouseEventArgs e)
@@ -3541,10 +3542,11 @@ namespace Roga
             _g.DrawImage(_img, new Rectangle(0, 0, bm_dest.Width + 1, bm_dest.Height + 1), 0, 0, bm_dest.Width + 1, bm_dest.Height + 1, GraphicsUnit.Pixel, imageAttributes);
 
             imgProcess = bm_dest;
-            pic.Image = imgProcess;
+            pic.Image = new Bitmap(imgProcess);
         }
         #endregion
 
+        //Saturation feature
         #region Saturation
         const float rwgt = 0.3086f;
         const float gwgt = 0.6094f;
@@ -3559,7 +3561,7 @@ namespace Roga
         public void Remove_Saturation()
         {
             imgNow = imgProcess;
-            pic.Image = imgNow;
+            pic.Image = new Bitmap(imgNow);
         }
 
         private void InitSaturation()
@@ -3574,7 +3576,7 @@ namespace Roga
             Saturation_Trackbar.ElapsedInnerColor = Color.Black;
             Saturation_Trackbar.ElapsedOuterColor = Color.Black;
             Saturation_Trackbar.LargeChange = ((uint)(5u));
-            Saturation_Trackbar.Location = new System.Drawing.Point(35, 16);
+            Saturation_Trackbar.Location = new System.Drawing.Point(75, 16);
             Saturation_Trackbar.Maximum = 100;
             Saturation_Trackbar.Minimum = -100;
             Saturation_Trackbar.Name = "Green_Trackbar";
@@ -3593,7 +3595,7 @@ namespace Roga
             Label lb = new Label();
             lb.AutoSize = true;
             lb.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            lb.Location = new System.Drawing.Point(20, 451);
+            lb.Location = new System.Drawing.Point(63, 451);
             lb.Name = "lb";
             lb.Size = new System.Drawing.Size(148, 26);
             lb.TabIndex = 0;
@@ -3616,22 +3618,9 @@ namespace Roga
                 new float[] {0,0,0,1,0},
                 new float[] {0,0,0,0,1},
             });
-            ImageAttributes imageAttributes = new ImageAttributes();
-            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-            Image _img = imgNowFake;
-
-            //PictureBox1.Image
-
-            Graphics _g = default(Graphics);
-
-            Bitmap bm_dest = new Bitmap(Convert.ToInt32(_img.Width), Convert.ToInt32(_img.Height));
-
-            _g = Graphics.FromImage(bm_dest);
-
-            _g.DrawImage(_img, new Rectangle(0, 0, bm_dest.Width + 1, bm_dest.Height + 1), 0, 0, bm_dest.Width + 1, bm_dest.Height + 1, GraphicsUnit.Pixel, imageAttributes);
-
-            imgProcess = bm_dest;
-            pic.Image = imgProcess;
+            Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
+            imgProcess = bitmap;
+            pic.Image = new Bitmap(imgProcess);
         }
 
         private void Saturation_Trackbar_MouseUp(object sender, MouseEventArgs e)
