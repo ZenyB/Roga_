@@ -186,6 +186,7 @@
             this.Shape_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Shape_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Shape_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Shape_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Shape_Button.Location = new System.Drawing.Point(98, 319);
             this.Shape_Button.Name = "Shape_Button";
@@ -199,6 +200,7 @@
             this.Crop_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Crop_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Crop_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Crop_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Crop_Button.Location = new System.Drawing.Point(18, 319);
             this.Crop_Button.Name = "Crop_Button";
@@ -212,6 +214,7 @@
             this.Filter_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Filter_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Filter_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Filter_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Filter_Button.Location = new System.Drawing.Point(98, 249);
             this.Filter_Button.Name = "Filter_Button";
@@ -225,6 +228,7 @@
             this.AddText_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.AddText_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AddText_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.AddText_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddText_Button.Location = new System.Drawing.Point(18, 249);
             this.AddText_Button.Name = "AddText_Button";
@@ -238,6 +242,7 @@
             this.AddPicture_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.AddPicture_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.AddPicture_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.AddPicture_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddPicture_Button.Location = new System.Drawing.Point(98, 173);
             this.AddPicture_Button.Name = "AddPicture_Button";
@@ -251,6 +256,7 @@
             this.Saturation_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Saturation_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Saturation_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Saturation_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Saturation_Button.Location = new System.Drawing.Point(18, 173);
             this.Saturation_Button.Name = "Saturation_Button";
@@ -264,6 +270,7 @@
             this.ColorChannel_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ColorChannel_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ColorChannel_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ColorChannel_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ColorChannel_Button.Location = new System.Drawing.Point(98, 98);
             this.ColorChannel_Button.Name = "ColorChannel_Button";
@@ -277,6 +284,7 @@
             this.BrightnessAndContrast_Button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BrightnessAndContrast_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BrightnessAndContrast_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.BrightnessAndContrast_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BrightnessAndContrast_Button.Location = new System.Drawing.Point(18, 98);
             this.BrightnessAndContrast_Button.Name = "BrightnessAndContrast_Button";
@@ -289,6 +297,7 @@
             // 
             this.Pen_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.Pen_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Pen_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Pen_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Pen_Button.Location = new System.Drawing.Point(18, 23);
             this.Pen_Button.Name = "Pen_Button";
@@ -314,6 +323,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Back_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Back_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Back_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Back_Button.Location = new System.Drawing.Point(1, 1);
             this.Back_Button.Name = "Back_Button";
@@ -328,6 +338,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Save_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Save_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Save_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Save_Button.Location = new System.Drawing.Point(117, 1);
             this.Save_Button.Name = "Save_Button";
@@ -342,6 +353,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Hand_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Hand_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Hand_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Hand_Button.Location = new System.Drawing.Point(59, 1);
             this.Hand_Button.Name = "Hand_Button";
@@ -364,6 +376,7 @@
             // Eraser_Button
             // 
             this.Eraser_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Eraser_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Eraser_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Eraser_Button.Location = new System.Drawing.Point(110, 146);
             this.Eraser_Button.Name = "Eraser_Button";
