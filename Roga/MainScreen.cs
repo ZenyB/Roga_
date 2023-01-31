@@ -134,7 +134,7 @@ namespace Roga
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(Width, Height);
             MouseType = "";
-            isSave = false;
+            isSave = true;
 
             pic = new PictureBox();
 
@@ -176,7 +176,7 @@ namespace Roga
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(Width, Height);
             MouseType = "";
-            isSave = false;
+            isSave = true;
 
             pic = new PictureBox();
 
@@ -234,7 +234,7 @@ namespace Roga
             this.MinimumSize = new System.Drawing.Size(Width, Height);
             fileNameNow = fileName;
             MouseType = "";
-            isSave = false;
+            isSave = true;
 
             pic = new PictureBox();
 
@@ -3685,6 +3685,7 @@ namespace Roga
             imgNow = picture;
             setLocation(imgNow);
             stackImage.Push(imgNow);
+            isSave = true;
 
             Controls.Add(pic);
             pic.BringToFront();
@@ -3772,7 +3773,7 @@ namespace Roga
                         setLocation(imgNow);
                         stackImage.Push(imgNow);
                     }
-                    isSave = false;
+                    isSave = true;
                     Controls.Add(pic);
                     pic.BringToFront();
                 }
