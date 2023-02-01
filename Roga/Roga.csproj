@@ -116,7 +116,6 @@
     <Resource Include="Assets\Images\testImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Debug\" />
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +140,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Cursors\EraserCursor.cur" />
+    <Content Include="Assets\Cursors\PenCursor.cur" />
     <Content Include="Assets\Images\btnBlank.PNG" />
     <Content Include="Assets\Images\btnImport.PNG" />
     <Content Include="Assets\Images\Crop and rotate\crop.png" />
@@ -187,6 +188,8 @@
     <Content Include="Assets\Images\Shapes\upArrow.png" />
     <Content Include="Assets\Images\test.PNG" />
     <Content Include="Assets\Images\testImage.png" />
+    <Content Include="bin\Debug\PenCursor.cur" />
+    <Content Include="bin\Debug\EraserCursor.cur" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Rename.resx">

@@ -122,6 +122,7 @@ namespace Roga
                 }
             }
         }
+        public bool isSave;
 
         #region constructor
 
@@ -133,6 +134,7 @@ namespace Roga
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(Width, Height);
             MouseType = "";
+            isSave = true;
 
             pic = new PictureBox();
 
@@ -174,6 +176,7 @@ namespace Roga
             this.MouseWheel += new MouseEventHandler(Form4_MouseWheel);
             this.MinimumSize = new System.Drawing.Size(Width, Height);
             MouseType = "";
+            isSave = true;
 
             pic = new PictureBox();
 
@@ -231,6 +234,7 @@ namespace Roga
             this.MinimumSize = new System.Drawing.Size(Width, Height);
             fileNameNow = fileName;
             MouseType = "";
+            isSave = true;
 
             pic = new PictureBox();
 
@@ -757,7 +761,7 @@ namespace Roga
         }
         #endregion
 
-        //pencil event
+        //Pencil feature
         #region Pencil
         Image imgTemp;
         private void Pic_Draw_MouseUp(object sender, MouseEventArgs e)
@@ -766,6 +770,7 @@ namespace Roga
             lastPoint = Point.Empty;
             imgNow = new Bitmap(imgTemp);
             stackImage.Push(imgNow);
+            isSave = false;
             pic.Image = imgNow;
         }
         private void Pic_Draw_MouseMove(object sender, MouseEventArgs e)
@@ -813,15 +818,18 @@ namespace Roga
             pic.MouseDown += Pic_Draw_MouseDown;
             pic.MouseMove += Pic_Draw_MouseMove;
             pic.MouseUp += Pic_Draw_MouseUp;
+            pic.Cursor = new Cursor(getFilePath(@"..\..\..\Roga\Assets\Cursors\PenCursor.cur"));
         }
         private void Remove_Draw()
         {
             pic.MouseDown -= Pic_Draw_MouseDown;
             pic.MouseMove -= Pic_Draw_MouseMove;
             pic.MouseUp -= Pic_Draw_MouseUp;
+            pic.Cursor = Cursors.Default;
         }
         #endregion
 
+        //Eraser feature
         #region Eraser
         private void Pic_Eraser_MouseUp(object sender, MouseEventArgs e)
         {
@@ -829,6 +837,7 @@ namespace Roga
             lastPoint = Point.Empty;
             imgNow = new Bitmap(imgTemp);
             stackImage.Push(imgNow);
+            isSave = false;
             pic.Image = imgNow;
         }
         private void Pic_Eraser_MouseMove(object sender, MouseEventArgs e)
@@ -871,6 +880,7 @@ namespace Roga
             pic.MouseDown += Pic_Eraser_MouseDown;
             pic.MouseMove += Pic_Eraser_MouseMove;
             pic.MouseUp += Pic_Eraser_MouseUp;
+            pic.Cursor = new Cursor(getFilePath(@"..\..\..\Roga\Assets\Cursors\EraserCursor.cur"));
         }
         private void Remove_Eraser()
         {
@@ -878,6 +888,7 @@ namespace Roga
             pic.MouseDown -= Pic_Eraser_MouseDown;
             pic.MouseMove -= Pic_Eraser_MouseMove;
             pic.MouseUp -= Pic_Eraser_MouseUp;
+            pic.Cursor = Cursors.Default;
         }
         #endregion
 
@@ -1090,6 +1101,7 @@ namespace Roga
                 imgNow = bit;
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
                 //btnGray.BorderSize = 2;
                 //filterType = 1;
             }
@@ -1102,6 +1114,7 @@ namespace Roga
                 imgNow = ImageWithNegative(imgNow);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
             }    
         }
 
@@ -1112,6 +1125,7 @@ namespace Roga
                 imgNow = ImageWithTransparency(imgNow);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
             }    
         }
 
@@ -1122,6 +1136,7 @@ namespace Roga
                 imgNow = ImageWithSepiaTone(imgNow);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
             }
         }
 
@@ -1132,6 +1147,7 @@ namespace Roga
                 imgNow = ImageWithRed(imgNow);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
             }
         }
 
@@ -1142,6 +1158,7 @@ namespace Roga
                 imgNow = ImageWithGreen(imgNow);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
             }
         }
 
@@ -1152,6 +1169,7 @@ namespace Roga
                 imgNow = ImageWithBlue(imgNow);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
             }
         }
 
@@ -1250,6 +1268,7 @@ namespace Roga
                         imgNow = new Bitmap(imgTempShapes);
                         pic.Image = imgNow;
                         stackImage.Push(imgNow);
+                        isSave = false;
                     }
                     headLine = new Point(0, 0);
                     tailLine = new Point(0, 0);
@@ -1266,6 +1285,7 @@ namespace Roga
                             imgNow = new Bitmap(imgTempShapes);
                             pic.Image = imgNow;
                             stackImage.Push(imgNow);
+                            isSave = false;
                         }
                         imgLocation = new Point(0, 0);
                         pic.Refresh();
@@ -2253,7 +2273,6 @@ namespace Roga
             base.OnMouseEnter(e);
             if (isSelect == true)
             {
-
                 Cursor = Cursors.Cross;
             }
         }
@@ -2355,6 +2374,7 @@ namespace Roga
             resizePic(imgNow);
             pic.Image = imgNow;
             stackImage.Push(imgNow);
+            isSave = false;
         }
 
         //rorate
@@ -2374,6 +2394,7 @@ namespace Roga
             crpX = crpY = slX = slY = 0;
             pic.Image = imgNow;
             stackImage.Push(imgNow);
+            isSave = false;
             resetSelect();
         }
 
@@ -2390,6 +2411,7 @@ namespace Roga
             imgNow = Flip_Image(imgNow);
             pic.Image = imgNow;
             stackImage.Push(imgNow);
+            isSave = false;
             resetSelect();
         }
 
@@ -3087,6 +3109,7 @@ namespace Roga
                 imgNow = new Bitmap(bit);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
+                isSave = false;
             }
         }
 
@@ -3193,6 +3216,7 @@ namespace Roga
         private Image imgNowFake;
         private Image imgProcess;
         private int _typeRGB;
+        private bool isChanged = false;
         public int TypeRGB
         {
             get
@@ -3201,6 +3225,7 @@ namespace Roga
             }
             set
             {
+                isChanged = true;
                 if (_typeRGB != value)
                 {
                     imgNowFake = imgProcess;
@@ -3211,6 +3236,7 @@ namespace Roga
         }
         public void Add_ColorRGB_Channel()
         {
+            isChanged = false;
             imgProcess = imgNow;
             imgNowFake = imgNow;
         }
@@ -3218,6 +3244,11 @@ namespace Roga
         {
             imgNow = imgProcess;
             pic.Image = new Bitmap(imgNow);
+            if (isChanged == true)
+            {
+                stackImage.Push(imgProcess);
+                isSave = false;
+            }
         }
         public void InitColorRGB()
         {
@@ -3246,7 +3277,6 @@ namespace Roga
             Green_Trackbar.ThumbSize = 2;
             Green_Trackbar.Value = 0;
             Green_Trackbar.ValueChanged += Green_Trackbar_ValueChanged;
-            Green_Trackbar.MouseUp += Green_Trackbar_MouseUp;
             panel3.Controls.Add(Green_Trackbar);
             // 
             // Red_Trackbar
@@ -3273,7 +3303,6 @@ namespace Roga
             Red_Trackbar.ThumbSize = 2;
             Red_Trackbar.Value = 0;
             Red_Trackbar.ValueChanged += Red_Trackbar_ValueChanged;
-            Red_Trackbar.MouseUp += Red_Trackbar_MouseUp;
             panel3.Controls.Add(Red_Trackbar);
             // 
             // Blue_Trackbar
@@ -3301,7 +3330,6 @@ namespace Roga
             Blue_Trackbar.ThumbSize = 2;
             Blue_Trackbar.Value = 0;
             Blue_Trackbar.ValueChanged += Blue_Trackbar_ValueChanged;
-            Blue_Trackbar.MouseUp += Blue_Trackbar_MouseUp;
             panel3.Controls.Add(Blue_Trackbar);
             //
             // Label
@@ -3335,11 +3363,6 @@ namespace Roga
             imgProcess = bitmap;
             pic.Image = new Bitmap(imgProcess);
         }
-        private void Blue_Trackbar_MouseUp(object sender, MouseEventArgs e)
-        {
-            CustomTrackbar bar = (CustomTrackbar)sender;
-            stackImage.Push(imgProcess);
-        }
 
         private void Red_Trackbar_ValueChanged(object sender, EventArgs e)
         {
@@ -3357,10 +3380,6 @@ namespace Roga
             Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
             imgProcess = bitmap;
             pic.Image = new Bitmap(imgProcess);
-        }
-        private void Red_Trackbar_MouseUp(object sender, MouseEventArgs e)
-        {
-            stackImage.Push(imgProcess);
         }
 
         private void Green_Trackbar_ValueChanged(object sender, EventArgs e)
@@ -3380,16 +3399,13 @@ namespace Roga
             imgProcess = bitmap;
             pic.Image = new Bitmap(imgProcess);
         }
-        private void Green_Trackbar_MouseUp(object sender, MouseEventArgs e)
-        {
-            stackImage.Push(imgProcess);
-        }
         #endregion
 
         //Brightness & Contrast feature
         #region BrighnessAndContrast
         public void Add_BrighnessAndContrast()
         {
+            isChanged = false;
             imgProcess = imgNow;
             imgNowFake = imgNow;
         }
@@ -3397,6 +3413,11 @@ namespace Roga
         {
             imgNow = imgProcess;
             pic.Image = new Bitmap(imgNow);
+            if (isChanged == true)
+            {
+                isSave = false;
+                stackImage.Push(imgProcess);
+            }
         }
 
         public void InitBrighnessAndContrast()
@@ -3426,7 +3447,6 @@ namespace Roga
             Brighness_Trackbar.ThumbSize = 2;
             Brighness_Trackbar.Value = 0;
             Brighness_Trackbar.ValueChanged += Brighness_Trackbar_ValueChanged;
-            Brighness_Trackbar.MouseUp += Brighness_Trackbar_MouseUp;
             panel3.Controls.Add(Brighness_Trackbar);
 
             // 
@@ -3454,7 +3474,6 @@ namespace Roga
             Contrast_Trackbar.ThumbSize = 2;
             Contrast_Trackbar.Value = 0;
             Contrast_Trackbar.ValueChanged += Contrast_Trackbar_ValueChanged;
-            Contrast_Trackbar.MouseUp += Contrast_Trackbar_MouseUp;
             panel3.Controls.Add(Contrast_Trackbar);
             //
             // Label
@@ -3470,11 +3489,6 @@ namespace Roga
             lb.BringToFront();
             panel3.Controls.Add(lb);
 
-        }
-
-        private void Contrast_Trackbar_MouseUp(object sender, MouseEventArgs e)
-        {
-            stackImage.Push(imgProcess);
         }
 
         private void Contrast_Trackbar_ValueChanged(object sender, EventArgs e)
@@ -3507,11 +3521,6 @@ namespace Roga
 
             imgProcess = bm_dest;
             pic.Image = new Bitmap(imgProcess);
-        }
-
-        private void Brighness_Trackbar_MouseUp(object sender, MouseEventArgs e)
-        {
-            stackImage.Push(imgProcess);
         }
 
         private void Brighness_Trackbar_ValueChanged(object sender, EventArgs e)
@@ -3555,6 +3564,7 @@ namespace Roga
 
         public void Add_Saturation()
         {
+            isChanged = false;
             imgProcess = imgNow;
             imgNowFake = imgNow;
         }
@@ -3562,6 +3572,11 @@ namespace Roga
         {
             imgNow = imgProcess;
             pic.Image = new Bitmap(imgNow);
+            if(isChanged == true)
+            {
+                isSave = false;
+                stackImage.Push(imgProcess);
+            }
         }
 
         private void InitSaturation()
@@ -3589,7 +3604,6 @@ namespace Roga
             Saturation_Trackbar.ThumbSize = 2;
             Saturation_Trackbar.Value = 0;
             Saturation_Trackbar.ValueChanged += Saturation_Trackbar_ValueChanged;
-            Saturation_Trackbar.MouseUp += Saturation_Trackbar_MouseUp;
             panel3.Controls.Add(Saturation_Trackbar);
 
             Label lb = new Label();
@@ -3621,11 +3635,6 @@ namespace Roga
             Bitmap bitmap = new Bitmap(ApplyColorMatrix(imgNowFake, colorMatrix));
             imgProcess = bitmap;
             pic.Image = new Bitmap(imgProcess);
-        }
-
-        private void Saturation_Trackbar_MouseUp(object sender, MouseEventArgs e)
-        {
-            stackImage.Push(imgProcess);
         }
         #endregion
 
@@ -3676,6 +3685,7 @@ namespace Roga
             imgNow = picture;
             setLocation(imgNow);
             stackImage.Push(imgNow);
+            isSave = true;
 
             Controls.Add(pic);
             pic.BringToFront();
@@ -3763,6 +3773,7 @@ namespace Roga
                         setLocation(imgNow);
                         stackImage.Push(imgNow);
                     }
+                    isSave = true;
                     Controls.Add(pic);
                     pic.BringToFront();
                 }
@@ -3777,11 +3788,38 @@ namespace Roga
                 if (File.Exists(fileNameNow))
                 {
                     imgNow.Save(fileNameNow);
+                    isSave = true;
                 }    
                 else
                 {
                     saveImage();
                 }    
+            }
+        }
+
+        private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isSave == false)
+            {
+                DialogResult dialogResult = MessageBox.Show("Bạn có muốn lưu ảnh?", "Ảnh chưa lưu", MessageBoxButtons.YesNoCancel);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    if (File.Exists(fileNameNow))
+                    {
+                        imgNow.Save(fileNameNow);
+                        isSave = true;
+                    }
+                    else
+                    {
+                        saveImage();
+                    }
+                    if (isSave == false)
+                        e.Cancel = true;
+                }
+                else if (dialogResult == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -3821,6 +3859,7 @@ namespace Roga
                 {
                     MouseType = "";
                     pic.Image.Save(saveFileDialog1.FileName);
+                    isSave = true;
                 }
                 catch (Exception e)
                 {
