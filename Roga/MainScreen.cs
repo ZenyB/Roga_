@@ -2820,9 +2820,9 @@ namespace Roga
 
         //Text feature
         #region AddText
-        private Pen pentext = new Pen(Brushes.Black, 3);
         private CustomTextbox txtAddText = new CustomTextbox();
         private bool addtext = false;
+        private bool isEnterText = false;
         private Font fontText = new Font("Arial", 13);
         private ComboBox cbFont = new ComboBox();
         private NumericUpDown numSize = new NumericUpDown();
@@ -2831,7 +2831,6 @@ namespace Roga
         private CheckBox cbBold = new CheckBox();
         private CheckBox cbUnderline = new CheckBox();
         private Button btnCustom = new Button();
-        private Brush colorText = Brushes.Black;
 
         private void InitTextDetails()
         {
@@ -3062,7 +3061,6 @@ namespace Roga
                 }
             }
 
-
         }
 
         private void pic_AddText_MouseUp(object sender, MouseEventArgs e)
@@ -3094,23 +3092,24 @@ namespace Roga
             {
                 txtAddText.Text = "";
             }
+            isEnterText = true;
         }
         #endregion
 
         private void Draw_Text()
         {
-            if (addtext == true)
+            if (isEnterText == true)
             {
                 Bitmap bit = new Bitmap(pic.Image);
                 Graphics g = Graphics.FromImage(bit);
                 g.DrawString(txtAddText.Text, fontText, new SolidBrush(txtAddText.ForeColor), txtAddText.Location.X, txtAddText.Location.Y);
-                pic.Controls.Remove(txtAddText);
                 txtAddText.Text = "";
                 imgNow = new Bitmap(bit);
                 pic.Image = imgNow;
                 stackImage.Push(imgNow);
                 isSave = false;
             }
+            pic.Controls.Remove(txtAddText);
         }
 
         private void cbFont_SelectedIndexChanged(object sender, EventArgs e)
