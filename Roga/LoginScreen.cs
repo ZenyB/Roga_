@@ -59,5 +59,25 @@ namespace Roga
             HomeScreen homeScreen = new HomeScreen();
             homeScreen.ShowDialog();    
         }
+
+        private void txtPassword_Enter(object sender, EventArgs e)
+        {
+            if (txtPassword.Text == "Please Enter Password")
+            {
+                txtPassword.Text = "";
+                txtPassword.ForeColor = SystemColors.WindowText;
+                txtPassword.UseSystemPasswordChar = true;
+            }
+        }
+
+        private void txtPassword_Leave(object sender, EventArgs e)
+        {
+            if (txtPassword.Text.Length == 0)
+            {
+                txtPassword.Text = "Please Enter Password";
+                txtPassword.ForeColor = SystemColors.GrayText;
+                txtPassword.UseSystemPasswordChar = false;
+            }
+        }
     }
 }
