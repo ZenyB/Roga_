@@ -3695,13 +3695,18 @@ namespace Roga
             if (e.Button == MouseButtons.Left)
             {
                 MouseType = "";
-                if (MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                DialogResult result = MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (!isSave && result == DialogResult.Yes)
                 {
                     if (!saveImage())
                     {
                         return;
                     }
                 }
+                else if (result == DialogResult.Cancel)
+                {
+                    return;
+                }    
                 createBlankForNew();
             }    
         }
@@ -3715,12 +3720,29 @@ namespace Roga
                 if (open.ShowDialog() == DialogResult.OK)
                 {
                     MouseType = "";
-                    if (MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    DialogResult result = MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    if (!isSave && result == DialogResult.Yes)
                     {
-                        if (!saveImage())
+                        if (fileNameNow != "")
+                        {
+                            if (File.Exists(fileNameNow))
+                            {
+                                imgNow.Save(fileNameNow);
+                                isSave = true;
+                            }
+                            else if (!saveImage())
+                            {
+                                return;
+                            }
+                        }
+                        else if (!saveImage())
                         {
                             return;
-                        }    
+                        }
+                    }
+                    else if (result == DialogResult.Cancel)
+                    {
+                        return;
                     }
                     fileNameNow = open.FileName;
                     Image tempp = Image.FromFile(open.FileName);
@@ -3835,11 +3857,16 @@ namespace Roga
             if (e.Button == MouseButtons.Left)
             {
                 MouseType = "";
-                if (MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                DialogResult result = MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (!isSave && result == DialogResult.Yes)
                 {
                     if (!saveImage())
                         return;
                 }
+                else if (result == DialogResult.Cancel)
+                {
+                    return;
+                }    
                 Application.Exit();
             }
         }
