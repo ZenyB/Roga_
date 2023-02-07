@@ -65,6 +65,7 @@ namespace Roga
             this.MaximumSize = new System.Drawing.Size(818, 497);
             this.MinimumSize = new System.Drawing.Size(818, 497);
             this.Name = "BeforeAddImage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Add Image";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.BeforeAddImage_FormClosed);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BeforeAddImage_KeyDown);
