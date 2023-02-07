@@ -2209,6 +2209,7 @@ namespace Roga
 
         int crpX = 0, crpY = 0, rectW, rectH, slX, slY;
         Pen crpPen = new Pen(Color.White);
+        bool canDelete = false;
 
         //resize picturebox when change image size
         private void resizePic(Image imageSource)
@@ -2220,6 +2221,18 @@ namespace Roga
         private void InitCropDetails()
         {
             resetSelect();
+            CustomButton.VBButton delete = new CustomButton.VBButton();
+            delete.Location = new Point(20, 210);
+            delete.Size = new Size(65, 20);
+            delete.BackColor = Color.Black;
+            delete.Text = "delete";
+            delete.ForeColor = Color.White;
+            delete.BorderRadius = 0;
+            delete.BorderColor = Color.White;
+            delete.BorderSize = 1;
+            delete.MouseDown += new MouseEventHandler(delete_MouseDown);
+            
+            panel3.Controls.Add(delete);
 
             PictureBox picSelect, picCrop, picRotate, picFlip;
             picSelect = new PictureBox();
@@ -2259,6 +2272,24 @@ namespace Roga
             picCrop.MouseEnter += new EventHandler(Select_Enter);
             picRotate.MouseEnter += new EventHandler(Select_Enter);
             picFlip.MouseEnter += new EventHandler(Select_Enter);
+        }
+
+        private void delete_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (canDelete && e.Button == MouseButtons.Left)
+            {
+                Image temp = new Bitmap(imgNow);
+                Graphics.FromImage(temp).FillRectangle(Brushes.White, crpX, crpY, rectW, rectH);
+                imgNow = new Bitmap(temp);
+                stackImage.Push(imgNow);
+                pic.Image = imgNow;
+                isSave = false;
+                pic.Refresh();
+                rectW = imgNow.Width;
+                rectH = imgNow.Height;
+                crpX = crpY = slX = slY = 0;
+                canDelete = false;
+            }    
         }
 
         private void Select_Enter(object sender, EventArgs e)
@@ -2303,6 +2334,7 @@ namespace Roga
                 if (e.Button == MouseButtons.Left)
                 {
                     pic.Refresh();
+                    canDelete = true;
 
                     crpX = Math.Min(slX, e.X);
                     if (crpX < 0)
@@ -2370,6 +2402,7 @@ namespace Roga
 
         private void picCrop_Click(object sender, EventArgs e)
         {
+            canDelete = false;
             imgNow = CropImage(imgNow);
             resizePic(imgNow);
             pic.Image = imgNow;
@@ -2387,6 +2420,7 @@ namespace Roga
 
         private void picRotate_Click(object sender, EventArgs e)
         {
+            canDelete = false;
             imgNow = Rotate_Image(imgNow);
             resizePic(imgNow);
             rectW = imgNow.Width;
@@ -2423,6 +2457,7 @@ namespace Roga
 
         private void resetSelect()
         {
+            canDelete = false;
             rectW = imgNow.Width;
             rectH = imgNow.Height;
             crpX = crpY = slX = slY = 0;
