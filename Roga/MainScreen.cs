@@ -2240,13 +2240,13 @@ namespace Roga
             picSelect.SizeMode = picCrop.SizeMode = picRotate.SizeMode = picFlip.SizeMode = PictureBoxSizeMode.StretchImage;
 
             //set position
-            picSelect.Location = new Point(13, 20);
+            picSelect.Location = new Point(23, 20);
             panel3.Controls.Add(picSelect);
-            picCrop.Location = new Point(110, 20);
+            picCrop.Location = new Point(120, 20);
             panel3.Controls.Add(picCrop);
-            picRotate.Location = new Point(13, 115);
+            picRotate.Location = new Point(23, 115);
             panel3.Controls.Add(picRotate);
-            picFlip.Location = new Point(110, 115);
+            picFlip.Location = new Point(120, 115);
             panel3.Controls.Add(picFlip);
 
             //set event
@@ -3820,6 +3820,7 @@ namespace Roga
 
         private void MainScreen_FormClosing(object sender, FormClosingEventArgs e)
         {
+            MouseType = "";
             if (isSave == false)
             {
                 DialogResult dialogResult = MessageBox.Show("Bạn có muốn lưu ảnh?", "Ảnh chưa lưu", MessageBoxButtons.YesNoCancel);
