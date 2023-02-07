@@ -43,22 +43,22 @@ namespace Roga
 
         private void txtPassword_Enter(object sender, EventArgs e)
         {
-            if (txtPassword.Text == "Enter password")
+            if (txtPassword.Text == "Enter Password")
             {
                 txtPassword.Text = "";
                 txtPassword.ForeColor = SystemColors.WindowText;
-                txtPassword.PasswordChar = '*';
+                txtPassword.UseSystemPasswordChar = true;
             }
         }
 
 
         private void txtConfirm_Enter(object sender, EventArgs e)
         {
-            if (txtConfirm.Text == "Confirm password")
+            if (txtConfirm.Text == "Confirm Password")
             {
                 txtConfirm.Text = "";
                 txtConfirm.ForeColor = SystemColors.WindowText;
-                txtConfirm.PasswordChar = '*';
+                txtConfirm.UseSystemPasswordChar = true;
             }
         }
 
@@ -67,6 +67,26 @@ namespace Roga
             this.Hide();
             LoginScreen loginScreen = new LoginScreen();
             loginScreen.ShowDialog();
+        }
+
+        private void txtPassword_Leave(object sender, EventArgs e)
+        {
+            if (txtPassword.Text.Length == 0)
+            {
+                txtPassword.Text = "Enter Password";
+                txtPassword.ForeColor = SystemColors.GrayText;
+                txtPassword.UseSystemPasswordChar = false;
+            }
+        }
+
+        private void txtConfirm_Leave(object sender, EventArgs e)
+        {
+            if (txtConfirm.Text.Length == 0)
+            {
+                txtConfirm.Text = "Confirm Password";
+                txtConfirm.ForeColor = SystemColors.GrayText;
+                txtConfirm.UseSystemPasswordChar = false;
+            }
         }
     }
 }

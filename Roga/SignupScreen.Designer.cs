@@ -104,8 +104,9 @@
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(195, 27);
             this.txtPassword.TabIndex = 8;
-            this.txtPassword.Text = "Enter password";
+            this.txtPassword.Text = "Enter Password";
             this.txtPassword.Enter += new System.EventHandler(this.txtPassword_Enter);
+            this.txtPassword.Leave += new System.EventHandler(this.txtPassword_Leave);
             // 
             // lbName
             // 
@@ -127,8 +128,9 @@
             this.txtConfirm.Name = "txtConfirm";
             this.txtConfirm.Size = new System.Drawing.Size(195, 27);
             this.txtConfirm.TabIndex = 10;
-            this.txtConfirm.Text = "Confirm password";
+            this.txtConfirm.Text = "Confirm Password";
             this.txtConfirm.Enter += new System.EventHandler(this.txtConfirm_Enter);
+            this.txtConfirm.Leave += new System.EventHandler(this.txtConfirm_Leave);
             // 
             // btnSignup
             // 
@@ -178,9 +180,9 @@
             this.Controls.Add(this.lbUsername);
             this.Controls.Add(this.lbSignup);
             this.Controls.Add(this.pbBackground);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(745, 408);
-            this.MinimumSize = new System.Drawing.Size(745, 408);
+            this.MinimizeBox = false;
             this.Name = "SignupScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Roga";

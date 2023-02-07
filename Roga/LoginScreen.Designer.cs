@@ -112,9 +112,11 @@
             this.txtPassword.ForeColor = System.Drawing.SystemColors.GrayText;
             this.txtPassword.Location = new System.Drawing.Point(520, 201);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(195, 27);
             this.txtPassword.TabIndex = 6;
+            this.txtPassword.Text = "Please Enter Password";
+            this.txtPassword.Enter += new System.EventHandler(this.txtPassword_Enter);
+            this.txtPassword.Leave += new System.EventHandler(this.txtPassword_Leave);
             // 
             // lbSignup
             // 
@@ -186,9 +188,9 @@
             this.Controls.Add(this.pbLogo);
             this.Controls.Add(this.lbLogin);
             this.Controls.Add(this.pbBackground);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(745, 408);
-            this.MinimumSize = new System.Drawing.Size(745, 408);
+            this.MinimizeBox = false;
             this.Name = "LoginScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Roga";
