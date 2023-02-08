@@ -15,5 +15,5 @@ Before starting to start the application for the first time, you need to do some
 ![image](https://user-images.githubusercontent.com/106144398/217647564-37b91d00-ab6f-40a9-a825-5ea1868ff81d.png)
 **DONE
 
-***Hope you enjoy our product - ***
+***Hope you enjoy our product***
 **Thank you**
