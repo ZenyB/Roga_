@@ -13,7 +13,8 @@ Before starting to start the application for the first time, you need to do some
 - Replace SEVER NAME and DATABASE NAME in App.config file with the corresponding name:
 ![image](https://user-images.githubusercontent.com/106144398/217647269-17fcb08b-d82c-43b3-87cf-842168bda379.png)
 ![image](https://user-images.githubusercontent.com/106144398/217647564-37b91d00-ab6f-40a9-a825-5ea1868ff81d.png)
-**DONE
+
+***DONE
 
 ***Hope you enjoy our product***
 
