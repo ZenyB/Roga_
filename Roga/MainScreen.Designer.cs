@@ -52,7 +52,6 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.Back_Button = new System.Windows.Forms.Button();
             this.Save_Button = new System.Windows.Forms.Button();
-            this.Hand_Button = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.Eraser_Button = new System.Windows.Forms.Button();
             this.pic = new System.Windows.Forms.PictureBox();
@@ -74,7 +73,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1162, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1162, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -87,7 +86,7 @@
             this.saveAsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
@@ -133,7 +132,7 @@
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.viewToolStripMenuItem.Text = "View";
             // 
             // helpToolStripMenuItem
@@ -141,7 +140,7 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contactUsRogagmailcomToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // contactUsRogagmailcomToolStripMenuItem
@@ -311,7 +310,6 @@
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.panel4.Controls.Add(this.Back_Button);
             this.panel4.Controls.Add(this.Save_Button);
-            this.panel4.Controls.Add(this.Hand_Button);
             this.panel4.Location = new System.Drawing.Point(12, 15);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(174, 59);
@@ -325,7 +323,7 @@
             this.Back_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Back_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Back_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Back_Button.Location = new System.Drawing.Point(1, 1);
+            this.Back_Button.Location = new System.Drawing.Point(18, 1);
             this.Back_Button.Name = "Back_Button";
             this.Back_Button.Size = new System.Drawing.Size(55, 55);
             this.Back_Button.TabIndex = 3;
@@ -340,27 +338,12 @@
             this.Save_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Save_Button.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Save_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Save_Button.Location = new System.Drawing.Point(117, 1);
+            this.Save_Button.Location = new System.Drawing.Point(98, 1);
             this.Save_Button.Name = "Save_Button";
             this.Save_Button.Size = new System.Drawing.Size(55, 55);
             this.Save_Button.TabIndex = 2;
             this.Save_Button.UseVisualStyleBackColor = true;
             this.Save_Button.Click += new System.EventHandler(this.Save_Button_Click);
-            // 
-            // Hand_Button
-            // 
-            this.Hand_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Hand_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Hand_Button.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Hand_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Hand_Button.Location = new System.Drawing.Point(59, 1);
-            this.Hand_Button.Name = "Hand_Button";
-            this.Hand_Button.Size = new System.Drawing.Size(55, 55);
-            this.Hand_Button.TabIndex = 1;
-            this.Hand_Button.UseVisualStyleBackColor = true;
-            this.Hand_Button.Click += new System.EventHandler(this.Hand_Button_Click);
             // 
             // panel3
             // 
@@ -459,7 +442,6 @@
         private System.Windows.Forms.Button Pen_Button;
         private System.Windows.Forms.Button Back_Button;
         private System.Windows.Forms.Button Save_Button;
-        private System.Windows.Forms.Button Hand_Button;
         private PicturePanel picturePanel2;
         private System.Windows.Forms.Button Eraser_Button;
         private System.Windows.Forms.Button Filter_Button;
