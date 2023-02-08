@@ -48,9 +48,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -74,6 +83,9 @@
     </Compile>
     <Compile Include="BeforeAddImage.Designer.cs">
       <DependentUpon>BeforeAddImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IMAGE_.cs">
+      <DependentUpon>Roga_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="LoginScreen.cs">
       <SubType>Form</SubType>
@@ -120,11 +132,29 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RogaDatabaseDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Roga_Model.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Roga_Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Roga_Model.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Roga_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Roga_Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Roga_Model.edmx</DependentUpon>
+    </Compile>
     <Compile Include="SignupScreen.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SignupScreen.Designer.cs">
       <DependentUpon>SignupScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="USER_.cs">
+      <DependentUpon>Roga_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="VBButton.cs">
       <SubType>Component</SubType>
@@ -134,6 +164,7 @@
     <None Include="App.config" />
     <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="obj\Debug\Roga.csproj.AssemblyReference.cache" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -148,6 +179,13 @@
     </None>
     <None Include="RogaDatabaseDataSet.xss">
       <DependentUpon>RogaDatabaseDataSet.xsd</DependentUpon>
+    </None>
+    <EntityDeploy Include="Roga_Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Roga_Model.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Roga_Model.edmx.diagram">
+      <DependentUpon>Roga_Model.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +275,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>RogaDatabase.mdf</DependentUpon>
     </Content>
+    <Content Include="Roga_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Roga_Model.Context.cs</LastGenOutput>
+      <DependentUpon>Roga_Model.edmx</DependentUpon>
+    </Content>
+    <Content Include="Roga_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Roga_Model.edmx</DependentUpon>
+      <LastGenOutput>Roga_Model.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Rename.resx">
@@ -254,6 +302,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

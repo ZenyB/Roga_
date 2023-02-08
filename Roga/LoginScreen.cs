@@ -13,6 +13,7 @@ namespace Roga
 {
     public partial class LoginScreen : Form
     {
+        RogaDatabaseEntities RogaEntities = new RogaDatabaseEntities();
         public LoginScreen()
         {
             InitializeComponent();
@@ -26,6 +27,10 @@ namespace Roga
             sFile = System.IO.Path.Combine(sCurrentDirectory, @"..\..\..\Roga\Assets\Images\logo.png");
             sFilePath = Path.GetFullPath(sFile);
             pbLogo.Image = Image.FromFile(sFilePath);
+        }
+
+        public void LoadData()
+        {
         }
 
         private void txtUsername_Enter(object sender, EventArgs e)
