@@ -14,7 +14,7 @@ namespace Roga
     
     public partial class IMAGE_
     {
-        public int ID { get; }
+        public int id { get; set; }
         public byte[] img { get; set; }
         public int userid { get; set; }
     
