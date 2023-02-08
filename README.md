@@ -16,4 +16,5 @@ Before starting to start the application for the first time, you need to do some
 **DONE
 
 ***Hope you enjoy our product***
-**Thank you**
+
+***Thank you***
