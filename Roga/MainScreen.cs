@@ -190,7 +190,7 @@ namespace Roga
 
             //pic.MouseWheel += Pic_MouseWheel;
 
-            if (Image.FromFile(selectedPath).Width > Width || Image.FromFile(selectedPath).Height > Height)
+            if (Image.FromFile(selectedPath).Width > Width - 100 || Image.FromFile(selectedPath).Height > Height - 100)
             {
                 int newHeight, newWidth;
                 if (Image.FromFile(selectedPath).Width > Image.FromFile(selectedPath).Height)
@@ -248,7 +248,7 @@ namespace Roga
 
             //pic.MouseWheel += Pic_MouseWheel;
 
-            if (picture.Width > Width || picture.Height > Height)
+            if (picture.Width > Width - 100 || picture.Height > Height - 100)
             {
                 int newHeight, newWidth;
                 if (picture.Width > picture.Height)
@@ -288,7 +288,6 @@ namespace Roga
         {
             Pen_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\pencil.jpg"));
             Back_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\back.png"));
-            Hand_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\hand.png"));
             Save_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\save.png"));
             Eraser_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\eraser.png"));
             BrightnessAndContrast_Button.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\brightness.png"));
