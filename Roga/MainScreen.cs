@@ -308,7 +308,7 @@ namespace Roga
         }
 
         //method to get filePath
-        static private string getFilePath(string relativePath)
+        static public string getFilePath(string relativePath)
         {
             string sFile = System.IO.Path.Combine(sCurrentDirectory, relativePath);
             string sFilePath = Path.GetFullPath(sFile);

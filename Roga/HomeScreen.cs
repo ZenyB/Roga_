@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomButton;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -57,7 +58,7 @@ namespace Roga
             btnImport.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\btnImport.png"));
             btnBlank.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\btnBlank.png"));
             btnRename.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\pen.png"));
-
+            btnLogout.BackgroundImage = Image.FromFile(getFilePath(@"..\..\..\Roga\Assets\Images\icons\logout.jpg"));
 
             //Storage
             if (Program.loginState)
@@ -88,6 +89,7 @@ namespace Roga
             }
             else
             {
+                btnLogout.Visible = false;
                 loginLabel.Visible = true;
                 linkLabelLogin.Visible = true;
                 listView1.Visible = false;
@@ -288,5 +290,21 @@ namespace Roga
         {
             Application.Exit();
         }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Logout", "Do you want to logout?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                string str = "false";
+                File.WriteAllText(MainScreen.getFilePath((@"..\..\..\Roga\Assets\Saves\State.txt")), str);
+                File.WriteAllText(MainScreen.getFilePath((@"..\..\..\Roga\Assets\Saves\save.txt")), "");
+                LoginScreen login = new LoginScreen();                
+                this.Hide();
+                Program.loginState = false;
+                login.ShowDialog();
+            }
+        }
+
     }
 }
