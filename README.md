@@ -3,7 +3,7 @@ Hello, Welcome to our product - Roga - Basic Photo Editor.
 This app is still in development. In the process of using, if there are any mistakes, we sincerely apologize and hope you can forgive them.
 
 ***IMPORTANT***
-Before starting to start the application for the first time, you need to do some work.
+Before starting to start the application for the first time, you need to have little knowledge about Microsoft SQL Sever and do some work.
 - Find this file in this project and create new database with Microsoft SQL Sever:
 ![image](https://user-images.githubusercontent.com/106144398/217645658-64a35125-4221-449c-8e0e-e5fd04ed9e69.png)
 - Find this in Microsoft SQL Sever Management:
