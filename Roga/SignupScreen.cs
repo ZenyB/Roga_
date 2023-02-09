@@ -133,8 +133,8 @@ namespace Roga
             }
             Program.loginState = true;
             this.Hide();
-            //HomeScreen home = new HomeScreen(LoginScreen.userNow);
-            //home.ShowDialog();
+            HomeScreen home = new HomeScreen(LoginScreen.userNow);
+            home.ShowDialog();
         }
     }
 }

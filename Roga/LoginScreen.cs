@@ -58,9 +58,8 @@ namespace Roga
         {
             USER_ temp = new USER_ { username = "", password = "", fullname = "new user" };
             this.Hide();
-            //add later
-            //HomeScreen homeScreen = new HomeScreen(temp);
-            //homeScreen.ShowDialog();
+            HomeScreen homeScreen = new HomeScreen(temp);
+            homeScreen.ShowDialog();
         }
 
         private void txtPassword_Enter(object sender, EventArgs e)
@@ -120,9 +119,8 @@ namespace Roga
             }
             Program.loginState = true;
             this.Hide();
-            //HomeScreen home = new HomeScreen(userNow);
-            //home.ShowDialog();
-
+            HomeScreen home = new HomeScreen(userNow);
+            home.ShowDialog();
         }
     }
 }
