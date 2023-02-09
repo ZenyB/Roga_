@@ -3907,6 +3907,15 @@ namespace Roga
                     if (File.Exists(fileNameNow))
                     {
                         imgNow.Save(fileNameNow);
+                        if (Program.loginState)
+                        {
+                            IMAGE_ newImg = new IMAGE_ { userid = LoginScreen.userNow.id, img = ConvertImgToBinary(imgNow) };
+                            using (RogaDatabaseEntities data = new RogaDatabaseEntities())
+                            {
+                                data.IMAGE_.Add(newImg);
+                                data.SaveChanges();
+                            }
+                        }
                         isSave = true;
                     }
                     else if (!saveImage())
