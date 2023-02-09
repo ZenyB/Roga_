@@ -172,6 +172,7 @@
             this.btnLogin.Text = "Login";
             this.btnLogin.TextColor = System.Drawing.Color.Black;
             this.btnLogin.UseVisualStyleBackColor = false;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // LoginScreen
             // 
