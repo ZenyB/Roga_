@@ -64,6 +64,7 @@ namespace Roga
 
         private void lbLogin_Click(object sender, EventArgs e)
         {
+            Program.loginState = false;
             this.Hide();
             LoginScreen loginScreen = new LoginScreen();
             loginScreen.ShowDialog();
@@ -87,6 +88,53 @@ namespace Roga
                 txtConfirm.ForeColor = SystemColors.GrayText;
                 txtConfirm.UseSystemPasswordChar = false;
             }
+        }
+
+        private void btnSignup_Click(object sender, EventArgs e)
+        {
+            if (txtUsername.Text.Trim().Length == 0 || txtUsername.Text == "Please Enter Your Name")
+            {
+                MessageBox.Show("Invalid username", "Roga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (txtPassword.Text == "Enter Password" || txtConfirm.Text == "Confirm Password")
+            {
+                MessageBox.Show("Invalid password or confirm password", "Roga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (txtPassword.Text.Length < 8)
+            {
+                MessageBox.Show("Password must have at least 8 characters", "Roga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (txtPassword.Text != txtConfirm.Text)
+            {
+                MessageBox.Show("Confirm password wrong", "Roga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            using (RogaDatabaseEntities data = new RogaDatabaseEntities())
+            {
+                var listUser = from user in data.USER_
+                               select user;
+                foreach (USER_ u in listUser)
+                {
+                    if (u.username == txtUsername.Text)
+                    {
+                        MessageBox.Show("Username already exist", "Roga", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                LoginScreen.userNow = new USER_ { username = txtUsername.Text, password = txtPassword.Text, fullname = "new user" };
+                data.USER_.Add(LoginScreen.userNow);
+                data.SaveChanges();
+            }
+            Program.loginState = true;
+            this.Hide();
+            //HomeScreen home = new HomeScreen(LoginScreen.userNow);
+            //home.ShowDialog();
         }
     }
 }

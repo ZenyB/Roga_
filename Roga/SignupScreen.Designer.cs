@@ -151,6 +151,7 @@
             this.btnSignup.Text = "Sign Up";
             this.btnSignup.TextColor = System.Drawing.Color.Black;
             this.btnSignup.UseVisualStyleBackColor = false;
+            this.btnSignup.Click += new System.EventHandler(this.btnSignup_Click);
             // 
             // lbLogin
             // 
