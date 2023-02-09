@@ -15,7 +15,8 @@ namespace Roga
         public CustomTextbox()
         {
             InitializeComponent();
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            SetStyle(ControlStyles.SupportsTransparentBackColor |
+                ControlStyles.UserPaint, true);
             BackColor = Color.Transparent;
 
             ForeColor = Color.Black;

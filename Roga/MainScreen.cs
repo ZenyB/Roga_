@@ -2855,6 +2855,7 @@ namespace Roga
         //Text feature
         #region AddText
         private CustomTextbox txtAddText = new CustomTextbox();
+        private Label lbAddText = new Label();
         private bool addtext = false;
         private bool isEnterText = false;
         private Font fontText = new Font("Arial", 13);
@@ -3112,12 +3113,25 @@ namespace Roga
                     txtAddText.Location = new Point(tboxX, tboxY);
                     txtAddText.BorderStyle = BorderStyle.FixedSingle;
                     txtAddText.Enter += new EventHandler(txt_Enter);
-                    //txtAddText.Leave += new EventHandler(txt_Leave);
+                    txtAddText.TextChanged += new EventHandler(txtAddText_TextChanged);
                     pic.Controls.Add(txtAddText);
+
+                    lbAddText.Text = "Add text";
+                    lbAddText.Font = txtAddText.Font;
+                    lbAddText.Location = new Point(0, 0);
+                    lbAddText.BackColor = Color.Transparent;
+                    lbAddText.AutoSize = true;
+                    lbAddText.BringToFront();
+                    txtAddText.Controls.Add(lbAddText);
                     addtext = true;
                     Cursor = Cursors.Default;
                 }
             }
+        }
+
+        private void txtAddText_TextChanged(object sender, EventArgs e)
+        {
+            lbAddText.Text = txtAddText.Text;
         }
 
         private void txt_Enter(object sender, EventArgs e)
@@ -3144,18 +3158,19 @@ namespace Roga
                 isSave = false;
             }
             pic.Controls.Remove(txtAddText);
+            
         }
 
         private void cbFont_SelectedIndexChanged(object sender, EventArgs e)
         {
             fontText = new Font(cbFont.Text, fontText.Size);
-            txtAddText.SelectionFont = fontText;
+            txtAddText.SelectionFont = lbAddText.Font = fontText;
         }
 
         private void numSize_ValueChanged(object sender, EventArgs e)
         {
             fontText = new Font(fontText.FontFamily.Name, (float)numSize.Value);
-            txtAddText.SelectionFont = fontText;
+            txtAddText.SelectionFont = lbAddText.Font = fontText;
         }
 
         private void FontStyle_Changed(object sender, EventArgs e)
@@ -3227,7 +3242,7 @@ namespace Roga
                     }
                 }
             }
-            txtAddText.SelectionFont = fontText;
+            txtAddText.SelectionFont = lbAddText.Font = fontText;
         }
 
         private void txt_Leave(object sender, EventArgs e)
