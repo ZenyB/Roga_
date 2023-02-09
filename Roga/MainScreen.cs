@@ -3671,6 +3671,26 @@ namespace Roga
         }
         #endregion
 
+        #region ConvertIMG
+        public static byte[] ConvertImgToBinary(Image img)
+        {
+            Image temp = new Bitmap(img);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                temp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return ms.ToArray();
+            }
+        }
+
+        public static Image ConvertBinaryToImg(byte[] bi)
+        {
+            using (MemoryStream ms = new MemoryStream(bi))
+            {
+                return Image.FromStream(ms);
+            }
+        }
+        #endregion
+
         #region button onclick
         private void Pen_Button_Click(object sender, EventArgs e)
         {
@@ -3768,10 +3788,34 @@ namespace Roga
                             {
                                 return;
                             }
+                            else
+                            {
+                                if (Program.loginState)
+                                {
+                                    IMAGE_ newImg = new IMAGE_ { userid = LoginScreen.userNow.id, img = ConvertImgToBinary(imgNow) };
+                                    using (RogaDatabaseEntities data = new RogaDatabaseEntities())
+                                    {
+                                        data.IMAGE_.Add(newImg);
+                                        data.SaveChanges();
+                                    }
+                                }
+                            }
                         }
                         else if (!saveImage())
                         {
                             return;
+                        }
+                        else
+                        {
+                            if (Program.loginState)
+                            {
+                                IMAGE_ newImg = new IMAGE_ { userid = LoginScreen.userNow.id, img = ConvertImgToBinary(imgNow) };
+                                using (RogaDatabaseEntities data = new RogaDatabaseEntities())
+                                {
+                                    data.IMAGE_.Add(newImg);
+                                    data.SaveChanges();
+                                }
+                            }
                         }
                     }
                     else if (result == DialogResult.Cancel)
@@ -3857,7 +3901,7 @@ namespace Roga
             MouseType = "";
             if (isSave == false)
             {
-                DialogResult dialogResult = MessageBox.Show("Bạn có muốn lưu ảnh?", "Ảnh chưa lưu", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show("Do you want to save the current image?", "Roga", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Yes)
                 {
                     if (File.Exists(fileNameNow))
@@ -3865,18 +3909,40 @@ namespace Roga
                         imgNow.Save(fileNameNow);
                         isSave = true;
                     }
+                    else if (!saveImage())
+                    {
+                        e.Cancel = true;
+                    }
                     else
                     {
-                        saveImage();
-                    }
-                    if (isSave == false)
-                        e.Cancel = true;
+                        if (Program.loginState)
+                        {
+                            IMAGE_ newImg = new IMAGE_ { userid = LoginScreen.userNow.id, img = ConvertImgToBinary(imgNow) };
+                            using (RogaDatabaseEntities data = new RogaDatabaseEntities())
+                            {
+                                data.IMAGE_.Add(newImg);
+                                data.SaveChanges();
+                            }
+                        }
+                    }    
                 }
                 else if (dialogResult == DialogResult.Cancel)
                 {
                     e.Cancel = true;
                 }
             }
+            else
+            {
+                if (Program.loginState)
+                {
+                    IMAGE_ newImg = new IMAGE_ { userid = LoginScreen.userNow.id, img = ConvertImgToBinary(imgNow) };
+                    using (RogaDatabaseEntities data = new RogaDatabaseEntities())
+                    {
+                        data.IMAGE_.Add(newImg);
+                        data.SaveChanges();
+                    }
+                }
+            }    
         }
 
         private void saveAsToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)

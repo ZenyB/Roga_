@@ -9,13 +9,12 @@ namespace Roga
 {
     class Program
     {
+        public static bool loginState = false;
         [STAThread]
         static void Main(string[] args)
         {
             LoginScreen loginScreen = new LoginScreen();
-            HomeScreen home = new HomeScreen();
-            home.ShowDialog();
-            //loginScreen.ShowDialog();
+            loginScreen.ShowDialog();
         }
     }
 }
