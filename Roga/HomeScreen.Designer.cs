@@ -37,7 +37,6 @@ namespace Roga
             this.loginLabel = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnRename = new CustomButton.VBButton();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnBlank = new System.Windows.Forms.Button();
@@ -45,6 +44,8 @@ namespace Roga
             this.labelName = new System.Windows.Forms.Label();
             this.ptbAvt = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnRename = new CustomButton.VBButton();
+            this.btnLogout = new CustomButton.VBButton();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -141,6 +142,7 @@ namespace Roga
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel2.AutoSize = true;
+            this.panel2.Controls.Add(this.btnLogout);
             this.panel2.Controls.Add(this.btnRename);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label3);
@@ -153,26 +155,6 @@ namespace Roga
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(501, 662);
             this.panel2.TabIndex = 0;
-            // 
-            // btnRename
-            // 
-            this.btnRename.BackColor = System.Drawing.Color.MediumSlateBlue;
-            this.btnRename.BackgroundColor = System.Drawing.Color.MediumSlateBlue;
-            this.btnRename.BorderColor = System.Drawing.Color.Gray;
-            this.btnRename.BorderRadius = 18;
-            this.btnRename.BorderSize = 1;
-            this.btnRename.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnRename.FlatAppearance.BorderSize = 0;
-            this.btnRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRename.ForeColor = System.Drawing.Color.White;
-            this.btnRename.Location = new System.Drawing.Point(439, 200);
-            this.btnRename.Name = "btnRename";
-            this.btnRename.Size = new System.Drawing.Size(50, 45);
-            this.btnRename.TabIndex = 8;
-            this.btnRename.TextColor = System.Drawing.Color.White;
-            this.btnRename.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnRename.UseVisualStyleBackColor = false;
-            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
             // 
             // label4
             // 
@@ -255,6 +237,46 @@ namespace Roga
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // btnRename
+            // 
+            this.btnRename.BackColor = System.Drawing.Color.MediumSlateBlue;
+            this.btnRename.BackgroundColor = System.Drawing.Color.MediumSlateBlue;
+            this.btnRename.BorderColor = System.Drawing.Color.Gray;
+            this.btnRename.BorderRadius = 18;
+            this.btnRename.BorderSize = 1;
+            this.btnRename.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRename.FlatAppearance.BorderSize = 0;
+            this.btnRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRename.ForeColor = System.Drawing.Color.White;
+            this.btnRename.Location = new System.Drawing.Point(439, 200);
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(50, 45);
+            this.btnRename.TabIndex = 8;
+            this.btnRename.TextColor = System.Drawing.Color.White;
+            this.btnRename.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnRename.UseVisualStyleBackColor = false;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.BackColor = System.Drawing.Color.MediumSlateBlue;
+            this.btnLogout.BackgroundColor = System.Drawing.Color.MediumSlateBlue;
+            this.btnLogout.BorderColor = System.Drawing.Color.Gray;
+            this.btnLogout.BorderRadius = 18;
+            this.btnLogout.BorderSize = 1;
+            this.btnLogout.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogout.FlatAppearance.BorderSize = 0;
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.ForeColor = System.Drawing.Color.White;
+            this.btnLogout.Location = new System.Drawing.Point(23, 592);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(50, 45);
+            this.btnLogout.TabIndex = 9;
+            this.btnLogout.TextColor = System.Drawing.Color.White;
+            this.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
             // HomeScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -307,5 +329,6 @@ namespace Roga
         private System.Windows.Forms.Label loginLabel;
         private System.Windows.Forms.LinkLabel linkLabelLogin;
         private CustomButton.VBButton btnRename;
+        private CustomButton.VBButton btnLogout;
     }
 }

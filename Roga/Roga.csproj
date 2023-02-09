@@ -196,6 +196,7 @@
     <Content Include="Assets\Images\icons\exposure.png" />
     <Content Include="Assets\Images\icons\filter.png" />
     <Content Include="Assets\Images\icons\hand.png" />
+    <Content Include="Assets\Images\icons\logout.jpg" />
     <Content Include="Assets\Images\icons\pencil.jpg" />
     <Content Include="Assets\Images\icons\save.png" />
     <Content Include="Assets\Images\icons\shape.png" />
@@ -226,6 +227,8 @@
     <Content Include="Assets\Images\Shapes\upArrow.png" />
     <Content Include="Assets\Images\test.PNG" />
     <Content Include="Assets\Images\testImage.png" />
+    <Content Include="Assets\Saves\save.txt" />
+    <Content Include="Assets\Saves\State.txt" />
     <Content Include="bin\Debug\PenCursor.cur" />
     <Content Include="bin\Debug\EraserCursor.cur" />
     <Content Include="Model1.Context.tt">

@@ -131,6 +131,10 @@ namespace Roga
                 data.USER_.Add(LoginScreen.userNow);
                 data.SaveChanges();
             }
+            string str = "true";
+            File.WriteAllText(MainScreen.getFilePath((@"..\..\..\Roga\Assets\Saves\State.txt")), str);
+            str = LoginScreen.userNow.id.ToString();
+            File.WriteAllText(MainScreen.getFilePath((@"..\..\..\Roga\Assets\Saves\save.txt")), str);
             Program.loginState = true;
             this.Hide();
             HomeScreen home = new HomeScreen(LoginScreen.userNow);
