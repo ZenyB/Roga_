@@ -3878,7 +3878,6 @@ namespace Roga
                 }
             }
         }
-
         private void saveToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
