@@ -224,6 +224,7 @@ namespace Roga
                 if (Program.loginState)
                 {
                     userNow.avatar = MainScreen.ConvertImgToBinary(imgAvt);
+                    LoginScreen.userNow = userNow;
                     using (RogaDatabaseEntities data = new RogaDatabaseEntities())
                     {
                         var user = data.USER_.FirstOrDefault(u => u.id == userNow.id);
@@ -259,6 +260,7 @@ namespace Roga
                         data.SaveChanges();
                     }
                 }
+                LoginScreen.userNow = userNow;
             }
         }
 
@@ -273,6 +275,7 @@ namespace Roga
                 Image img = new Bitmap(temp);
                 temp.Dispose();
                 MainScreen mainForm = new MainScreen(img, open.FileName);
+                LoginScreen.userNow = userNow;
                 this.Hide();
                 mainForm.ShowDialog();
             }
@@ -282,6 +285,7 @@ namespace Roga
         private void btnBlank_Click(object sender, EventArgs e)
         {
             MainScreen mainForm = new MainScreen();
+            LoginScreen.userNow = userNow;
             this.Hide();
             mainForm.ShowDialog();
         }
