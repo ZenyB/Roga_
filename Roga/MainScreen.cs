@@ -2867,9 +2867,18 @@ namespace Roga
         private CheckBox cbUnderline = new CheckBox();
         private Button btnCustom = new Button();
 
+        private void Form_keyEnter(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled= true;
+            }
+        }
+
         private void InitTextDetails()
         {
             txtAddText.Font = fontText;
+            this.KeyDown += Form_keyEnter;
 
             foreach (FontFamily oneFontFamily in FontFamily.Families)
             {
@@ -3158,7 +3167,7 @@ namespace Roga
                 isSave = false;
             }
             pic.Controls.Remove(txtAddText);
-            
+            isEnterText = false;
         }
 
         private void cbFont_SelectedIndexChanged(object sender, EventArgs e)
