@@ -140,5 +140,22 @@ namespace Roga
             HomeScreen home = new HomeScreen(LoginScreen.userNow);
             home.ShowDialog();
         }
+
+        private void MyTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // we don't accept whitespace characters
+            if (char.IsWhiteSpace(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private void txtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void txtConfirm_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
     }
 }

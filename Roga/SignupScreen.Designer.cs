@@ -82,6 +82,7 @@
             this.txtUsername.TabIndex = 6;
             this.txtUsername.Text = "Please Enter Your Name";
             this.txtUsername.Enter += new System.EventHandler(this.txtUsername_Enter);
+            this.txtUsername.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MyTextBox_KeyPress);
             this.txtUsername.Leave += new System.EventHandler(this.txtUsername_Leave);
             // 
             // lbPassword
@@ -106,6 +107,7 @@
             this.txtPassword.TabIndex = 8;
             this.txtPassword.Text = "Enter Password";
             this.txtPassword.Enter += new System.EventHandler(this.txtPassword_Enter);
+            this.txtPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MyTextBox_KeyPress);
             this.txtPassword.Leave += new System.EventHandler(this.txtPassword_Leave);
             // 
             // lbName
@@ -130,6 +132,7 @@
             this.txtConfirm.TabIndex = 10;
             this.txtConfirm.Text = "Confirm Password";
             this.txtConfirm.Enter += new System.EventHandler(this.txtConfirm_Enter);
+            this.txtConfirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MyTextBox_KeyPress);
             this.txtConfirm.Leave += new System.EventHandler(this.txtConfirm_Leave);
             // 
             // btnSignup
