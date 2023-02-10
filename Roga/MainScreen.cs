@@ -3261,6 +3261,7 @@ namespace Roga
 
         private void Remove_AddText()
         {
+            this.KeyDown -= Form_keyEnter;
             pic.MouseDown -= pic_AddText_MouseDown;
             pic.MouseUp -= pic_AddText_MouseUp;
             pic.MouseMove -= pic_AddText_MouseMove;
